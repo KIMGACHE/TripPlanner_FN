@@ -1,21 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
-import MakePlanner from './planner/makePlanner/MakePlanner';
-import {useState, useEffect} from 'react';
+
 import React from 'react';
-import StartPage from './planner/StartPage/StartPage';
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom'; // BrowserRouter를 올바르게 임포트
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
-function App() {
+import TravelCourse from './tourist/TravelCourse.jsx';
+import TravelCourseInfo from './tourist/TravelCourseInfo.jsx';
+import Tourist from './tourist/Tourist.jsx';
+import TouristInfo from './tourist/TouristInfo.jsx';
+import Board from './planner/Board.jsx';
+import DestinationInfo from './planner/DestinationInfo.jsx';
+import Destination from './planner/Destination.jsx';
 
+const App = () => {
   return (
-    <BrowserRouter> {/* Router -> BrowserRouter로 수정 */}
-      <Link to="/planner/makePlanner">플래너 만들기</Link>
 
+    <Router>
+      <Link to="/tourist">
+        <button>관광지</button>
+      </Link>
+      <Link to="/travelcourse">
+        <button>추천코스</button>
+      </Link>
+
+      <Link to="/planner/board">
+        <button>게시판</button>
+      </Link>
       <Routes>
-        <Route path="/planner/makePlanner" element={<MakePlanner />} />
+        <Route path="/travelcourse" element={< TravelCourse />}></Route>
+        <Route path="/travelcourse-info" element={< TravelCourseInfo />}></Route>
+        <Route path="/tourist" element={<Tourist />}></Route>
+        <Route path="/tourist-info" element={<TouristInfo />}></Route>
+        <Route path="/planner/board" element={<Board />}></Route>
+        <Route path="/planner/board/destination" element={<Destination/>}></Route>
+        <Route path="/planner/board/destination/info" element={<DestinationInfo />}></Route>
       </Routes>
-    </BrowserRouter>
+
+    </Router>
+
+
   );
 }
 
