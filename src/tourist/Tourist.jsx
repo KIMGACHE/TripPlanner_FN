@@ -46,6 +46,7 @@ const Tourist = () => {
     // 관광지 검색 함수
     const handleSearch = () => {
         setLoading(true); // 검색 시작 시 로딩 상태 true로 설정
+        console.log('AXIOS 로딩');
         const currentEncodedData = encodeUTF8();
         const data = {
             keyword: currentEncodedData,  // 원하는 키워드 데이터를 넣어야 합니다.
@@ -57,9 +58,11 @@ const Tourist = () => {
         };
 
         axios.post('http://localhost:9000/api/getSearch', data, {
+          
             headers: {
                 'Content-Type': 'application/json', // Content-Type을 JSON으로 설정
             },
+            withCredentials: true,
         })
             .then((response) => {
                 console.log('response : ', response);
