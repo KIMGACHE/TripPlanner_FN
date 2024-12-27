@@ -1,21 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
-import MakePlanner from './planner/makePlanner/MakePlanner';
-import {useState, useEffect} from 'react';
-import React from 'react';
-import StartPage from './planner/StartPage/StartPage';
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom'; // BrowserRouter를 올바르게 임포트
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import Join from "./Join"; // 올바른 경로
+import CalendarComponent from "./CalendarComponent";
+import ATest from "./ATest";
+import Mypage from "./Mypage";
+import "./App.css";
 
 function App() {
-
   return (
-    <BrowserRouter> {/* Router -> BrowserRouter로 수정 */}
-      <Link to="/planner/makePlanner">플래너 만들기</Link>
+    <Router>
+      <div>
+        <Link to="/user/join">JOIN</Link> <br />
+        <Link to="/CalendarComponent">CalendarComponent</Link><br/>
+        <Link to="/ATest">ATest</Link><br/>
+        <Link to="/user/mypage">Mypage</Link> <br />
+      </div>
 
       <Routes>
-        <Route path="/planner/makePlanner" element={<MakePlanner />} />
+        <Route path="/user/join" element={<Join />} />
+        <Route path="/ATest" element={<ATest />} />
+        <Route path="/CalendarComponent" element={<CalendarComponent />} />
+        <Route path="/user/mypage" element={<Mypage />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
