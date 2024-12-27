@@ -1,15 +1,21 @@
 import logo from './logo.svg';
 import './App.css';
-import Options from './planner/Options';
-import Map from './planner/Map';
-
+import MakePlanner from './planner/makePlanner/MakePlanner';
+import {useState, useEffect} from 'react';
+import React from 'react';
+import StartPage from './planner/StartPage/StartPage';
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom'; // BrowserRouter를 올바르게 임포트
 
 function App() {
+
   return (
-    <div className="App">
-      <Options/>
-      <Map/>
-    </div>
+    <BrowserRouter> {/* Router -> BrowserRouter로 수정 */}
+      <Link to="/planner/makePlanner">플래너 만들기</Link>
+
+      <Routes>
+        <Route path="/planner/makePlanner" element={<MakePlanner />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

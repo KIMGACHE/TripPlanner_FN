@@ -1,0 +1,109 @@
+.sidebar {
+    width: 900px;
+    height: 100vh;
+
+    background-color: aqua;
+
+    display: flex;
+    justify-content: stretch;
+    align-items: center;
+
+    .option{
+        width:100px;
+        height: 100%;
+
+        background-color: red;
+
+        .optionButton {
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+
+            border: 1px solid black;
+            margin: 10px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: .8rem;
+        }
+    }
+    .content{
+        width:400px;
+        height: 100%;
+
+        background-color: blue;
+        
+        .date {
+            display: flex;
+            justify-content: center;
+        }
+
+        .plannerList {
+            display: flex;
+            justify-content: stretch;
+            align-items: start;
+
+            .content-side {
+                width:100px;
+                height:100%;
+
+                .optionButton {
+                    width: 80px;
+                    height: 80px;
+                    cursor: pointer;
+
+                    border: 1px solid black;
+                    margin: 10px;
+        
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+        
+                    font-size: .8rem;
+                }
+            }
+
+            .content-body {
+                width:300px;
+                height:100%;
+
+                .content-card {
+                    width: auto;
+                    height: 100px;
+                    padding: 5px 10px 0px 5px;
+                    margin-bottom: 5px;
+
+                    background-color: white;
+
+                    border: 1px solid black;
+                    
+                }
+            }
+        }
+
+        
+    }
+    .question{
+        width:400px;
+        height: 100%;
+
+        background-color: green;
+
+        .search-body {
+
+            .search-card {
+                width: auto;
+                height: 100px;
+                padding: 5px 10px 0px 5px;
+                margin-bottom: 5px;
+
+                background-color: white;
+
+                border: 1px solid black;
+                
+            }
+        }
+    }
+}
