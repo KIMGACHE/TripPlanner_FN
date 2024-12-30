@@ -9,13 +9,16 @@ import Option from '../Option/Options';
 
 const MakePlanner = () => {
     const [optionState, setOptionState] = useState();
-    const [areaState, setAreaState] = useState();
+    const [areaState, setAreaState] = useState(null);
     const [plannerData, setPlannerData] = useState([]);
     const [selectedDay, setSelectedDay] = useState(1);
 
     const handleOption = (data) => {setOptionState(data);}
 
-    const handleArea = (data) => {setAreaState(data)}
+    const handleArea = (data) => {
+        setAreaState(data)
+        console.log("area Map왜 안됨?",data)
+    }
 
     const handleData = (data) => {setPlannerData((plannerData)=>[...plannerData,data]);}
 
