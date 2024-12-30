@@ -1,11 +1,11 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, React} from 'react';
 import '../../public/reset.css'
 import {Link} from 'react-router-dom';
 import Map from '../Map/Map';
 import SideBar from '../SideBar/SideBar';
 import './MakePlanner.scss'
 import Option from '../Option/Options';
-
+import axios from 'axios';
 
 const MakePlanner = () => {
     const [optionState, setOptionState] = useState();
@@ -15,12 +15,26 @@ const MakePlanner = () => {
 
     const handleOption = (data) => {setOptionState(data);}
 
-    const handleArea = (data) => {
-        setAreaState(data)
-        console.log("area Map왜 안됨?",data)
+    const handleArea = (data) => {setAreaState(data)}
+
+    const handleData = async (data) => {
+        const response = await axios.post('http://localhost:9000/planner/getImages',
+            {'latitude':data.data.yCoordinate,'longitude':data.data.xCoordinate},
+        )
+        
+        setPlannerData((plannerData)=>[...plannerData,data]);
     }
 
-    const handleData = (data) => {setPlannerData((plannerData)=>[...plannerData,data]);}
+    const [image, setImage] = useState('');
+
+    const fetchImage = async () => {
+        const response = await axios.post('/getImages', {
+            latitude: 37.7749, // 예시: 위도
+            longitude: -122.4194 // 예시: 경도
+        });
+        // 이미지 URL이 response.data.image에 포함되어 있습니다.
+        setImage(response.data.image);
+    };
 
     const handleDay = (data) => {setSelectedDay(data);}
 
@@ -40,7 +54,10 @@ const MakePlanner = () => {
         setPlannerData([]);
     }
     
-    // useEffect(()=>{console.log(plannerData)},[plannerData])
+    // 홈페이지가 렌더링 되자마자 로그인여부 확인
+    useEffect(()=>{
+        console.log(plannerData);
+    },[plannerData])
 
     return (
         <div className='planner' >

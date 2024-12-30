@@ -12,6 +12,8 @@
     "proj4leaflet": "^1.0.2",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.7",
+    "react-cookie": "^7.2.2",
+    "react-cookies": "^0.1.1",
     "react-date-range": "^1.4.0",
     "react-dom": "^19.0.0",
     "react-leaflet": "^5.0.0",

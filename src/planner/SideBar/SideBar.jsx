@@ -281,6 +281,7 @@ const SideBar = (props) => {
                         return (
                           <li key={index} className="content-card">
                             <div className="card-name">{destination && destination.data.businessName}</div>
+                            <div className="card-image">{destination && destination.data}</div>
                             <div className="card-category">{destination && destination.data.businessCategory}</div>
                             <div className="card-addr">{destination && destination.data.streetFullAddress}</div>
                             <div className="card-desc">{destination && destination.data.description}</div>
