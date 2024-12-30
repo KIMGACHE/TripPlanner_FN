@@ -52,13 +52,16 @@ const MakePlanner = () => {
                 />
             </div>
             <div className='plannerBody' >
-                <Option OptionData={handleOption}/>
-                <Map 
-                    OptionData={optionState}
-                    AreaData={areaState}
-                    DayData={selectedDay}
-                    AddDestination={handleData}
-                />
+                { areaState && <>
+                        <Option OptionData={handleOption}/>
+                        <Map 
+                            OptionData={optionState}
+                            AreaData={areaState}
+                            DayData={selectedDay}
+                            AddDestination={handleData}
+                        />
+                    </>
+                }
             </div>
             
         </div>
