@@ -5,7 +5,7 @@ import Map from '../Map/Map';
 import SideBar from '../SideBar/SideBar';
 import './MakePlanner.scss'
 import Option from '../Option/Options';
-
+import axios from 'axios';
 
 const MakePlanner = () => {
     const [optionState, setOptionState] = useState();
@@ -38,6 +38,19 @@ const MakePlanner = () => {
     }
     
     useEffect(()=>{console.log(plannerData)},[plannerData])
+
+    useEffect(() => {
+        axios.post('http://localhost:9000/api/cookie/validate', {}, {
+            withCredentials: true, // 쿠키 포함
+        })
+        .then(response => {
+            console.log("쿠키 보내기:", response.data);
+        })
+        .catch(error => {
+            console.error("쿠키 에러:", error);
+        });
+    }, []);
+    
 
     return (
         <div className='planner' >
