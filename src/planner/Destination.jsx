@@ -75,7 +75,13 @@ const Destination = () => {
             <div className="Destination-desc">
                 <img src={plannerItem.thumbnailImage} alt={plannerItem.plannerTitle} />
                 <h2>{plannerItem.plannerTitle}</h2>
-                <p>{plannerItem.day - 1}박 {plannerItem.day}일</p>
+
+                <p className="">
+                    {/* 기간 : */}
+                    {plannerItem.day === 1
+                        ? "당일"
+                        : `${plannerItem.day - 1}박 ${plannerItem.day}일`}
+                </p>
                 <p>지역 : {plannerItem.area}</p>
                 <p>코스 설명 : {plannerItem.description}</p>
                 <p>좋아요: {likes}</p>
