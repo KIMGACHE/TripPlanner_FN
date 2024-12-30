@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-<<<<<<< HEAD
 import "./LoginForm.scss";
 
 const LoginForm = () => {
