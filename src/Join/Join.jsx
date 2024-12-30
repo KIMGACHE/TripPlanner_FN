@@ -486,7 +486,7 @@ const Join = () => {
     
         // profileImage와 username을 추가
         data.append("profileImage", formData.profileImage || "/ProfileImg/anonymous.jpg");
-        data.append("username", formData.username); // 여기서 username 추가
+        
     
         try {
             const response = await axios.post("http://localhost:9000/user/join", data);
