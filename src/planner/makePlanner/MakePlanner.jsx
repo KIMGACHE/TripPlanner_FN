@@ -37,7 +37,7 @@ const MakePlanner = () => {
         setPlannerData([]);
     }
     
-    useEffect(()=>{console.log(plannerData)},[plannerData])
+    // useEffect(()=>{console.log(plannerData)},[plannerData])
 
     return (
         <div className='planner' >

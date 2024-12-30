@@ -18,7 +18,7 @@ const LoginForm = () =>{
         e.preventDefault();
         setError(null); //이전 에러 초기화
         try{
-            const response = await axios.post('http://localhost:9000/login',formData,{
+            const response = await axios.post('http://localhost:9000/user/login',formData,{
                 headers : {
                     'Content-Type': 'application/json',
                 },

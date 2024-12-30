@@ -138,6 +138,7 @@ const SideBar = (props) => {
             'http://localhost:9000/planner/addPlanner',
             {
               title: title,
+              areaName: areaName,
               description: description,
               isPublic: isPublic,
               destination: props.DestinationData,
