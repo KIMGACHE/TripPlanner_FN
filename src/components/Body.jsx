@@ -7,7 +7,7 @@ import TravelCourseInfo from '../tourist/TravelCourseInfo.jsx';
 import Tourist from '../tourist/Tourist.jsx';
 import TouristInfo from '../tourist/TouristInfo.jsx';
 import Board from '../planner/Board.jsx';
-import DestinationInfo from '../planner/DestinationInfo.jsx';
+// import DestinationInfo from '../planner/DestinationInfo.jsx';
 import Destination from '../planner/Destination.jsx';
 import MakePlanner from '../planner/makePlanner/MakePlanner.jsx';
 import LoginForm from '../login/LoginForm.jsx';
@@ -26,7 +26,7 @@ const Body = () => {
             <Route path="/user/join" element={<Join />}> </Route>
 
             {/* 로그인 */}
-            <Route path="/user/login" element={<LoginForm />}> </Route>
+            <Route path="/user/login" element={<LoginForm />}></Route>
 
             {/* 플래너 생성 */}
             <Route path="/makePlanner" element={< MakePlanner />}></Route>
@@ -46,11 +46,11 @@ const Body = () => {
             {/* 게시판 */}
             <Route path="/planner/board" element={<Board />}></Route>
 
-            {/* 게시판 중간 페이지 */}
-            <Route path="/planner/board/destination" element={<Destination />}></Route>
+            {/* 게시판 중간 페이지 - 없앨거임 */}
+            {/* <Route path="/planner/board/destination" element={<Destination />}></Route> */}
 
             {/* 게시판 자세히 보기 */}
-            <Route path="/planner/board/destination/info" element={<DestinationInfo />}></Route>
+            <Route path="/planner/board/destination" element={<Destination />}></Route>
 
         </Routes>
 
