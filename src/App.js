@@ -12,6 +12,8 @@ import Destination from './planner/Destination.jsx';
 import MakePlanner from './planner/makePlanner/MakePlanner.jsx';
 import LoginForm from './login/LoginForm.jsx';
 import Join from './join/Join.jsx';
+import ForgotPage from './login/ForgotPage.jsx';
+import FindIdPage from './login/components/FindIdPage.jsx';
 
 const App = () => {
   return (
@@ -47,6 +49,8 @@ const App = () => {
 
         {/* 로그인 */}
         <Route path="/user/login" element={<LoginForm />}> </Route>
+        <Route path="/forgot" element={<ForgotPage />}> </Route>
+        <Route path="/find-id" element={<FindIdPage />}> </Route>
 
         {/* 플래너 생성 */}
         <Route path="/makePlanner" element={< MakePlanner />}></Route>

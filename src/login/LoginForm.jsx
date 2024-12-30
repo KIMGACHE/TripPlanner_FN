@@ -29,7 +29,7 @@ const LoginForm = () => {
 
   const googleLogin =()=>{
     console.log("구글 로그인");
-    window.location.href = " /oauth2/authorization/google "
+    window.location.href = " http://localhost:9000/oauth2/authorization/google "
   }
   
 
@@ -81,14 +81,17 @@ const LoginForm = () => {
             onChange={handleChange}
             required
           />
+          <div className="forgot-password">
+            <a href="/forgot">비밀번호를 잊으셨나요?</a>
+          </div>
           <div className="checkbox">
-            <label>ID 저장</label>
-            <input
+            <label>ID 저장
+              <input
               type="checkbox"
               name="rememberMe"
               checked={formData.rememberMe}
               onChange={handleChange}
-            />
+            /></label>
           </div>
           {error && <p className="error-message">{error}</p>}
           <button className="loginButton" type="submit">
