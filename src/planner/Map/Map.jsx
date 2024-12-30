@@ -16,6 +16,16 @@ const Map = (props) => {
 
     const isMounted = useRef(false);
 
+    var accomIcon = L.icon({
+        iconUrl:'',
+        
+    });
+
+    var foodIcon = L.icon({
+        iconUrl:'/images/food_icon.png',
+        iconSize:[25,50],
+    })
+
     // 지도에 마커 생성 (비동기요청)
     const MapRender = async (zoomlevel) => {
         // 비동기요청
@@ -28,54 +38,13 @@ const Map = (props) => {
             layerGroup.clearLayers();
 
             // 체크박스의 food값이 true일 경우에만
-            // if(props.OptionData[0].food) {
-            //     // 음식리스트
-            //     const foodList = JSON.parse(resp.data.foodList);
-            //     foodList.forEach(el => {
-            //         const lat = el.xCoordinate; const lng = el.yCoordinate;
-            //         // 마커 생성 후 layerGroup에 추가
-            //         const marker = L.marker([lng,lat]).addTo(layerGroup);
-            //         // 마커 클릭시 팝업 생성
-            //         marker.on('click', () => {
-            //             marker.unbindPopup();
-            //             marker.bindPopup(
-            //                 `
-            //                 <style></style>
-            //                 업장명 : ${el.businessName} <br/>
-            //                 카테고리 : ${el.businessCategory} <br/>
-            //                 주소 : ${el.streetFullAddress} <br/>
-            //                 <button class='planner_btn ${el.businessName}' >플래너에 추가</button>
-            //                 `
-            //             ).openPopup();
-            //         })
-            //         // 팝업 오픈시 팝업 내에 있는 버튼의 이벤트리스너 추가
-            //         marker.on('popupopen',function(e){
-            //             const nodeList = e.target._popup._contentNode.childNodes;
-            //             nodeList[9].addEventListener('click', async () => {
-            //                 await  axios.post('http://localhost:9000/planner/findDestination',
-            //                     {"businessName":el.businessName, "businessCategory":el.businessCategory,"streetFullAddress":el.streetFullAddress,"coordinate_x":el.xCoordinate,"coordinate_y":el.yCoordinate},
-            //                     {"Content-Type":"application/json"},
-            //                 )
-            //                 .then(resp=>{
-            //                     console.log(props.DayData)
-            //                     props.AddDestination({"day":props.DayData,"data":resp.data})
-            //                 })
-            //                 .catch(err=>{console.log(err)})
-            //             });
-            //         })
-
-            //     });
-            // }
-
-            // 체크박스의 accom값이 true일 경우에만
-            if(props.OptionData[0].accom) {
+            if(props.OptionData[0].food) {
                 // 음식리스트
-                const accomList = JSON.parse(resp.data.accomList);
-                console.log(accomList);
-                accomList.forEach(el => {
+                const foodList = JSON.parse(resp.data.foodList);
+                foodList.forEach(el => {
                     const lat = el.xCoordinate; const lng = el.yCoordinate;
                     // 마커 생성 후 layerGroup에 추가
-                    const marker = L.marker([lng,lat]).addTo(layerGroup);
+                    const marker = L.marker([lng,lat],{icon: foodIcon}).addTo(layerGroup);
                     // 마커 클릭시 팝업 생성
                     marker.on('click', () => {
                         marker.unbindPopup();
@@ -99,6 +68,45 @@ const Map = (props) => {
                             )
                             .then(resp=>{
                                 console.log(props.DayData)
+                                props.AddDestination({"day":props.DayData,"data":resp.data})
+                            })
+                            .catch(err=>{console.log(err)})
+                        });
+                    })
+
+                });
+            }
+
+            // 체크박스의 accom값이 true일 경우에만
+            if(props.OptionData[0].accom) {
+                // 숙소리스트
+                const accomList = JSON.parse(resp.data.accomList);
+                accomList.forEach(el => {
+                    const lat = el.xCoordinate; const lng = el.yCoordinate;
+                    // 마커 생성 후 layerGroup에 추가
+                    const marker = L.marker([lng,lat]).addTo(layerGroup);
+                    // 마커 클릭시 팝업 생성
+                    marker.on('click', () => {
+                        marker.unbindPopup();
+                        marker.bindPopup(
+                            `
+                            <style>backgroundColor:pink;</style>
+                            업장명 : ${el.businessName} <br/>
+                            카테고리 : ${el.businessCategory} <br/>
+                            주소 : ${el.streetFullAddress} <br/>
+                            <button class='planner_btn ${el.businessName}' >플래너에 추가</button>
+                            `
+                        ).openPopup();
+                    })
+                    // 팝업 오픈시 팝업 내에 있는 버튼의 이벤트리스너 추가
+                    marker.on('popupopen',function(e){
+                        const nodeList = e.target._popup._contentNode.childNodes;
+                        nodeList[9].addEventListener('click', async () => {
+                            await  axios.post('http://localhost:9000/planner/findDestination',
+                                {"businessName":el.businessName, "businessCategory":el.businessCategory,"streetFullAddress":el.streetFullAddress,"coordinate_x":el.xCoordinate,"coordinate_y":el.yCoordinate},
+                                {"Content-Type":"application/json"},
+                            )
+                            .then(resp=>{
                                 props.AddDestination({"day":props.DayData,"data":resp.data})
                             })
                             .catch(err=>{console.log(err)})
