@@ -10,7 +10,7 @@ const SideBar = (props) => {
   const [listState, setListState] = useState(false);
 
   const [day, setDay] = useState(0);
-  const [area, setArea] = useState([126.9779692, 37.566535]); // 서울
+  const [area, setArea] = useState(null); // 서울
   const [selectedDay, setSelectedDay] = useState(1);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -19,7 +19,7 @@ const SideBar = (props) => {
   const [word, setWord] = useState('');
   const [search, setSearch] = useState([]);
   const [typeState, setTypeState] = useState('식당');
-  const [areaName, setAreaName] = useState('서울');
+  const [areaName, setAreaName] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
   const [resultsPerPage] = useState(7); // 한 페이지에 표시할 결과 수
