@@ -40,41 +40,41 @@ const App = () => {
         <button>플래너 만들기</button>
       </Link>
 
+      <Routes>
 
 
+        {/* 회원가입 페이지 */}
+        <Route path="/user/join" element={<Join />}> </Route>
 
-      {/* 회원가입 페이지 */}
-      <Route path="/user/join" element={<Join />}> </Route>
+        {/* 로그인 */}
+        <Route path="/user/login" element={<LoginForm />}> </Route>
 
-      {/* 로그인 */}
-      <Route path="/user/login" element={<LoginForm />}> </Route>
+        {/* 플래너 생성 */}
+        <Route path="/makePlanner" element={< MakePlanner />}></Route>
 
-      {/* 플래너 생성 */}
-      <Route path="/makePlanner" element={< MakePlanner />}></Route>
+        {/* 관광지 코스 */}
+        <Route path="/travelcourse" element={< TravelCourse />}></Route>
 
-      {/* 관광지 코스 */}
-      <Route path="/travelcourse" element={< TravelCourse />}></Route>
+        {/* 관광지 코스 자세히 보기 */}
+        <Route path="/travelcourse-info" element={< TravelCourseInfo />}></Route>
 
-      {/* 관광지 코스 자세히 보기 */}
-      <Route path="/travelcourse-info" element={< TravelCourseInfo />}></Route>
+        {/* 관광지 리스트 */}
+        <Route path="/tourist" element={<Tourist />}></Route>
 
-      {/* 관광지 리스트 */}
-      <Route path="/tourist" element={<Tourist />}></Route>
+        {/* 관광지 자세히 보기 */}
+        <Route path="/tourist-info" element={<TouristInfo />}></Route>
 
-      {/* 관광지 자세히 보기 */}
-      <Route path="/tourist-info" element={<TouristInfo />}></Route>
+        {/* 게시판 */}
+        <Route path="/planner/board" element={<Board />}></Route>
 
-      {/* 게시판 */}
-      <Route path="/planner/board" element={<Board />}></Route>
+        {/* 게시판 중간 페이지 */}
+        <Route path="/planner/board/destination" element={<Destination />}></Route>
 
-      {/* 게시판 중간 페이지 */}
-      <Route path="/planner/board/destination" element={<Destination />}></Route>
+        {/* 게시판 자세히 보기 */}
+        <Route path="/planner/board/destination/info" element={<DestinationInfo />}></Route>
 
-      {/* 게시판 자세히 보기 */}
-      <Route path="/planner/board/destination/info" element={<DestinationInfo />}></Route>
-
+      </Routes>
     </Router >
-
 
   );
 }
