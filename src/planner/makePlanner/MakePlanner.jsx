@@ -1,6 +1,6 @@
 import {useState, useEffect, React} from 'react';
 import '../../public/reset.css'
-import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Map from '../Map/Map';
 import SideBar from '../SideBar/SideBar';
 import './MakePlanner.scss'
@@ -8,8 +8,24 @@ import Option from '../Option/Options';
 import axios from 'axios';
 
 const MakePlanner = () => {
+    const navigate = useNavigate();
+    const [cookie,setCookie] = useState();
+    useEffect(() => {
+      axios.post('http://localhost:9000/api/cookie/validate', {}, {
+          withCredentials: true, // 쿠키 포함
+      })
+      .then(response => {
+          console.log("쿠키 보내기:", response.data);
+          setCookie(response.data);
+      })
+      .catch(error => {
+          alert('로그인 후 이용가능한 서비스입니다.');
+          navigate('/user/login');
+      });
+    }, []);
+
     const [optionState, setOptionState] = useState();
-    const [areaState, setAreaState] = useState(null);
+    const [areaState, setAreaState] = useState([]);
     const [plannerData, setPlannerData] = useState([]);
     const [selectedDay, setSelectedDay] = useState(1);
 
@@ -18,23 +34,21 @@ const MakePlanner = () => {
     const handleArea = (data) => {setAreaState(data)}
 
     const handleData = async (data) => {
-        const response = await axios.post('http://localhost:9000/planner/getImages',
-            {'latitude':data.data.yCoordinate,'longitude':data.data.xCoordinate},
+        await axios.post('http://localhost:9000/planner/getImages',
+            {'businessName':data.data.businessName},
         )
-        
-        setPlannerData((plannerData)=>[...plannerData,data]);
+        .then(resp=>{
+            console.log(resp)
+            const updatedData = {
+                ...data,  // 기존 data 객체를 복사
+                image: resp.data.image  // image 키 추가
+            };
+    
+            // plannerData에 updatedData 추가
+            setPlannerData((plannerData) => [...plannerData, updatedData]);
+        })
+        .catch(err=>{console.log(err)});
     }
-
-    const [image, setImage] = useState('');
-
-    const fetchImage = async () => {
-        const response = await axios.post('/getImages', {
-            latitude: 37.7749, // 예시: 위도
-            longitude: -122.4194 // 예시: 경도
-        });
-        // 이미지 URL이 response.data.image에 포함되어 있습니다.
-        setImage(response.data.image);
-    };
 
     const handleDay = (data) => {setSelectedDay(data);}
 
@@ -53,11 +67,6 @@ const MakePlanner = () => {
     const handleAllDelete = () => {
         setPlannerData([]);
     }
-    
-    // 홈페이지가 렌더링 되자마자 로그인여부 확인
-    useEffect(()=>{
-        console.log(plannerData);
-    },[plannerData])
 
     return (
         <div className='planner' >
@@ -69,19 +78,17 @@ const MakePlanner = () => {
                     DeleteDestination={handleDeleteDest}
                     DeleteAllDestination={handleAllDelete}
                     AddDestination={handleData}
+                    CookieData={cookie}
                 />
             </div>
             <div className='plannerBody' >
-                { areaState && <>
-                        <Option OptionData={handleOption}/>
-                        <Map 
-                            OptionData={optionState}
-                            AreaData={areaState}
-                            DayData={selectedDay}
-                            AddDestination={handleData}
-                        />
-                    </>
-                }
+                {/* <Option OptionData={handleOption}/>
+                <Map 
+                    OptionData={optionState}
+                    AreaData={areaState}
+                    DayData={selectedDay}
+                    AddDestination={handleData}
+                /> */}
             </div>
             
         </div>

@@ -66,89 +66,106 @@
             }
 
             .content-body {
-                width:300px;
-                height:100%;
-
-                // .content-card {
-                //     width: auto;
-                //     height: 100px;
-                //     padding: 5px 10px 0px 5px;
-                //     margin-bottom: 5px;
-
-                //     background-color: white;
-
-                //     border: 1px solid black;
-                    
-                // }
+                width: 500px;
+                height: 100%;
+              
                 /* 기본적인 카드 스타일 */
-            .content-card {
-                display: flex;
-                flex-direction: column;
-                background-color: #fff;
-                border-radius: 8px;
-                border: 1px solid #ddd;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                margin-bottom: 15px;
-                padding: 20px;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            
-                &:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                .content-card {
+                  display: flex;
+                  flex-direction: row;  /* 이미지와 텍스트를 가로로 배치 */
+                  background-color: #fff;
+                  border-radius: 8px;
+                  border: 1px solid #ddd;
+                  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                  margin-bottom: 15px;
+                  padding: 20px;
+                  transition: transform 0.3s ease, box-shadow 0.3s ease;
+              
+                  &:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                  }
                 }
-            }
-            
-            /* 카드의 제목 (장소 이름) */
-            .card-name {
-                font-size: 18px;
-                font-weight: bold;
-                color: #333;
-                margin-bottom: 10px;
-            }
-            
-            /* 카드의 카테고리 (식당, 숙소, 관광지 등) */
-            .card-category {
-                font-size: 14px;
-                color: #888;
-                margin-bottom: 10px;
-            }
-            
-            /* 카드의 주소 */
-            .card-addr {
-                font-size: 14px;
-                color: #555;
-                margin-bottom: 10px;
-            }
-            
-            /* 카드의 설명 */
-            .card-desc {
-                font-size: 12px;
-                color: #666;
-                margin-bottom: 15px;
-            }
-            
-            /* 제거 버튼 */
-            button {
-                align-self: flex-start;
-                padding: 8px 12px;
-                font-size: 14px;
-                color: #fff;
-                background-color: #e53e3e;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            
-                &:hover {
-                background-color: #c53030;
+              
+                /* 이미지 스타일 */
+                .card-image {
+                  width: 200px;  /* 이미지의 고정 크기 */
+                  height: 100px;
+                  margin-right: 15px;
+                  img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 4px;
+                  }
                 }
-                
-                &:disabled {
-                background-color: #ddd;
-                cursor: not-allowed;
+              
+                /* 텍스트 영역 */
+                .card-content {
+                  display: flex;
+                  flex-direction: column;
+                  flex-grow: 1;
+                  justify-content: space-between;
                 }
-            }
-  
+              
+                /* 카드 상단 (이름, 카테고리, 주소, 제거 버튼) */
+                .card-header {
+                  display: flex;
+                  flex-direction: column; /* 이름, 카테고리, 주소 세로로 정렬 */
+                  justify-content: flex-start;
+                  margin-bottom: 10px;
+                }
+              
+                /* 카드의 제목 (장소 이름) */
+                .card-name {
+                  font-size: 18px;
+                  font-weight: bold;
+                  color: #333;
+                  margin-bottom: 5px;
+                }
+              
+                /* 카드의 카테고리 (식당, 숙소, 관광지 등) */
+                .card-category {
+                  font-size: 14px;
+                  color: #888;
+                  margin-bottom: 5px;
+                }
+              
+                /* 카드의 주소 */
+                .card-addr {
+                  font-size: 14px;
+                  color: #555;
+                  margin-bottom: 10px;
+                }
+              
+                /* 제거 버튼 */
+                button {
+                  align-self: flex-start;
+                  padding: 8px 12px;
+                  font-size: 14px;
+                  color: #fff;
+                  background-color: #e53e3e;
+                  border: none;
+                  border-radius: 4px;
+                  cursor: pointer;
+                  transition: background-color 0.3s ease;
+              
+                  &:hover {
+                    background-color: #c53030;
+                  }
+              
+                  &:disabled {
+                    background-color: #ddd;
+                    cursor: not-allowed;
+                  }
+                }
+              
+                /* 카드의 설명 */
+                .card-desc {
+                  font-size: 12px;
+                  color: #666;
+                  margin-bottom: 15px;
+                }
             }
         }
 
@@ -175,4 +192,53 @@
             }
         }
     }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px; /* Space between buttons */
+      
+        button {
+          padding: 8px 16px;  /* Adjust size of all pagination buttons */
+          font-size: 1rem;    /* Adjust font size if necessary */
+          cursor: pointer;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;
+          border-radius: 4px;
+      
+          transition: background-color 0.3s ease;
+      
+          &:hover {
+            background-color: #e0e0e0;
+          }
+      
+          &.active {
+            background-color: #007bff;
+            color: white;
+          }
+      
+          &:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+          }
+        }
+      }
+      
+      .search-btn {
+        padding: 8px 16px; /* Consistent padding */
+        font-size: 1rem;   /* Ensure consistent font size */
+        cursor: pointer;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+        border-radius: 4px;
+      
+        &:hover {
+          background-color: #e0e0e0;
+        }
+      }
+      
+      button.pagination-btn {
+        padding: 8px 16px;  /* Same padding as pagination buttons */
+        font-size: 1rem;    /* Same font size */
+      }
 }

@@ -14,7 +14,7 @@ const Test = (props) => {
   ]);
   const [showCalendar, setShowCalendar] = useState(false); // 팝업 열림 여부
   const [inputValue, setInputValue] = useState(""); // 날짜 입력 필드 값
-  const [area, setArea] = useState(null); // 선택된 지역 좌표
+  const [area, setArea] = useState([126.9779692, 37.566535]); // 선택된 지역 좌표
   const [areaName, setAreaName] = useState("서울");
 
   const today = new Date(); // 오늘 날짜 계산
