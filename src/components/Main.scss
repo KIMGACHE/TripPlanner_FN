@@ -1,0 +1,85 @@
+// 메인페이지 전체
+.main-wrapper {
+    background-image: url('../images/main.jpg');
+    flex: 1;
+    height: calc(100vh - 80px);
+    background-size: cover;
+    background-position: center;
+}
+
+// 메인페이지 제목
+.main-title {
+
+    position: fixed;
+    font-size: 3rem;
+    text-align: center;
+    top: 35%;
+    left: 15%;
+
+    color: white;
+}
+
+.main-makeplanner-btn {
+    position: fixed;
+
+    top: 60%;
+    left: 13%;
+    height: 70px;
+    padding: 20px;
+    text-align: center;
+    border: 0px;
+    color: #FFFFFF;
+    background: #333;
+    /* 버튼 배경색을 header-wrapper와 동일하게 설정 */
+    border-radius: 15px;
+    /* 버튼에 둥근 모서리 추가 */
+    font-size: 2rem;
+
+    /* 네온 효과 */
+    text-shadow:
+        0 0 35px #FFFFFF;
+
+    transition: text-shadow 0.3s ease;
+    /* 호버 효과를 위한 트랜지션 */
+}
+
+.main-makeplanner-btn:hover {
+    /* 호버 시 네온 효과 강조 */
+    text-shadow:
+        0 0 10px #2317FF,
+        0 0 20px #2317FF,
+        0 0 70px #FFFFFF;
+}
+
+
+.main-board-btn {
+    position: fixed;
+    top: 60%;
+    left: 30%;
+    height: 70px;
+    padding: 20px;
+    border: 0px;
+    text-align: center;
+
+    color: #FFFFFF;
+    background: #333;
+    /* 버튼 배경색을 header-wrapper와 동일하게 설정 */
+    border-radius: 15px;
+    /* 버튼에 둥근 모서리 추가 */
+    font-size: 2rem;
+
+    /* 네온 효과 */
+    text-shadow:
+        0 0 35px #FFFFFF;
+
+    transition: text-shadow 0.3s ease;
+    /* 호버 효과를 위한 트랜지션 */
+}
+
+.main-board-btn:hover {
+    /* 호버 시 네온 효과 강조 */
+    text-shadow:
+        0 0 10px #2317FF,
+        0 0 20px #2317FF,
+        0 0 70px #FFFFFF;
+}

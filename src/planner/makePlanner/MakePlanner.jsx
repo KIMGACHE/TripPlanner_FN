@@ -29,7 +29,7 @@ const MakePlanner = () => {
     const [plannerData, setPlannerData] = useState([]);
     const [selectedDay, setSelectedDay] = useState(1);
 
-    const handleOption = (data) => {setOptionState(data);}
+    const handleOption = (data) => { setOptionState(data); }
 
     const handleArea = (data) => {setAreaState(data)}
 
@@ -50,10 +50,10 @@ const MakePlanner = () => {
         .catch(err=>{console.log(err)});
     }
 
-    const handleDay = (data) => {setSelectedDay(data);}
+    const handleDay = (data) => { setSelectedDay(data); }
 
     const handleDeleteDest = (day, index) => {
-        setPlannerData(prevPlannerData => 
+        setPlannerData(prevPlannerData =>
             prevPlannerData
                 .filter(el => el.day !== day) // 해당 day와 일치하지 않는 항목만 남기기
                 .concat(
@@ -90,7 +90,7 @@ const MakePlanner = () => {
                     AddDestination={handleData}
                 /> */}
             </div>
-            
+
         </div>
     )
 }
