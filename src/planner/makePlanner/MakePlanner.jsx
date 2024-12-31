@@ -1,10 +1,11 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import '../../public/reset.css'
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Map from '../Map/Map';
 import SideBar from '../SideBar/SideBar';
 import './MakePlanner.scss'
 import Option from '../Option/Options';
+import axios from 'axios';
 
 
 const MakePlanner = () => {
@@ -13,19 +14,19 @@ const MakePlanner = () => {
     const [plannerData, setPlannerData] = useState([]);
     const [selectedDay, setSelectedDay] = useState(1);
 
-    const handleOption = (data) => {setOptionState(data);}
+    const handleOption = (data) => { setOptionState(data); }
 
     const handleArea = (data) => {
         setAreaState(data)
-        console.log("area Map왜 안됨?",data)
+        console.log("area Map왜 안됨?", data)
     }
 
-    const handleData = (data) => {setPlannerData((plannerData)=>[...plannerData,data]);}
+    const handleData = (data) => { setPlannerData((plannerData) => [...plannerData, data]); }
 
-    const handleDay = (data) => {setSelectedDay(data);}
+    const handleDay = (data) => { setSelectedDay(data); }
 
     const handleDeleteDest = (day, index) => {
-        setPlannerData(prevPlannerData => 
+        setPlannerData(prevPlannerData =>
             prevPlannerData
                 .filter(el => el.day !== day) // 해당 day와 일치하지 않는 항목만 남기기
                 .concat(
@@ -39,8 +40,18 @@ const MakePlanner = () => {
     const handleAllDelete = () => {
         setPlannerData([]);
     }
-    
-    // useEffect(()=>{console.log(plannerData)},[plannerData])
+
+    useEffect(() => {
+        axios.post('http://localhost:9000/api/cookie/validate', {}, {
+            withCredentials: true, // 쿠키 포함
+        })
+            .then(response => {
+                console.log("쿠키 보내기:", response.data);
+            })
+            .catch(error => {
+                console.error("쿠키 에러:", error);
+            });
+    }, []);
 
     return (
         <div className='planner' >
@@ -55,18 +66,18 @@ const MakePlanner = () => {
                 />
             </div>
             <div className='plannerBody' >
-                { areaState && <>
-                        <Option OptionData={handleOption}/>
-                        <Map 
-                            OptionData={optionState}
-                            AreaData={areaState}
-                            DayData={selectedDay}
-                            AddDestination={handleData}
-                        />
-                    </>
+                {areaState && <>
+                    <Option OptionData={handleOption} />
+                    <Map
+                        OptionData={optionState}
+                        AreaData={areaState}
+                        DayData={selectedDay}
+                        AddDestination={handleData}
+                    />
+                </>
                 }
             </div>
-            
+
         </div>
     )
 }

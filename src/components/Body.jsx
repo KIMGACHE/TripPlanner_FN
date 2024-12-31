@@ -13,6 +13,7 @@ import MakePlanner from '../planner/makePlanner/MakePlanner.jsx';
 import LoginForm from '../login/LoginForm.jsx';
 import Join from '../join/Join.jsx';
 import Main from './Main.jsx';
+import Destination1 from '../planner/Destination1.jsx';
 
 const Body = () => {
     return (
@@ -50,7 +51,7 @@ const Body = () => {
             {/* <Route path="/planner/board/destination" element={<Destination />}></Route> */}
 
             {/* 게시판 자세히 보기 */}
-            <Route path="/planner/board/destination" element={<Destination />}></Route>
+            <Route path="/planner/board/destination" element={<Destination1 />}></Route>
 
         </Routes>
 

@@ -75,6 +75,8 @@ const TravelCourseInfo = () => {
                 console.error('요청 중 오류 발생: ', error); // 에러 발생 시 로그 출력
             });
 
+        
+
 
     }, [courseDetail]);
 
