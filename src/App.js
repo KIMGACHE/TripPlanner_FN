@@ -14,6 +14,8 @@ import LoginForm from './login/LoginForm.jsx';
 import Join from './join/Join.jsx';
 import ForgotPage from './login/ForgotPage.jsx';
 import FindIdPage from './login/components/FindIdPage.jsx';
+import PasswordResetRequest from './login/components/PasswordResetRequest.jsx';
+import PasswordResetPage from './login/components/PasswordResetPage.jsx';
 
 const App = () => {
   return (
@@ -51,7 +53,12 @@ const App = () => {
         <Route path="/user/login" element={<LoginForm />}> </Route>
         <Route path="/forgot" element={<ForgotPage />}> </Route>
         <Route path="/find-id" element={<FindIdPage />}> </Route>
+        <Route path="/find-password" element={<PasswordResetRequest />}> </Route>
+        <Route path="/reset-password" element={<PasswordResetPage />}> </Route>
 
+
+
+        
         {/* 플래너 생성 */}
         <Route path="/makePlanner" element={< MakePlanner />}></Route>
 
