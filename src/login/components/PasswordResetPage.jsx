@@ -3,8 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 const PasswordResetPage = ()=>{
-    const [searchParams] = useSearchParams();
-    const token = searchParams.get("token"); //URL 에서 토큰 추출
     const [newPassword,setNewPassword] = useState("");
     const [confirmPassword,setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -20,7 +18,6 @@ const PasswordResetPage = ()=>{
         setError("");
         try{
             await axios.post("http://localhost:9000/user/reset-password",{
-                token,
                 newPassword,
             });
             setMessage("비밀번호가 성공적으로 변경되었습니다");

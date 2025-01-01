@@ -14,8 +14,10 @@ import LoginForm from './login/LoginForm.jsx';
 import Join from './join/Join.jsx';
 import ForgotPage from './login/ForgotPage.jsx';
 import FindIdPage from './login/components/FindIdPage.jsx';
-import PasswordResetRequest from './login/components/PasswordResetRequest.jsx';
 import PasswordResetPage from './login/components/PasswordResetPage.jsx';
+import VerifyCodePage from './login/components/VerifyCodePage.jsx';
+import EmailAuthPage from './login/components/EmailAuthPage.jsx';
+import UseridInputPage from './login/components/UseridInputPage.jsx';
 
 const App = () => {
   return (
@@ -53,8 +55,12 @@ const App = () => {
         <Route path="/user/login" element={<LoginForm />}> </Route>
         <Route path="/forgot" element={<ForgotPage />}> </Route>
         <Route path="/find-id" element={<FindIdPage />}> </Route>
-        <Route path="/find-password" element={<PasswordResetRequest />}> </Route>
-        <Route path="/reset-password" element={<PasswordResetPage />}> </Route>
+        <Route path="/find-password" element={<UseridInputPage />}> </Route>
+        <Route path="/userid-check" element={<UseridInputPage />} /> 
+        <Route path="/email-auth" element={<EmailAuthPage />} />  
+        <Route path="/verify-code" element={<VerifyCodePage />} /> 
+        <Route path="/reset-password" element={<PasswordResetPage />} />
+        
 
 
 
