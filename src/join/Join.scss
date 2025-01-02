@@ -103,7 +103,7 @@
             display: flex;
             flex-direction: column; // 수직 배치
             align-items: flex-start;
-            width: 400px;
+            width: 400;
             // border: 1px solid red;
             margin-bottom: 0; // 기본적으로 margin-bottom 없음
         
@@ -163,7 +163,7 @@
                 display: flex;
                 align-items: center;
                 width: 100%;
-                // border: 1px solid blue;
+                border: 1px solid blue;
                 // margin-bottom: 50px ;
         
                 .auth-code {
@@ -173,7 +173,7 @@
                     border-radius: 4px;
                     font-size: 0.9rem;
                     width: 100%;
-                    // border: 1px solid red;
+                    border: 1px solid red;
                     position: relative;
                     // margin-bottom:  0px;
                 }

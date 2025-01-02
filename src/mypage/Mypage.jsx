@@ -28,7 +28,7 @@ const Mypage = () => {
     isAuthCodeLocked,
     resetAuthState,
     setIsAuthCodeLocked, // 인증 코드 버튼 잠금 상태 업데이트 함수
-    handleFileChange
+    handleFileChange,
   } = useMyPage(); // Using the custom hook
 
   const [isEditing, setIsEditing] = useState(false);
@@ -37,7 +37,6 @@ const Mypage = () => {
   const [error, setError] = useState(null);
   const [isPasswordEditing, setIsPasswordEditing] = useState(false); // 비밀번호 편집 상태
   const [isEmailEditing, setIsEmailEditing] = useState(false); // 이메일 편집 상태
-  const imageServerUrl = "http://localhost:9000";
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -106,7 +105,7 @@ const Mypage = () => {
 
   const handleCancelChanges = () => {
     setFormData({
-      profileImage: userData?.profileImg || "/ProfileImg/anonymous.jpg",
+      profileImage: userData?.img || "/ProfileImg/anonymous.jpg",
       userid: userData?.userid || "",
       username: userData?.username || "",
       email: userData?.email || "",
@@ -132,8 +131,6 @@ const Mypage = () => {
     setIsEmailEditing(true); // 이메일 편집 활성화
   };
 
- 
-
   return (
     <div className="mypage-container">
       <h2>마이페이지</h2>
@@ -141,34 +138,40 @@ const Mypage = () => {
       <div className="user-info">
         {isEditing ? (
           <>
-     <div className="image-preview-container" onDrop={handleDrop} onDragOver={handleDragOver}>
-  <img src={imagePreview} alt="미리보기" className="circle-preview" />
-</div>
-<div id="imgbutton">
-  <button id="imgupload" type="button" onClick={handleFileInputClick}>
-    이미지 업로드
-  </button>
-  {formData.profileImage && (
-    <button
-      id="imgcancel"
-      type="button"
-      onClick={handleCancelImage}
-      style={{ marginLeft: "10px", color: "red" }}
-    >
-      이미지 취소
-    </button>
-  )}
-  {/* 숨겨진 파일 입력 */}
-  <input
-    ref={fileInputRef}
-    id="fileInput"
-    type="file"
-    accept="image/*"
-    style={{ display: "none" }}
-    onChange={handleFileChange} // 파일 변경 이벤트
-  />
-</div>
-
+            <div
+              className="image-preview-container"
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+            >
+              <img
+                src={imagePreview}
+                alt="미리보기"
+                className="circle-preview"
+              />
+            </div>
+            <div id="imgbutton">
+              <button id="imgupload" type="button" onClick={handleFileInputClick}>
+                이미지 업로드
+              </button>
+              {formData.profileImage && (
+                <button
+                  id="imgcancel"
+                  type="button"
+                  onClick={handleCancelImage}
+                  style={{ marginLeft: "10px", color: "red" }}
+                >
+                  이미지 취소
+                </button>
+              )}
+              <input
+                ref={fileInputRef}
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+              />
+            </div>
 
             <div>{userData.userid}</div>
             <input
@@ -178,146 +181,155 @@ const Mypage = () => {
               onChange={handleChange}
             />
             {validationMessages.username && (
-              <div className={`validation-message ${validationMessages.usernameColor}`}>
+              <div
+                className={`validation-message ${validationMessages.usernameColor}`}
+              >
                 {validationMessages.username}
               </div>
             )}
 
-          {/* 이메일 */}
-{/* 이메일 수정 */}  
-<div className={`emailbox ${validationMessages.email ? 'has-message' : ''}`}>
-  <div className="email-wrapper">
-    <input
-      type="email"
-      name="email"
-      value={formData.email}
-      placeholder="이메일 입력"
-      onChange={handleChange}
-      disabled={!isEmailEditing} // 이메일 편집 상태에 따라 비활성화
-    />
-    {isEmailEditing ? (
-      <>
-        <button
-          className="emailbutton"
-          type="button"
-          onClick={sendAuthCode}
-          disabled={isAuthCodeLocked} // 인증 버튼 잠금 상태
-        >
-          인증 코드 받기
-        </button>
-        <button
-          className="cancel-email-editing"
-          type="button"
-          onClick={() => {
-            setIsEmailEditing(false); // 이메일 편집 비활성화
-            setFormData((prev) => ({ ...prev, email: userData.email })); // 원래 이메일로 복원
-            resetAuthState(); // 인증 상태 초기화
-          }}
-        >
-          취소
-        </button>
-      </>
-    ) : (
-      <button
-        className="edit-email"
-        type="button"
-        onClick={() => setIsEmailEditing(true)} // 이메일 편집 활성화
-      >
-        이메일 수정
-      </button>
-    )}
-  </div>
-  {validationMessages.email && (
-    <div className={`validation-message ${validationMessages.emailColor}`}>
-      {validationMessages.email}
-    </div>
-  )}
-</div>
+            <div className={`emailbox ${validationMessages.email ? "has-message" : ""}`}>
+              <div className="email-wrapper">
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  placeholder="이메일 입력"
+                  onChange={handleChange}
+                  disabled={!isEmailEditing}
+                />
+                {isEmailEditing ? (
+                  <>
+                    <button
+                      className="emailbutton"
+                      type="button"
+                      onClick={sendAuthCode}
+                      disabled={isAuthCodeLocked}
+                    >
+                      인증 코드 받기
+                    </button>
+                    <button
+                      className="cancel-email-editing"
+                      type="button"
+                      onClick={() => {
+                        setIsEmailEditing(false);
+                        setFormData((prev) => ({
+                          ...prev,
+                          email: userData.email,
+                        }));
+                        resetAuthState();
+                      }}
+                    >
+                      취소
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="edit-email"
+                    type="button"
+                    onClick={() => setIsEmailEditing(true)}
+                  >
+                    이메일 수정
+                  </button>
+                )}
+              </div>
+              {validationMessages.email && (
+                <div
+                  className={`validation-message ${validationMessages.emailColor}`}
+                >
+                  {validationMessages.email}
+                </div>
+              )}
+            </div>
 
+            <div className="password-box">
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                placeholder="새 비밀번호"
+                onChange={handleChange}
+                disabled={!isPasswordEditing}
+              />
 
-           {/* 비밀번호 변경 */}
-<div className="password-box">
-  <input
-    type="password"
-    name="password"
-    value={formData.password}
-    placeholder="새 비밀번호"
-    onChange={handleChange}
-    disabled={!isPasswordEditing} // 비밀번호 편집 상태에 따라 비활성화
-  />
+              {isPasswordEditing && (
+                <input
+                  type="password"
+                  name="repassword"
+                  value={formData.repassword}
+                  placeholder="비밀번호 확인"
+                  onChange={handleChange}
+                />
+              )}
 
-  {isPasswordEditing && (
-    <input
-      type="password"
-      name="repassword"
-      value={formData.repassword}
-      placeholder="비밀번호 확인"
-      onChange={handleChange}
-    />
-  )}
+              <div className="password-buttons">
+                {!isPasswordEditing ? (
+                  <button
+                    className="passwordbutton"
+                    type="button"
+                    onClick={handlePasswordChange}
+                  >
+                    비밀번호 변경
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      className="password-save-button"
+                      type="button"
+                      onClick={() => setIsPasswordEditing(false)}
+                    >
+                      저장
+                    </button>
+                    <button
+                      className="password-cancel-button"
+                      type="button"
+                      onClick={() => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          password: "",
+                          repassword: "",
+                        }));
+                        setIsPasswordEditing(false);
+                      }}
+                    >
+                      취소
+                    </button>
+                  </>
+                )}
+              </div>
 
-  <div className="password-buttons">
-    {!isPasswordEditing ? (
-      <button
-        className="passwordbutton"
-        type="button"
-        onClick={handlePasswordChange}
-      >
-        비밀번호 변경
-      </button>
-    ) : (
-      <>
-        <button
-          className="password-save-button"
-          type="button"
-          onClick={() => setIsPasswordEditing(false)} // 비밀번호 편집 비활성화 (저장 로직에 맞게 수정 가능)
-        >
-          저장
-        </button>
-        <button
-          className="password-cancel-button"
-          type="button"
-          onClick={() => {
-            setFormData((prev) => ({
-              ...prev,
-              password: "",
-              repassword: "",
-            }));
-            setIsPasswordEditing(false); // 비밀번호 변경 취소
-          }}
-        >
-          취소
-        </button>
-      </>
-    )}
-  </div>
-
-  {/* Validation Messages */}
-  {validationMessages.password && (
-    <div className={`validation-message ${validationMessages.passwordColor}`}>
-      {validationMessages.password}
-    </div>
-  )}
-  {validationMessages.repassword && (
-    <div className={`validation-message ${validationMessages.repasswordColor}`}>
-      {validationMessages.repassword}
-    </div>
-  )}
-</div>
+              {validationMessages.password && (
+                <div
+                  className={`validation-message ${validationMessages.passwordColor}`}
+                >
+                  {validationMessages.password}
+                </div>
+              )}
+              {validationMessages.repassword && (
+                <div
+                  className={`validation-message ${validationMessages.repasswordColor}`}
+                >
+                  {validationMessages.repassword}
+                </div>
+              )}
+            </div>
 
             <button onClick={handleSaveChanges}>저장</button>
             <button onClick={handleCancelChanges}>취소</button>
           </>
         ) : (
           <>
-              <img
-                src={userData.img ? `http://localhost:9000/user/mypage${userData.img}` : '/ProfileImg/anonymous.jpg'}
-                alt="프로필 사진"
-                className="profile-img"
-              />
+            <img
+              src={
+                userData.img
+                  ? `http://localhost:9000${userData.img}`
+                  : "/ProfileImg/anonymous.jpg"
+              }
+              alt="프로필 사진"
+              className="profile-img"
+            />
 
-            <div>{`http://localhost:9000/user/mypage${userData.img}`}</div>
-    
+            <div>{`http://localhost:9000${userData.img}`}</div>
 
             <p>아이디: {userData.userid}</p>
             <p>이름: {userData.username}</p>
