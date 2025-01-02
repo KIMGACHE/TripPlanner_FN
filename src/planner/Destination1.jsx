@@ -1,25 +1,27 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
 import Summary from './Summary.jsx';
-import Details from './Details';
+import DestinationDetails from './DestinationDetails.jsx';
 import Comments from './Comments';
 import '../css/Destination.scss';
+import Destination from './Destination.jsx';
 
 const Destination1 = () => {
-    const [plannerItem, setPlannerItem] = useState(null);
+    const location = useLocation();
+    const plannerID = new URLSearchParams(location.search).get("plannerID");
+    const { plannerItem } = location.state || {}; // state에서 데이터 가져오기 (Planner의 정보)
     const [destinations, setDestinations] = useState([]);
-    const [username, setUsername] = useState('');
     const [loginStatus, setLoginStatus] = useState([]);
     const [activeTab, setActiveTab] = useState("summary");  // 현재 활성화된 탭을 관리
 
     useEffect(() => {
         // 데이터를 가져오는 로직
-        axios.get('http://localhost:9000/planner/board/destination')
+        axios.get(`http://localhost:9000/planner/board/destination?plannerID=${plannerID}`)
             .then((response) => {
-                setPlannerItem(response.data.plannerItem);
-                setDestinations(response.data.destinations);
-                setUsername(response.data.username);
+
+                setDestinations(response.data);
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
@@ -48,8 +50,8 @@ const Destination1 = () => {
 
 
             {/* 탭에 따라 컴포넌트 렌더링 */}
-            {activeTab === "summary" && <Summary plannerItem={plannerItem} />}
-            {activeTab === "details" && <Details plannerItem={plannerItem} destinations={destinations} />}
+            {activeTab === "summary" && <Destination plannerItem={plannerItem} />}
+            {activeTab === "details" && <DestinationDetails plannerItem={plannerItem} destinations={destinations} />}
             {activeTab === "comments" && <Comments plannerItem={plannerItem} />}
         </div>
     );
