@@ -2,8 +2,6 @@
     width: 900px;
     height: 100vh;
 
-    background-color: aqua;
-
     display: flex;
     justify-content: stretch;
     align-items: center;
@@ -12,32 +10,75 @@
         width:100px;
         height: 100%;
 
-        background-color: red;
-
         .optionButton {
-            width: 80px;
-            height: 80px;
-            cursor: pointer;
-
-            border: 1px solid black;
-            margin: 10px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            font-size: .8rem;
+          width: 80px;
+          height: 80px;
+          cursor: pointer;
+          margin: 10px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: .7rem;
+          transition: font-size 0.3s ease, background-color 0.3s ease;  // 애니메이션 추가
+          color: gray;
+        
+          &:active {
+            color: #d3cbed;  // 텍스트 색상 변경
+            font-size: 1rem;  // 글자 크기 커짐
+          }
         }
     }
     .content{
         width:400px;
         height: 100%;
-
-        background-color: blue;
         
+        p {
+          text-align: center;
+        }
+        .title {
+          display: flex;                // Flexbox 사용
+          flex-direction: column;       // 수직 정렬
+          justify-content: baseline;      // 수직 중앙 정렬
+          align-items: center;          // 수평 중앙 정렬
+          height: 100vh;                // 화면 전체 높이 사용
+          text-align: center;           // 텍스트 중앙 정렬
+          padding: 20px;                // 여백 추가 (필요에 따라 조정)
+        
+          label, input {
+            margin-bottom: 10px;        // 각 입력 요소 사이에 여백 추가
+          }
+        
+          label {
+            display: flex;              // label 내부의 텍스트와 체크박스를 가로로 배치
+            align-items: center;        // 텍스트와 체크박스를 세로로 정렬
+        
+            input {
+              margin-right: 10px;        // 체크박스와 텍스트 사이에 여백 추가
+            }
+          }
+        
+          button {
+            margin-top: 20px;            // 버튼과 그 위 요소들 사이에 여백 추가
+            padding: 10px 20px;          // 버튼 안쪽 여백 추가
+            font-size: 1rem;             // 버튼 글꼴 크기
+            cursor: pointer;            // 마우스 커서가 손 모양으로 바뀌게 함
+            background-color: #d3cbed;  // 버튼 배경 색
+            color: white;                // 버튼 글자 색
+            border: none;                // 버튼 테두리 없애기
+            border-radius: 5px;          // 버튼 모서리 둥글게 처리
+            transition: background-color 0.3s ease;
+        
+            &:hover {
+              background-color: #d3cbed;  // 버튼에 마우스를 올렸을 때 색 변경
+            }
+          }
+        }
+        
+
         .date {
-            display: flex;
-            justify-content: center;
+          width: 100%;
+          display: flex;
+          justify-content: center;
         }
 
         .plannerList {
@@ -50,18 +91,21 @@
                 height:100%;
 
                 .optionButton {
-                    width: 80px;
-                    height: 80px;
-                    cursor: pointer;
-
-                    border: 1px solid black;
-                    margin: 10px;
-        
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-        
-                    font-size: .8rem;
+                  width: 80px;
+                  height: 80px;
+                  cursor: pointer;
+                  margin: 10px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  font-size: .9rem;
+                  transition: font-size 0.3s ease, background-color 0.3s ease;  // 애니메이션 추가
+                  color: gray;
+                
+                  &:active {
+                    color: black;  // 텍스트 색상 변경
+                    font-size: 1.2rem;  // 글자 크기 커짐
+                  }
                 }
             }
 
@@ -175,7 +219,28 @@
         width:400px;
         height: 100%;
 
-        background-color: green;
+        p {
+          text-align: center;
+          margin-bottom: 10px;
+        }
+        button {
+          padding: 10px 20px;          // 버튼 안쪽 여백 추가
+          font-size: 1rem;             // 버튼 글꼴 크기
+          cursor: pointer;            // 마우스 커서가 손 모양으로 바뀌게 함
+          background-color: #d3cbed;  // 버튼 배경 색
+          color: white;                // 버튼 글자 색
+          border: none;                // 버튼 테두리 없애기
+          border-radius: 5px;          // 버튼 모서리 둥글게 처리
+
+          &:hover {
+            background-color: #e0e0e0;
+          }
+      
+          &.active {
+            background-color: #d3cbed;
+            color: white;
+          }
+        }
 
         .search-body {
 
@@ -213,7 +278,7 @@
           }
       
           &.active {
-            background-color: #007bff;
+            background-color: #d3cbed;
             color: white;
           }
       
@@ -223,17 +288,23 @@
           }
         }
       }
-      
-      .search-btn {
-        padding: 8px 16px; /* Consistent padding */
-        font-size: 1rem;   /* Ensure consistent font size */
-        cursor: pointer;
-        border: 1px solid #ccc;
-        background-color: #f1f1f1;
-        border-radius: 4px;
-      
-        &:hover {
-          background-color: #e0e0e0;
+      .search-btns {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        margin: 3px 10px;
+
+        .search-btn {
+          margin: 3px 10px;
+          padding: 8px 16px; /* Consistent padding */
+          font-size: 1rem;   /* Ensure consistent font size */
+          cursor: pointer;
+          background-color: #817aff;
+          border-radius: 4px;
+        
+          &:hover {
+            background-color: #817aff;
+          }
         }
       }
       

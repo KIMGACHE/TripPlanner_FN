@@ -204,8 +204,7 @@ const Map = (props) => {
 
     return (
         <>              
-            <div id="map" style={{width: '70vw',height:'90vh'}} ></div>
-            {/* style={{ width: '60vw', height: '80vh',position:"absolute",left:"400px" }} */}
+            <div id="map" style={{ width: '1000px', height: '90vh' }}></div>
         </>
     );
 }
