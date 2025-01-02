@@ -6,9 +6,6 @@ import Body from './components/Body';
 import '../src/public/public.css';
 import '../src/public/reset.css';
 
-
-
-
 const App = () => {
   return (
     <Router>
@@ -16,9 +13,7 @@ const App = () => {
       <Header />
       <Body />
 
-    </Router >
-
-  );
+    </Router>
+    );
 }
-
 export default App;

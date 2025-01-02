@@ -17,14 +17,25 @@ const LoginForm = () => {
     setFormData((prev) => ({ ...prev, [name]: fieldValue }));
   };
 
-  const handleSocialLogin = (provider) => {
-    window.location.href = `/oauth2/authorization/${provider}`;
-  };
-
-  const handleLogin = () => {
+  const naverLogin = () => {
     console.log("네이버 로그인 클릭");
     window.location.href = "http://localhost:9000/oauth2/authorization/naver";
   };
+
+  const kakaoLogin = ()=>{
+    console.log("카카오 로그인 클릭");
+    window.location.href = " http://localhost:9000/oauth2/authorization/kakao ";
+  }
+
+  const googleLogin =()=>{
+    console.log("구글 로그인");
+    window.location.href = " http://localhost:9000/oauth2/authorization/google "
+  }
+
+  const instaLogin =()=>{
+    console.log("인스타 로그인");
+    window.location.href = " http://localhost:9000/oauth2/authorization/instagram "
+  }
   
 
   //로그인 요청
@@ -53,9 +64,9 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="wrapper">
-      <div className="logo">로고 들어갈 부분</div>
-      <div className="login">
+    <div className="login-form_wrapper">
+      <div className="login-form_logo">여행가자</div>
+      <div className="login-form_login">
         <form onSubmit={handleSubmit}>
           <label htmlFor="userid">유저 ID:</label>
           <input
@@ -66,60 +77,61 @@ const LoginForm = () => {
             onChange={handleChange}
             required
           />
+          <div className="login-form_checkbox">
+            <label>ID 저장
+              <input
+              type="checkbox"
+              name="rememberMe"
+              checked={formData.rememberMe}
+              onChange={handleChange}
+            /></label>
+          </div>
           <label htmlFor="password">PASSWORD:</label>
           <input
-            type="text"
+            type="password"
             id="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
             required
           />
-          <div className="checkbox">
-            <label>ID 저장</label>
-            <input
-              type="checkbox"
-              name="rememberMe"
-              checked={formData.rememberMe}
-              onChange={handleChange}
-            />
+          <div className="login-form_forgot-password">
+            <a href="/forgot">비밀번호를 잊으셨나요?</a>
           </div>
-          {error && <p className="error-message">{error}</p>}
-          <button className="loginButton" type="submit">
+          {error && <p className="login-form_error-message">{error}</p>}
+          <button className="login-form_loginButton" type="submit">
             로그인
           </button>
         </form>
       </div>
-      <div className="join">
+      <div className="login-form_join">
         아직 회원이 아니세요? <a href="/user/join">회원가입</a>
       </div>
       <hr />
-      <div className="oauth2">
+      <div className="login-form_oauth2">
         <div style={{ textAlign: "center" }}>SNS 간편 로그인</div>
-        <div className="oauth2-buttons">
+        <div className="login-form_oauth2-buttons">
           <ul>
             <li>
-              <a href="/oauth2/authorization/kakao" title="카카오로그인">
-                <img src="/images/kakaobutton.png" alt="카카오로그인" />
-              </a>
+              <button className="login-form_oauth2-button" onClick={kakaoLogin}>
+              <img src="/images/kakaobutton.png" alt="카카오로그인" />
+              </button>
             </li>
             <li>
               <button
-                className="oauth2-button"
-                onClick={handleLogin}
-              >
+                className="login-form_oauth2-button" onClick={naverLogin}>
                 <img src="/images/naverbutton.png" alt="네이버 로그인" />
               </button>
             </li>
             <li>
-              <a href="/oauth2/authorization/google" title="구글 로그인">
-                <img src="/images/googlebutton.png" alt="구글 로그인" />
-              </a>
+              <button className="login-form_oauth2-button" onClick={googleLogin}>
+              <img src="/images/googlebutton.png" alt="구글 로그인" />
+              </button>
             </li>
             <li>
-              <a href="/oauth2/authorization/instagram" title="인스타로그인">
-                <img src="/images/instabutton.png" alt="인스타 로그인" />
-              </a>
+              <button className="login-form_oauth2-button" onClick={instaLogin}>
+              <img src="/images/instabutton.png" alt="인스타 로그인" />
+              </button>
             </li>
           </ul>
         </div>
