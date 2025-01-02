@@ -31,6 +31,11 @@ const LoginForm = () => {
     console.log("구글 로그인");
     window.location.href = " http://localhost:9000/oauth2/authorization/google "
   }
+
+  const instaLogin =()=>{
+    console.log("인스타 로그인");
+    window.location.href = " http://localhost:9000/oauth2/authorization/instagram "
+  }
   
 
   //로그인 요청
@@ -114,9 +119,7 @@ const LoginForm = () => {
             </li>
             <li>
               <button
-                className="login-form_oauth2-button"
-                onClick={naverLogin}
-              >
+                className="login-form_oauth2-button" onClick={naverLogin}>
                 <img src="/images/naverbutton.png" alt="네이버 로그인" />
               </button>
             </li>
@@ -126,9 +129,9 @@ const LoginForm = () => {
               </button>
             </li>
             <li>
-              <a href="/oauth2/authorization/instagram" title="인스타로그인">
-                <img src="/images/instabutton.png" alt="인스타 로그인" />
-              </a>
+              <button className="login-form_oauth2-button" onClick={instaLogin}>
+              <img src="/images/instabutton.png" alt="인스타 로그인" />
+              </button>
             </li>
           </ul>
         </div>
