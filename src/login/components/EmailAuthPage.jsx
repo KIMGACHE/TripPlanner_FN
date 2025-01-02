@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
-
+import "../scss/EmailAuthPage.scss"
 
 const EmailAuthPage = ()=>{
     const [email,setEmail] = useState("");
@@ -27,9 +27,9 @@ const EmailAuthPage = ()=>{
 
 
 return (
-    <div>
-        <h2>이메일 인증</h2>
-        <form onSubmit={handleSubmit}>
+    <div className="email-auth-page">
+        <h2 class="email-auth-title">이메일 인증</h2>
+        <form onSubmit={handleSubmit} className="email-auth-form">
             <label htmlFor="email">이메일</label>
             <input 
             type="email"
@@ -37,11 +37,12 @@ return (
             value={email}
             onChange={(e)=>setEmail(e.target.value)}
             required
+            placeholder="이메일을 입력해주세요."
             />
-            <button type="submit">인증 코드 받기</button>
+            <button type="submit" className="email-auth-button">인증 코드 받기</button>
         </form>
-        {message && <p style={{color:"green"}}> {message} </p>}
-        {error && <p style={{color:"red"}}> {error} </p> }
+        {message && <p className="email-auth-message"> {message} </p>}
+        {error && <p className="email-auth-error"> {error} </p> }
     </div>
 );
 

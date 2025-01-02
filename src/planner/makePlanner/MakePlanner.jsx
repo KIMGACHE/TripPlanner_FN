@@ -7,27 +7,16 @@ import './MakePlanner.scss'
 import Option from '../Option/Options';
 import axios from 'axios';
 
-const MakePlanner = () => {
+const MakePlanner = ({cookie}) => {
     const navigate = useNavigate();
-    const [cookie,setCookie] = useState();
-    useEffect(() => {
-      axios.post('http://localhost:9000/api/cookie/validate', {}, {
-          withCredentials: true, // 쿠키 포함
-      })
-      .then(response => {
-          console.log("쿠키 보내기:", response.data);
-          setCookie(response.data);
-      })
-      .catch(error => {
-          alert('로그인 후 이용가능한 서비스입니다.');
-          navigate('/user/login');
-      });
-    }, []);
+
 
     const [optionState, setOptionState] = useState();
     const [areaState, setAreaState] = useState([]);
     const [plannerData, setPlannerData] = useState([]);
     const [selectedDay, setSelectedDay] = useState(1);
+
+    console.log("쿠키정보들 받아온거 : " ,cookie);
 
     const handleOption = (data) => { setOptionState(data); }
 
@@ -68,30 +57,30 @@ const MakePlanner = () => {
         setPlannerData([]);
     }
 
-    useEffect(() => {
-        axios.post('http://localhost:9000/api/cookie/validate', {}, {
-            withCredentials: true, // 쿠키 포함
-        })
-        .then(response => {
-            console.log("쿠키 보내기:", response.data);
-        })
-        .catch(error => {
-            console.error("쿠키 에러:", error);
-        });
-    }, []);
+    // useEffect(() => {
+    //     axios.post('http://localhost:9000/api/cookie/validate', {}, {
+    //         withCredentials: true, // 쿠키 포함
+    //     })
+    //     .then(response => {
+    //         console.log("쿠키 보내기:", response.data);
+    //     })
+    //     .catch(error => {
+    //         console.error("쿠키 에러:", error);
+    //     });
+    // }, []);
     
 
-    useEffect(() => {
-        axios.post('http://localhost:9000/api/cookie/validate', {}, {
-            withCredentials: true, // 쿠키 포함
-        })
-        .then(response => {
-            console.log("쿠키 보내기:", response.data);
-        })
-        .catch(error => {
-            console.error("쿠키 에러:", error);
-        });
-    }, []);
+    // useEffect(() => {
+    //     axios.post('http://localhost:9000/api/cookie/validate', {}, {
+    //         withCredentials: true, // 쿠키 포함
+    //     })
+    //     .then(response => {
+    //         console.log("쿠키 보내기:", response.data);
+    //     })
+    //     .catch(error => {
+    //         console.error("쿠키 에러:", error);
+    //     });
+    // }, []);
     
 
     return (

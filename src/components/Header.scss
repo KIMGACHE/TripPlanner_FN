@@ -41,7 +41,7 @@
     height: 100%;
 
     // 로그인 버튼
-    .login-btn {
+    .login-btn ,.logout-btn{
         height: 100%;
         padding: 0 20px;
         border: 0px;
@@ -62,7 +62,7 @@
         /* 호버 효과를 위한 트랜지션 */
     }
 
-    .login-btn:hover {
+    .login-btn:hover ,.logout-btn:hover{
 
         /* 호버 시 네온 효과 강조 */
         text-shadow:

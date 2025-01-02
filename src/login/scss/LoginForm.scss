@@ -4,8 +4,8 @@
   border: 1px solid grey;
   border-radius: 5%;
   width: 600px;
-  height: 650px;
-  margin: 100px auto;
+  height: 700px;
+  margin: 50px auto;
   background-color: white;
 }
 
@@ -83,7 +83,13 @@
       font-weight: bold;
       cursor: pointer;
       color: white;
+      transition: box-shadow 0.3s ease, background-color 0.3s ease;
     }
+    .login-form_loginButton:hover{
+      background-color: #4169e1;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 효과 */
+    }
+
   }
 }
 
@@ -100,6 +106,7 @@
   height: 200px;
 
   .login-form_oauth2-buttons {
+    margin-top:30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -132,11 +139,17 @@
           border: none; /* 기본 border 제거 */
           background: none; /* 기본 배경 제거 */
           cursor: pointer; /* 클릭 가능 커서 */
+          transition: box-shadow 0.3s ease, transform 0.3s ease;
 
         img {
           width: 100%;
           height: auto;
           object-fit: contain;
+        }
+
+        &:hover {
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          transform: scale(1.1); /* 살짝 확대 효과 */
         }
       }
     }

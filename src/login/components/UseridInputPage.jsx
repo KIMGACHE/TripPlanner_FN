@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
-
+import "../scss/UseridInputPage.scss"
 
 const UseridInputPage = ()=>{
     const [userid,setUserid] = useState("");
@@ -21,20 +21,26 @@ const UseridInputPage = ()=>{
     };
 
     return (
-        <div>
-            <h2>사용자 ID 확인</h2>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="userid">사용자 ID</label>
+        <div className="userid-page">
+            <h1 className="userid-title">
+                비밀번호를 찾고자 하는 아이디를 입력해주세요.</h1>
+            <form className="userid-form" onSubmit={handleSubmit}>
                 <input 
                 type="text"
                 id="userid"
                 value={userid}
                 onChange={(e)=>setUserid(e.target.value)}
+                placeholder="아이디를 입력해주세요"
                 required
+                className="userid-input"
                 />
-                <button type="submit">다음</button>
+                <button type="submit" className="userid-button">다음</button>
             </form>
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            <div className="userid-help">
+            아이디가 기억나지 않는다면 ?
+            <a href="/find-id" className="userid-link">아이디 찾기</a>
+            </div>
+            {error && <p className="userid-error">{error}</p>}
         </div>
     );
 };

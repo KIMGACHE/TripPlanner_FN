@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "../scss/PasswordResetPage.scss"
 
 const PasswordResetPage = ()=>{
     const [newPassword,setNewPassword] = useState("");
     const [confirmPassword,setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
     const [error,setError] = useState("");
+    const navigate = useNavigate(); // useNavigate 초기화
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
@@ -23,21 +26,25 @@ const PasswordResetPage = ()=>{
                 headers : {Authorization : `Bearer ${token}`},
             });
             setMessage("비밀번호가 성공적으로 변경되었습니다");
+            setTimeout(()=>{
+                navigate("/");
+            },2000); //메시지 나오고 2초 뒤에 리다이렉트
         }catch(err){
             setError("비밀번호 변경에 실패했습니다. 링크가 유효하지 않거나 문제가 발생했습니다");
         }
     };
 
     return (
-        <div>
-            <h2>
-                <form onSubmit={handleSubmit}>
+        <div className="password-reset-page">
+            <h2 className="password-reset-title">비밀번호 변경</h2>
+                <form onSubmit={handleSubmit} className="password-reset-form">
                     <label htmlFor="newPassword">새 비밀번호</label>
                     <input 
                     type="password"
                     id="newPassword"
                     value={newPassword}
                     onChange={(e)=>setNewPassword(e.target.value)}
+                    placeholder="새 비밀번호를 입력하세요"
                     required
                     />
                     <label htmlFor="confirmPassword">비밀번호 확인</label>
@@ -46,12 +53,12 @@ const PasswordResetPage = ()=>{
                     id="confirmPassword"
                     value={confirmPassword}
                     onChange={(e)=>setConfirmPassword(e.target.value)}
+                    placeholder="비밀번호를 다시 입력하세요"
                     required />
-                    <button type="submit">비밀번호 변경</button>
+                    <button type="submit" className="password-reset-button">비밀번호 변경</button>
                 </form>
-                {message && <p style={{ color: "green" }}>{message}</p>}
-                {error && <p style={{ color: "red" }}>{error}</p>}
-            </h2>
+                {message && <p className="password-reset-message">{message}</p>}
+                {error && <p className="password-reset-error">{error}</p>}
         </div>
     )
 
