@@ -17,14 +17,20 @@ const LoginForm = () => {
     setFormData((prev) => ({ ...prev, [name]: fieldValue }));
   };
 
-  const handleSocialLogin = (provider) => {
-    window.location.href = `/oauth2/authorization/${provider}`;
-  };
-
-  const handleLogin = () => {
+  const naverLogin = () => {
     console.log("네이버 로그인 클릭");
     window.location.href = "http://localhost:9000/oauth2/authorization/naver";
   };
+
+  const kakaoLogin = ()=>{
+    console.log("카카오 로그인 클릭");
+    window.location.href = " http://localhost:9000/oauth2/authorization/kakao ";
+  }
+
+  const googleLogin =()=>{
+    console.log("구글 로그인");
+    window.location.href = " /oauth2/authorization/google "
+  }
   
 
   //로그인 요청
@@ -99,22 +105,22 @@ const LoginForm = () => {
         <div className="oauth2-buttons">
           <ul>
             <li>
-              <a href="/oauth2/authorization/kakao" title="카카오로그인">
-                <img src="/images/kakaobutton.png" alt="카카오로그인" />
-              </a>
+              <button className="oauth2-button" onClick={kakaoLogin}>
+              <img src="/images/kakaobutton.png" alt="카카오로그인" />
+              </button>
             </li>
             <li>
               <button
                 className="oauth2-button"
-                onClick={handleLogin}
+                onClick={naverLogin}
               >
                 <img src="/images/naverbutton.png" alt="네이버 로그인" />
               </button>
             </li>
             <li>
-              <a href="/oauth2/authorization/google" title="구글 로그인">
-                <img src="/images/googlebutton.png" alt="구글 로그인" />
-              </a>
+              <button className="oauth2-button" onClick={googleLogin}>
+              <img src="/images/googlebutton.png" alt="구글 로그인" />
+              </button>
             </li>
             <li>
               <a href="/oauth2/authorization/instagram" title="인스타로그인">

@@ -1,54 +1,27 @@
-import {useState, useEffect, React} from 'react';
+import { useState, useEffect } from 'react';
 import '../../public/reset.css'
-import {useNavigate} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Map from '../Map/Map';
 import SideBar from '../SideBar/SideBar';
 import './MakePlanner.scss'
 import Option from '../Option/Options';
 import axios from 'axios';
 
-const MakePlanner = () => {
-    const navigate = useNavigate();
-    const [cookie,setCookie] = useState();
-    useEffect(() => {
-      axios.post('http://localhost:9000/api/cookie/validate', {}, {
-          withCredentials: true, // 쿠키 포함
-      })
-      .then(response => {
-          console.log("쿠키 보내기:", response.data);
-          setCookie(response.data);
-      })
-      .catch(error => {
-          alert('로그인 후 이용가능한 서비스입니다.');
-          navigate('/user/login');
-      });
-    }, []);
 
+const MakePlanner = () => {
     const [optionState, setOptionState] = useState();
-    const [areaState, setAreaState] = useState([]);
+    const [areaState, setAreaState] = useState(null);
     const [plannerData, setPlannerData] = useState([]);
     const [selectedDay, setSelectedDay] = useState(1);
 
     const handleOption = (data) => { setOptionState(data); }
 
-    const handleArea = (data) => {setAreaState(data)}
-
-    const handleData = async (data) => {
-        await axios.post('http://localhost:9000/planner/getImages',
-            {'businessName':data.data.businessName},
-        )
-        .then(resp=>{
-            console.log(resp)
-            const updatedData = {
-                ...data,  // 기존 data 객체를 복사
-                image: resp.data.image  // image 키 추가
-            };
-    
-            // plannerData에 updatedData 추가
-            setPlannerData((plannerData) => [...plannerData, updatedData]);
-        })
-        .catch(err=>{console.log(err)});
+    const handleArea = (data) => {
+        setAreaState(data)
+        console.log("area Map왜 안됨?", data)
     }
+
+    const handleData = (data) => { setPlannerData((plannerData) => [...plannerData, data]); }
 
     const handleDay = (data) => { setSelectedDay(data); }
 
@@ -68,6 +41,18 @@ const MakePlanner = () => {
         setPlannerData([]);
     }
 
+    useEffect(() => {
+        axios.post('http://localhost:9000/api/cookie/validate', {}, {
+            withCredentials: true, // 쿠키 포함
+        })
+            .then(response => {
+                console.log("쿠키 보내기:", response.data);
+            })
+            .catch(error => {
+                console.error("쿠키 에러:", error);
+            });
+    }, []);
+
     return (
         <div className='planner' >
             <div className='plannerSide' >
@@ -78,17 +63,19 @@ const MakePlanner = () => {
                     DeleteDestination={handleDeleteDest}
                     DeleteAllDestination={handleAllDelete}
                     AddDestination={handleData}
-                    CookieData={cookie}
                 />
             </div>
             <div className='plannerBody' >
-                {/* <Option OptionData={handleOption}/>
-                <Map 
-                    OptionData={optionState}
-                    AreaData={areaState}
-                    DayData={selectedDay}
-                    AddDestination={handleData}
-                /> */}
+                {areaState && <>
+                    <Option OptionData={handleOption} />
+                    <Map
+                        OptionData={optionState}
+                        AreaData={areaState}
+                        DayData={selectedDay}
+                        AddDestination={handleData}
+                    />
+                </>
+                }
             </div>
 
         </div>

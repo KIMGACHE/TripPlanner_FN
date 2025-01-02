@@ -203,7 +203,7 @@ const TravelCourse = () => {
 
     return (
         <div className="tourist-wrapper">
-            <h1 className="tourist-header">여행 코스 정보</h1>
+            <h1 className="tourist-header">여행 코스 검색</h1>
 
             {/* 지역 필터 */}
             <select

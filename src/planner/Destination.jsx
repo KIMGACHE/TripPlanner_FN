@@ -83,59 +83,54 @@ const Destination = () => {
 
         if (destinations.length > 0) {
             const container = document.getElementById('main-map');
-            
-            // 이미 지도 객체가 초기화 되어 있는지 체크
-            if (window.kakao && window.kakao.maps && !window.kakao.maps.Map) {
-                return;  // 카카오 맵 객체가 로드되지 않았다면 초기화하지 않음
-            }
-    
             const options = {
                 center: new window.kakao.maps.LatLng(destinations[0].y, destinations[0].x),
                 level: 5
             };
-    
-            // 맵 객체를 한 번만 초기화하고, 이미 초기화된 맵이 있다면 재사용
             const map = new window.kakao.maps.Map(container, options);
             const bounds = new window.kakao.maps.LatLngBounds();
-            let dayMarkers = {}; 
-            let dayPolylines = {}; 
-            let dayCounters = {};
-    
+            let dayMarkers = {}; // Day별로 마커 그룹화
+            let dayPolylines = {}; // Day별 Polyline 그룹화
+            let dayCounters = {}; // 각 Day별로 커스텀 오버레이 번호 초기화
+
             destinations.forEach((destination, index) => {
                 const position = new window.kakao.maps.LatLng(destination.y, destination.x);
                 bounds.extend(position);
-    
+
+                // Day별로 Polyline 색상 변경
                 const currentDay = destination.day;
                 const color = dayColors[(currentDay - 1) % dayColors.length];
-    
+
+                // Day별로 번호 초기화
                 if (!dayCounters[currentDay]) {
-                    dayCounters[currentDay] = 1;
+                    dayCounters[currentDay] = 1; // 해당 Day에 대한 번호 초기화
                 } else {
-                    dayCounters[currentDay] += 1;
+                    dayCounters[currentDay] += 1; // Day별로 번호 증가
                 }
-    
+
+                // 마커 위에 커스텀 오버레이 생성
                 const customOverlayContent = `
-                    <div style="font-size: 16px; font-weight: bold; background-color: ${color}; border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; color: white;">
+                    <div style="font-size: 16px; font-weight: bold; background-color: ${dayColors[(destination.day - 1) % dayColors.length]}; border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; color: white;">
                         ${dayCounters[currentDay]}
                     </div>
                 `;
-    
                 const customOverlay = new window.kakao.maps.CustomOverlay({
                     position, content: customOverlayContent, clickable: true
                 });
                 customOverlay.setMap(map);
-    
+
+                // Day별 Polyline 그리기
                 if (!dayMarkers[currentDay]) {
-                    dayMarkers[currentDay] = [];
+                    dayMarkers[currentDay] = []; // 새로운 Day에 대해서 Polyline을 초기화
                 }
                 dayMarkers[currentDay].push(position);
-    
+
                 if (dayMarkers[currentDay].length > 1) {
                     if (!dayPolylines[currentDay]) {
                         dayPolylines[currentDay] = new window.kakao.maps.Polyline({
                             path: dayMarkers[currentDay],
                             strokeWeight: 5,
-                            strokeColor: color,
+                            strokeColor: color, // Day별 색상
                             strokeOpacity: 0.7,
                             strokeStyle: 'solid',
                         });
@@ -145,8 +140,8 @@ const Destination = () => {
                     }
                 }
             });
-    
-            map.setBounds(bounds);
+
+            map.setBounds(bounds); // 경계에 맞게 지도 중심 및 확대 조정
         }
         console.log('destinations : ', destinations);
     }, [destinations]);

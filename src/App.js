@@ -1,11 +1,19 @@
+import React from 'react';
+import { BrowserRouter as Router, Link, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Body from './components/Body';
+import '../src/public/public.css';
+import '../src/public/reset.css';
+
+
 
 import TravelCourse from './tourist/TravelCourse.jsx';
 import TravelCourseInfo from './tourist/TravelCourseInfo.jsx';
 import Tourist from './tourist/Tourist.jsx';
 import TouristInfo from './tourist/TouristInfo.jsx';
-import Board from './planner/Board.jsx';
-import DestinationInfo from './planner/DestinationInfo.jsx';
-import Destination from './planner/Destination.jsx';
+// import Board from './planner/Board.jsx';
+// import DestinationInfo from './planner/DestinationInfo.jsx';
+// import Destination from './planner/Destination.jsx';
 import MakePlanner from './planner/makePlanner/MakePlanner.jsx';
 import LoginForm from './login/LoginForm.jsx';
 import Mypage from './mypage/Mypage.jsx';
@@ -24,9 +32,9 @@ const App = () => {
         <Link to="/travelcourse">
           <button>추천코스</button>
         </Link>
-        <Link to="/planner/board">
+        {/* <Link to="/planner/board">
           <button>게시판</button>
-        </Link>
+        </Link> */}
         <Link to="/user/join">
           <button>회원가입</button>
         </Link>
@@ -37,13 +45,11 @@ const App = () => {
           <button>플래너 만들기</button>
         </Link>
       </div>
-      
 
       {/* 여기서 Routes로 감싸줘야 합니다. */}
       <Routes>
         {/* 마이페이지 페이지 */}
         <Route path="/user/mypage" element={<Mypage />} />
-
 
         {/* 회원가입 페이지 */}
         <Route path="/user/join" element={<Join />} />
@@ -65,15 +71,16 @@ const App = () => {
 
         {/* 관광지 자세히 보기 */}
         <Route path="/tourist-info" element={<TouristInfo />} />
-
+  
         {/* 게시판 */}
-        <Route path="/planner/board" element={<Board />} />
+        {/* <Route path="/planner/board" element={<Board />} /> */}
 
         {/* 게시판 중간 페이지 */}
-        <Route path="/planner/board/destination" element={<Destination />} />
+        {/* <Route path="/planner/board/destination" element={<Destination />} /> */}
 
         {/* 게시판 자세히 보기 */}
-        <Route path="/planner/board/destination/info" element={<DestinationInfo />} />
+        {/* <Route path="/planner/board/destination/info" element={<DestinationInfo />} /> */}
+        
       </Routes>
     </Router>
   );
