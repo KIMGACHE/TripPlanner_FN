@@ -10,3 +10,8 @@ body {
     font-family: 'Ownglyph_ParkDaHyun', sans-serif !important;
 	font-size: 1.5rem;
 }
+
+.ACTIVE {
+    background-color:  #1e90ff;
+    color: white;
+}

@@ -35,10 +35,13 @@
     
     li {
         width: 80px;
-        height: 80px;
+        height: 70px;
+        margin-bottom: 20px;
         display:flex;
         justify-content: center;
         align-items: center;
+        border-radius: 15px;
+        
     }
     li:hover {
         cursor:pointer;

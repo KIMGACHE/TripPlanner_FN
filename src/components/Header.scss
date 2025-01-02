@@ -11,7 +11,7 @@
 .header-logo {
     display: inline-block;
     height: 80px;
-    width: 100px;
+    width: 80px;
     position: relative;
     left: 2.5%;
 
@@ -19,14 +19,14 @@
     .logoImage {
         position: absolute;
         top: 0;
-        width: 100px;
+        width: 80px;
         height: 50px;
     }
 
     // 로고 (타이틀만)
     .logoTitle {
         position: absolute;
-        width: 100px;
+        width: 80px;
         height: 30px;
         top: 45px;
     }
@@ -115,7 +115,7 @@
     .header-logo {
         display: inline-block;
         height: 100%;
-        width: 100px;
+        width: 80px;
         position: relative;
         left: 2.5%;
 
@@ -158,7 +158,7 @@
     .header-logo {
         display: inline-block;
         height: 100%;
-        width: 100px;
+        width: 80px;
         position: relative;
         left: 2.5%;
 

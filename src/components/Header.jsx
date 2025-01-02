@@ -1,11 +1,19 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Header.scss';
 import LogoImage from '../images/logoImage.png';
 import LogoTitle from '../images/logotitle.png';
 
 const Header = () => {
+
+    const location = useLocation();
+
+    // 특정 경로에서는 Header를 표시하지 않음
+    if (location.pathname === '/planner/board/destination') {
+        return null;
+    }
+
     return (
         <header className="header-wrapper">
 

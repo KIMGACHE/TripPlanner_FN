@@ -3,11 +3,13 @@
     padding: 10px;
     display: block;
     width: 100px;
+    margin: 0 15px 0 15px;
 
-
-    li {
+    .day-button {
         width: 80px;
-        height: 80px;
+        height: 60px;
+        border-radius: 15px;
+        margin-bottom: 15px;
         display: flex;
         justify-content: center;
         align-items: center;

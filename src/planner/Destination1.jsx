@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
-import moment from 'moment';
-import Summary from './Summary.jsx';
 import DestinationDetails from './DestinationDetails.jsx';
 import Comments from './Comments';
 import '../css/Destination.scss';
 import Destination from './Destination.jsx';
+import LogoImage from '../images/logoImage.png';
+import LogoTitle from '../images/logotitle.png';
+
 
 const Destination1 = () => {
     const location = useLocation();
@@ -42,9 +43,30 @@ const Destination1 = () => {
             {/* 탭 버튼 */}
 
             <ul className="destinaion-depth">
-                <li onClick={() => handleTabChange("summary")}>전체정보</li>
-                <li onClick={() => handleTabChange("details")}>세부정보</li>
-                <li onClick={() => handleTabChange("comments")}>댓글</li>
+                <li>
+                    <Link className="header-logo" to="/">
+                        <img className="logoImage" src={LogoImage} alt="logo"></img>
+                        <img className="logoTitle" src={LogoTitle} alt="logo"></img>
+                    </Link>
+                </li>
+                <li
+                    onClick={() => handleTabChange("summary")}
+                    className={activeTab === "summary" ? "ACTIVE" : ""}
+                >
+                    전체정보
+                </li>
+                <li
+                    onClick={() => handleTabChange("details")}
+                    className={activeTab === "details" ? "ACTIVE" : ""}
+                >
+                    세부정보
+                </li>
+                <li
+                    onClick={() => handleTabChange("comments")}
+                    className={activeTab === "comments" ? "ACTIVE" : ""}
+                >
+                    댓글
+                </li>
             </ul>
 
 
