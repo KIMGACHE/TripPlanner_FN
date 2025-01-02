@@ -22,10 +22,13 @@ const SideBar = (props) => {
   const [search, setSearch] = useState([]);
   const [typeState, setTypeState] = useState('식당');
   const [areaName, setAreaName] = useState(null);
+  const [areaCode, setAreaCode] = useState();
 
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
   const [resultsPerPage] = useState(7); // 한 페이지에 표시할 결과 수
   const [pagesToShow] = useState(10); // 한 번에 표시할 페이지 번호 개수
+
+  const [showQuestion, setShowQuestion] = useState(false);  // 새로 추가된 상태
 
   // 지역정보 저장
   const handleArea = (data) => {
@@ -91,20 +94,49 @@ const SideBar = (props) => {
 
   // 검색
   const handleSearch = () => {
-    axios
-      .post(
-        'http://localhost:9000/planner/searchDestination',
-        { type: typeState, word: word, areaname: areaName },
-        { 'Content-Type': 'application/json' }
-      )
-      .then((resp) => {
-        console.log(resp);
-        setSearch(resp.data.data || []);
-        setWord('');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if(typeState=='관광지') {
+      axios
+        .post(
+          'http://localhost:9000/planner/searchDestination',
+          { type: typeState, word: encodeURIComponent(word.trim()), areaname: areaName, areacode: areaCode, pageNo: 1, },
+          { 'Content-Type': 'application/json' }
+        )
+        .then((resp) => {
+          var placeArray = [];
+          resp.data.data.items.item.map((el)=>{
+            const data = {
+              businessName:el.title,
+              businessCategory:'관광지',
+              streetFullAddress:el.addr1,
+              description:'',
+              image:el.firstimage,
+            }
+            placeArray = [...placeArray,data];
+          })
+          console.log(placeArray)
+          setSearch(placeArray || []);
+          setWord('');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log('서치중');
+      axios
+        .post(
+          'http://localhost:9000/planner/searchDestination',
+          { type: typeState, word: word, areaname: areaName },
+          { 'Content-Type': 'application/json' }
+        )
+        .then((resp) => {
+          console.log(resp.data.data);
+          setSearch(resp.data.data || []);
+          setWord('');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   // 검색한 장소 플래너에 추가
@@ -184,6 +216,48 @@ const SideBar = (props) => {
     }
   }, [listState]);
 
+  useEffect(()=>{
+    if(areaName) {
+      if(areaName=='서울') {
+        setAreaCode('1')
+      } else if(areaName=='인천') {
+        setAreaCode('2')
+      } else if(areaName=='대전') {
+        setAreaCode('3')
+      } else if(areaName=='대구') {
+        setAreaCode('4')
+      } else if(areaName=='광주') {
+        setAreaCode('5')
+      } else if(areaName=='부산') {
+        setAreaCode('6')
+      } else if(areaName=='울산') {
+        setAreaCode('7')
+      } else if(areaName=='세종') {
+        setAreaCode(areaName=='8')
+      } else if(areaName=='경기') {
+        setAreaCode('31')
+      } else if(areaName=='강원도') {
+        setAreaCode('32')
+      } else if(areaName=='충청북도') {
+        setAreaCode('33')
+      } else if(areaName=='충청남도') {
+        setAreaCode('34')
+      } else if(areaName=='경상북도') {
+        setAreaCode('35')
+      } else if(areaName=='경상남도') {
+        setAreaCode('36')
+      } else if(areaName=='전라북도') {
+        setAreaCode('37')
+      } else if(areaName=='전라남도') {
+        setAreaCode('38')
+      } else if(areaName=='제주') {
+        setAreaCode('39')
+      } else {
+        setAreaCode(null);
+      }
+    }
+  },[areaName])
+
   // 페이징 로직 ---------------------------------------------------------------------------------------
   // 검색 결과를 현재 페이지에 맞게 잘라서 표시
   const indexOfLastResult = currentPage * resultsPerPage;
@@ -230,7 +304,9 @@ const SideBar = (props) => {
     <>
       <div className="sidebar">
         <div className="option">
-          <div className="optionButton" onClick={handleStateTitle}>
+          <div 
+            className="optionButton"
+            onClick={handleStateTitle}>
             <span>Title</span>
           </div>
 
@@ -250,9 +326,9 @@ const SideBar = (props) => {
         <div className="content">
           {titleState && (
             <div className="title">
-              <label htmlFor="">Title</label>
+              <label htmlFor="">플래너 제목</label>
               <input type="text" onChange={(e) => handleTitle(e.target.value)} /> <br />
-              <label htmlFor="">Description</label>
+              <label htmlFor="">설명</label>
               <input type="text" onChange={(e) => handleDescription(e.target.value)} /> <br />
               <label htmlFor="">다른 사람에게 Planner를 공유하시겠습니까?</label>
               <input
@@ -316,23 +392,26 @@ const SideBar = (props) => {
         </div>
         {listState && (
           <div className="question">
-            <p>검색기능</p>
-            <label htmlFor="">검색어 : </label>
+            <p>SEARCH</p>
+            <label htmlFor="">검색어 </label>
             <input type="text" onChange={(e) => { setWord(e.target.value); }} />
             <button onClick={handleSearch}>검색</button>
             { totalPages>0 && 
                 <span>{currentPage}/{totalPages}</span>
             }
-            <div>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setSearch([]); }}>식당</button>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setSearch([]); }}>숙소</button>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setSearch([]); }}>관광지</button>
+            <div className='search-btns'>
+              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord(""); handleSearch(); }}>식당</button>
+              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord(""); handleSearch(); }}>숙소</button>
+              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord(""); handleSearch(); }}>관광지</button>
             </div>
             <div className="search-body">
               <ul>
                 {search && search.length > 0 && currentResults.map((el, index) => {
                   return (
                     <li key={index} className="search-card">
+                      <div className="card-image">
+                              {el && <img src={el.image} alt="" />}
+                      </div>
                       <div className="card-name">{el && el.businessName}</div>
                       <div className="card-category">{el && el.businessCategory}</div>
                       <div className="card-addr">{el && el.streetFullAddress}</div>
