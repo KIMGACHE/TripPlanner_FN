@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 import DestinationDetails from './DestinationDetails.jsx';
-import Comments from './Comments';
+// import Comments from './Comments';
 import '../css/Destination.scss';
 import Destination from './Destination.jsx';
 import LogoImage from '../images/logoImage.png';
@@ -61,20 +61,13 @@ const Destination1 = () => {
                 >
                     세부정보
                 </li>
-                <li
-                    onClick={() => handleTabChange("comments")}
-                    className={activeTab === "comments" ? "ACTIVE" : ""}
-                >
-                    댓글
-                </li>
+                
             </ul>
-
-
 
             {/* 탭에 따라 컴포넌트 렌더링 */}
             {activeTab === "summary" && <Destination plannerItem={plannerItem} />}
             {activeTab === "details" && <DestinationDetails plannerItem={plannerItem} destinations={destinations} />}
-            {activeTab === "comments" && <Comments plannerItem={plannerItem} />}
+        
         </div>
     );
 
