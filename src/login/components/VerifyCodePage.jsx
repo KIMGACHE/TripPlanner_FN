@@ -16,7 +16,11 @@ const VerifyCodePage = () => {
     setMessage("");
 
     try {
-      await axios.post("http://localhost:9000/user/verify-code", { email, code });
+      const response = await axios.post("http://localhost:9000/user/verify-code", { email, code });
+
+      const {resetToken} = response.data;
+      localStorage.setItem("resetToken",resetToken); //로컬스토리지에 리셋토큰저장
+
       setMessage("인증 성공!");
       navigate(`/reset-password?email=${email}`); //비밀번호 재설정 페이지로 이동
     } catch (err) {

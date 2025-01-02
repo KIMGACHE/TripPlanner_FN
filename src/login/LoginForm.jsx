@@ -59,9 +59,9 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="wrapper">
-      <div className="logo">로고 들어갈 부분</div>
-      <div className="login">
+    <div className="login-form_wrapper">
+      <div className="login-form_logo">여행가자</div>
+      <div className="login-form_login">
         <form onSubmit={handleSubmit}>
           <label htmlFor="userid">유저 ID:</label>
           <input
@@ -72,6 +72,15 @@ const LoginForm = () => {
             onChange={handleChange}
             required
           />
+          <div className="login-form_checkbox">
+            <label>ID 저장
+              <input
+              type="checkbox"
+              name="rememberMe"
+              checked={formData.rememberMe}
+              onChange={handleChange}
+            /></label>
+          </div>
           <label htmlFor="password">PASSWORD:</label>
           <input
             type="password"
@@ -81,47 +90,38 @@ const LoginForm = () => {
             onChange={handleChange}
             required
           />
-          <div className="forgot-password">
+          <div className="login-form_forgot-password">
             <a href="/forgot">비밀번호를 잊으셨나요?</a>
           </div>
-          <div className="checkbox">
-            <label>ID 저장
-              <input
-              type="checkbox"
-              name="rememberMe"
-              checked={formData.rememberMe}
-              onChange={handleChange}
-            /></label>
-          </div>
-          {error && <p className="error-message">{error}</p>}
-          <button className="loginButton" type="submit">
+          {error && <p className="login-form_error-message">{error}</p>}
+          <button className="login-form_loginButton" type="submit">
             로그인
           </button>
         </form>
       </div>
-      <div className="join">
+      <div className="login-form_join">
         아직 회원이 아니세요? <a href="/user/join">회원가입</a>
       </div>
       <hr />
-      <div className="oauth2">
+      <div className="login-form_oauth2">
         <div style={{ textAlign: "center" }}>SNS 간편 로그인</div>
-        <div className="oauth2-buttons">
+        <div className="login-form_oauth2-buttons">
           <ul>
             <li>
-              <button className="oauth2-button" onClick={kakaoLogin}>
+              <button className="login-form_oauth2-button" onClick={kakaoLogin}>
               <img src="/images/kakaobutton.png" alt="카카오로그인" />
               </button>
             </li>
             <li>
               <button
-                className="oauth2-button"
+                className="login-form_oauth2-button"
                 onClick={naverLogin}
               >
                 <img src="/images/naverbutton.png" alt="네이버 로그인" />
               </button>
             </li>
             <li>
-              <button className="oauth2-button" onClick={googleLogin}>
+              <button className="login-form_oauth2-button" onClick={googleLogin}>
               <img src="/images/googlebutton.png" alt="구글 로그인" />
               </button>
             </li>

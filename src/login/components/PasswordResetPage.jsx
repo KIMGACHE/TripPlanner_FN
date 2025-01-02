@@ -17,8 +17,10 @@ const PasswordResetPage = ()=>{
         setMessage("");
         setError("");
         try{
-            await axios.post("http://localhost:9000/user/reset-password",{
-                newPassword,
+            const token = localStorage.getItem("resetToken");
+            await axios.post("http://localhost:9000/user/reset-password",
+            { newPassword }, {
+                headers : {Authorization : `Bearer ${token}`},
             });
             setMessage("비밀번호가 성공적으로 변경되었습니다");
         }catch(err){
