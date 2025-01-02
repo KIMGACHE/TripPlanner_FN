@@ -1,5 +1,26 @@
 // SCSS Update
 
+<<<<<<< HEAD
+=======
+@font-face {
+  font-family: 'Ownglyph_ParkDaHyun';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/Ownglyph_ParkDaHyun.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif !important;
+font-size: 1.5rem;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: gainsboro;
+}
+
+>>>>>>> d019eba01ea7f1f00d122a8158e2955b044d9ec0
 .login-form_wrapper {
   border: 1px solid;
   width: 600px;
