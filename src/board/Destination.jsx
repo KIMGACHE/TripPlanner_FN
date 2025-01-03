@@ -8,6 +8,7 @@ import likeIcon from '../images/likeIcon.png';
 import moment from 'moment';
 
 const Destination = () => {
+    const navigate = useNavigate();
     const dayColors = [
         "#FF5733", "#33FF57", "#3357FF", "#F0E68C", "#FF1493", "#8A2BE2", "#FFD700", "#FF6347", "#00FA9A", "#ADFF2F"
     ];
@@ -225,6 +226,19 @@ const Destination = () => {
                 console.error("Error adding to my course:", error);
                 alert("내 코스로 저장에 실패했습니다. 다시 시도해주세요.");
             });
+
+        const bringData = {
+            plannerid: 0,
+            title: plannerItem.plannerTitle,
+            areaName: plannerItem.area,
+            description: plannerItem.description,
+            isPublic: plannerItem.public,
+            day: plannerItem.day,
+            userid: plannerItem.userId,
+            destinations: destinations,
+        }
+        navigate('/makePlanner', { state: { bringData } });
+
     }
 
     const handleDeletePlanner = () => {
@@ -251,8 +265,45 @@ const Destination = () => {
                 console.error("Error Deleting to my course:", err);
                 alert("플래너 삭제에 실패했습니다. 다시 시도해주세요.");
             })
+
     }
 
+    // const handleUpdatePlanner = () => {
+    //     console.log(plannerItem);
+    //     axios.post('http://localhost:9000/planner/updatePlanner',
+    //         {
+    //             plannerid: plannerItem.plannerID,
+    //             title: plannerItem.title,
+    //             areaName: plannerItem.area,
+    //             description: plannerItem.description,
+    //             isPublic: plannerItem.public,
+    //             day: plannerItem.day,
+    //             userid: plannerItem.userId,
+    //             destinations: destinations,
+    //         },
+    //         {'Content-Type': 'application/json'},
+    //     )
+    //     .then(resp=> {
+    //         console.log(resp)
+    //     })
+    //     .catch(err=>{
+    //         console.log(resp)
+    //     })
+    // }
+
+    const handleUpdatePlanner = () => {
+        const updateData = {
+            plannerid: plannerItem.plannerID,
+            title: plannerItem.plannerTitle,
+            areaName: plannerItem.area,
+            description: plannerItem.description,
+            isPublic: plannerItem.public,
+            day: plannerItem.day,
+            userid: plannerItem.userId,
+            destinations: destinations,
+        }
+        navigate('/makePlanner', { state: { updateData } });
+    }
 
     return (
         // 페이지 전체
@@ -328,15 +379,17 @@ const Destination = () => {
                     <div className="destination-plannerControl">
                         {loginStatus && loginStatus.userid && loginStatus.userid === plannerItem.userId ? (
                             <>
-                                <button className="destination-plannerControl-button">수정</button>
+
+                                <button className="destination-plannerControl-button" onClick={() => { handleUpdatePlanner() }} >수정</button>
                                 <button className="destination-plannerControl-button" onClick={() => { handleDeletePlanner() }} >삭제</button>
+
                             </>
 
                         ) : (
                             <button className="destination-plannerControl-button" onClick={() => { handleAddToMyCourse() }}>내 코스로 담기</button>
                         )
                         }
-                    </div>
+                    </div >
 
                 </div >
 

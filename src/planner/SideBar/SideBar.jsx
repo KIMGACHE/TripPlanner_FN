@@ -2,11 +2,16 @@ import { useState, useEffect, useRef } from 'react';
 import PlannerDate from '../PlannerDate/PlannerDate';
 import axios from 'axios';
 import './SideBar.scss';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 
 const SideBar = (props) => {
+  const location = useLocation();
   const navigate = useNavigate();
   const isMounted = useRef(false);
+  const updateData = { ...location.state };
+  const bringData = { ...location.state };
+  const [plannerID,setPlannerID] = useState(0);
+
   const [titleState, setTitleState] = useState(true);
   const [dateState, setDateState] = useState(false);
   const [listState, setListState] = useState(false);
@@ -36,21 +41,6 @@ const SideBar = (props) => {
   // 몇박인지 저장
   const handleDate = (data) => {
     setDay(data);
-  };
-
-  // 제목 저장
-  const handleTitle = (data) => {
-    setTitle(data);
-  };
-
-  // 설명 저장
-  const handleDescription = (data) => {
-    setDescription(data);
-  };
-
-  // 공유 여부 저장
-  const handlePublic = (data) => {
-    setIsPublic(data);
   };
 
   const handleStateTitle = () => {
@@ -103,9 +93,9 @@ const SideBar = (props) => {
           var placeArray = [];
           resp.data.data.items.item.map((el)=>{
             const data = {
-              businessName:el.title,
-              businessCategory:'관광지',
-              streetFullAddress:el.addr1,
+              name:el.title,
+              category:'관광지',
+              address:el.addr1,
               description:'',
               image:el.firstimage,
             }
@@ -119,7 +109,6 @@ const SideBar = (props) => {
           console.log(err);
         });
     } else {
-      console.log('서치중');
       axios
         .post(
           'http://localhost:9000/planner/searchDestination',
@@ -166,7 +155,29 @@ const SideBar = (props) => {
       if (props.DestinationData.length === 0) {
         alert('경로를 지정해주세요.');
       } else {
-        await axios.post('http://localhost:9000/planner/addPlanner',
+        if(plannerID==0) {
+          await axios.post('http://localhost:9000/planner/addPlanner',
+              {
+                title: title,
+                areaName: areaName,
+                description: description,
+                isPublic: isPublic,
+                destination: props.DestinationData,
+                day: day,
+                userid: props.CookieData.userid,
+              },
+              { 'Content-Type': 'application/json' }
+            )
+            .then((resp) => {
+              alert('플래너를 성공적으로 작성하였습니다!');
+              navigate('/');
+            })
+            .catch((err) => {
+              console.log(err);
+              alert('플래너를 작성하지 못했습니다.');
+            });
+        } else {
+          await axios.post('http://localhost:9000/planner/updatePlanner',
             {
               title: title,
               areaName: areaName,
@@ -175,17 +186,19 @@ const SideBar = (props) => {
               destination: props.DestinationData,
               day: day,
               userid: props.CookieData.userid,
+              plannerid: plannerID,
             },
             { 'Content-Type': 'application/json' }
           )
           .then((resp) => {
-            alert('플래너를 성공적으로 작성하였습니다!');
-            navigate('/');
+            alert('플래너를 성공적으로 수정하였습니다!');
+            navigate('/planner/board');
           })
           .catch((err) => {
             console.log(err);
-            alert('플래너를 작성하지 못했습니다.');
+            alert('플래너를 수정하지 못했습니다.');
           });
+        }
       }
     }
   };
@@ -207,12 +220,6 @@ const SideBar = (props) => {
       isMounted.current = true;
     }
   }, [area]);
-
-  useEffect(() => {
-    if (!listState) {
-      props.DeleteAllDestination();
-    }
-  }, [listState]);
 
   useEffect(()=>{
     if(areaName) {
@@ -292,11 +299,66 @@ const SideBar = (props) => {
     }
   };
 
-  // ----------------------------------------------------------------------------------------
-
   useEffect(()=>{
-    console.log(typeState);
-  },[typeState])
+    console.log('up',Object.keys(updateData))
+    console.log('br',Object.keys(bringData))
+      if(Object.keys(updateData).length > 0 && Object.keys(updateData)[0]=='updateData'){
+        setTitle(updateData.updateData.title);
+        setDescription(updateData.updateData.description)
+        setIsPublic(updateData.updateData.isPublic)
+        setDay(updateData.updateData.day)
+        setAreaName(updateData.updateData.areaName)
+        setPlannerID(updateData.updateData.plannerid);
+
+        const transformData = (data) => {
+          return data.map(item => ({
+              day: item.day,
+              data: {
+                  name: item.name,
+                  x: item.x,
+                  y: item.y,
+                  locationFullAddress: item.address,
+                  address: item.address,
+                  category: item.category,
+                  image: item.image,
+              },
+              image: item.image
+          }));
+      };
+      props.UpdatePlanner(transformData(updateData.updateData.destinations));
+    } else {
+      console.log('없음')
+    }
+
+    if(Object.keys(bringData).length > 0 && Object.keys(bringData)[0]=='bringData'){
+
+      setTitle(bringData.bringData.title);
+      setDescription(bringData.bringData.description)
+      setIsPublic(bringData.bringData.isPublic)
+      setDay(bringData.bringData.day)
+      setAreaName(bringData.bringData.areaName)
+      setPlannerID(0);
+
+      const transformData = (data) => {
+        return data.map(item => ({
+            day: item.day,
+            data: {
+                name: item.name,
+                x: item.x,
+                y: item.y,
+                locationFullAddress: item.address,
+                address: item.address,
+                category: item.category,
+                image: item.image,
+            },
+            image: item.image
+        }));
+    };
+    props.UpdatePlanner(transformData(bringData.bringData.destinations));
+  } else {
+    console.log('없음')
+  }
+  },[])
 
   return (
     <>
@@ -325,13 +387,13 @@ const SideBar = (props) => {
           {titleState && (
             <div className="title">
               <label htmlFor="">플래너 제목</label>
-              <input type="text" onChange={(e) => handleTitle(e.target.value)} /> <br />
+              <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} /> <br />
               <label htmlFor="">설명</label>
-              <input type="text" onChange={(e) => handleDescription(e.target.value)} /> <br />
+              <input type="text" onChange={(e) => setDescription(e.target.value)} value={description} /> <br />
               <label htmlFor="">다른 사람에게 Planner를 공유하시겠습니까?</label>
               <input
                 type="checkbox"
-                onChange={(e) => handlePublic(e.target.checked)}
+                onChange={(e) => setIsPublic(e.target.checked)}
                 checked={isPublic}
               />{' '}
               <br />
@@ -340,12 +402,13 @@ const SideBar = (props) => {
           )}
           {dateState && (
             <div className="date">
-              <PlannerDate AreaData={handleArea} DayData={handleDate} AreaNameData={handleAreaName} />
+              <PlannerDate AreaData={handleArea} DayData={handleDate} AreaNameData={handleAreaName} State={()=>{handleStatePlanner()}}/>
             </div>
           )}
           {listState && (
             <>
               <p> Planner </p>
+              <button onClick={()=>props.DeleteAllDestination()} >비우기</button>
               <div className="plannerList">
                 <div className="content-side">
                   {(() => {
@@ -363,7 +426,7 @@ const SideBar = (props) => {
                 <div className="content-body">
                   {selectedDay && (
                     <ul>
-                      {props.DestinationData.filter((el) => el.day === selectedDay).map((destination, index) => {
+                      {props.DestinationData.length > 0 && props.DestinationData.filter((el) => el.day === selectedDay).map((destination, index) => {
                         return (
                           <li key={index} className="content-card">
                             <div className="card-image">
@@ -371,9 +434,9 @@ const SideBar = (props) => {
                             </div>
                             <div className="card-content">
                               <div className="card-header">
-                                <div className="card-name">{destination && destination.data.businessName}</div>
-                                <div className="card-category">{destination && destination.data.businessCategory}</div>
-                                <div className="card-addr">{destination && destination.data.streetFullAddress}</div>
+                                <div className="card-name">{destination && destination.data.name}</div>
+                                <div className="card-category">{destination && destination.data.category}</div>
+                                <div className="card-addr">{destination && destination.data.address}</div>
                                 <button onClick={() => props.DeleteDestination(selectedDay, index)}>제거</button>
                               </div>
                               <div className="card-desc">{destination && destination.data.description}</div>
@@ -392,7 +455,7 @@ const SideBar = (props) => {
           <div className="question">
             <p>SEARCH</p>
             <label htmlFor="">검색어 </label>
-            <input type="text" onChange={(e) => { setWord(e.target.value); }} />
+            <input type="text" value={word} onChange={(e) => { setWord(e.target.value); }} />
             <button onClick={handleSearch}>검색</button>
             { totalPages>0 && 
                 <span>{currentPage}/{totalPages}</span>
@@ -410,9 +473,9 @@ const SideBar = (props) => {
                       <div className="card-image">
                               {el && <img src={el.image} alt="" />}
                       </div>
-                      <div className="card-name">{el && el.businessName}</div>
-                      <div className="card-category">{el && el.businessCategory}</div>
-                      <div className="card-addr">{el && el.streetFullAddress}</div>
+                      <div className="card-name">{el && el.name}</div>
+                      <div className="card-category">{el && el.category}</div>
+                      <div className="card-addr">{el && el.address}</div>
                       <div className="card-desc">{el && el.description}</div>
                       <button onClick={() => { handleSearchAdd(el); }}>추가</button>
                     </li>
