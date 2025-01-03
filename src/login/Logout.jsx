@@ -12,7 +12,7 @@ const Logout = ()=>{
         .then((response)=>{
             console.log("로그아웃 성공",response.data);
 
-            navigate('/');
+            window.location.href="/";
         })      
         .catch((error) =>{
             console.log("로그아웃 실패.",error);

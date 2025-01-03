@@ -20,7 +20,11 @@ const Destination = () => {
     const { plannerItem } = location.state || {}; // state에서 데이터 가져오기 (Planner의 정보)
     const [shownDays, setShownDays] = useState([]);
     const [loginStatus, setLoginStatus] = useState([]);
-    console.log('plannerItem : ', plannerItem);
+    const [likeCount, setLikeCount] = useState(0);
+    const [isLiked, setIsLiked] = useState(false);
+
+
+
 
     // 거리 계산 함수: 두 좌표 간의 거리 계산 (단위: km)
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -70,6 +74,22 @@ const Destination = () => {
                 })
         }
 
+        // 좋아요
+
+        if (plannerID) {
+            axios.get(`http://localhost:9000/planner/board/likeStatus?plannerID=${plannerID}`, {
+                withCredentials: true, // 쿠키 포함
+            })
+                .then((response) => {
+                    setLikeCount(response.data.likeCount);
+                    setIsLiked(response.data.isLiked); // 사용자가 좋아요를 눌렀는지 여부
+                })
+                .catch((error) => {
+                    console.error("Error fetching like status:", error);
+                });
+        }
+
+
     }, [plannerID]);
 
     useEffect(() => {
@@ -83,53 +103,53 @@ const Destination = () => {
 
         if (destinations.length > 0) {
             const container = document.getElementById('main-map');
-            
+
             // 이미 지도 객체가 초기화 되어 있는지 체크
             if (window.kakao && window.kakao.maps && !window.kakao.maps.Map) {
                 return;  // 카카오 맵 객체가 로드되지 않았다면 초기화하지 않음
             }
-    
+
             const options = {
                 center: new window.kakao.maps.LatLng(destinations[0].y, destinations[0].x),
                 level: 5
             };
-    
+
             // 맵 객체를 한 번만 초기화하고, 이미 초기화된 맵이 있다면 재사용
             const map = new window.kakao.maps.Map(container, options);
             const bounds = new window.kakao.maps.LatLngBounds();
-            let dayMarkers = {}; 
-            let dayPolylines = {}; 
+            let dayMarkers = {};
+            let dayPolylines = {};
             let dayCounters = {};
-    
+
             destinations.forEach((destination, index) => {
                 const position = new window.kakao.maps.LatLng(destination.y, destination.x);
                 bounds.extend(position);
-    
+
                 const currentDay = destination.day;
                 const color = dayColors[(currentDay - 1) % dayColors.length];
-    
+
                 if (!dayCounters[currentDay]) {
                     dayCounters[currentDay] = 1;
                 } else {
                     dayCounters[currentDay] += 1;
                 }
-    
+
                 const customOverlayContent = `
                     <div style="font-size: 16px; font-weight: bold; background-color: ${color}; border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; color: white;">
                         ${dayCounters[currentDay]}
                     </div>
                 `;
-    
+
                 const customOverlay = new window.kakao.maps.CustomOverlay({
                     position, content: customOverlayContent, clickable: true
                 });
                 customOverlay.setMap(map);
-    
+
                 if (!dayMarkers[currentDay]) {
                     dayMarkers[currentDay] = [];
                 }
                 dayMarkers[currentDay].push(position);
-    
+
                 if (dayMarkers[currentDay].length > 1) {
                     if (!dayPolylines[currentDay]) {
                         dayPolylines[currentDay] = new window.kakao.maps.Polyline({
@@ -145,59 +165,33 @@ const Destination = () => {
                     }
                 }
             });
-    
+
             map.setBounds(bounds);
         }
         console.log('destinations : ', destinations);
     }, [destinations]);
 
-    const navigate = useNavigate();
-    // 클릭 시 
-    const desInfoClick = (item) => {
-
-        axios.post(`http://localhost:9000/destination-to-tourist`, {
-            mapX: item.x,
-            mapY: item.y
-        }).then((response) => {
-
-            if (response.data.items.item[0].contentid) {
-                const contentId = response.data.items.item[0].contentid;
-                axios.get(`http://localhost:9000/tourist-info?id=${contentId}`)
-                    .then((response) => {
-
-                        const detailCommon = response.data;
-
-                        navigate('/tourist-info', { state: { detailCommon } }); // 데이터와 함께 이동
-
-                    })
-                    .catch((error) => {
-                        console.error('Error fetching course info:', error);
-
-                    });
-
-            }
-
-            console.log(response.data.items.item[0]);
-        }).catch(() => {
-            // 데이터가 없으면 카카오지도에 장소 이름으로 검색
-            const kakaoMapUrl = `https://map.kakao.com/link/search/${encodeURIComponent(item.name)}`;
-            window.open(kakaoMapUrl, '_blank'); // 새 탭으로 카카오 지도 열기
-
-        })
-
-    }
-
-    const addressClick = (item) => {
-        const kakaoMapUrl = `https://map.kakao.com/link/search/${encodeURIComponent(item.address)}`;
-        window.open(kakaoMapUrl, '_blank');
-    }
 
 
-    const [likeCount, setLikeCount] = useState(0);
+
+
 
     const handleLike = (plannerID) => {
-        // 좋아요 증가/감소 처리 (간단한 토글)
-        setLikeCount((prev) => prev + 1);
+        if (!loginStatus) {
+            alert('로그인이 필요한 서비스입니다');
+        }
+        axios.post('http://localhost:9000/planner/board/toggleLike',
+            { plannerID },
+            { withCredentials: true }) // 쿠키 포함
+            .then((response) => {
+                console.log('response', response);
+                setLikeCount(response.data.likeCount); // 서버에서 업데이트된 좋아요 개수
+                setIsLiked(response.data.isLiked); // 서버에서 반환된 좋아요 상태
+            })
+            .catch((error) => {
+                console.error("Error toggling like:", error);
+                alert('좋아요 처리 중 오류가 발생했습니다.');
+            });
 
     };
 
@@ -222,7 +216,7 @@ const Destination = () => {
                 area: plannerItem.area,
                 plannerid: plannerItem.plannerID,
             },
-            {'Content-Type': 'application/json'},
+            { 'Content-Type': 'application/json' },
         )
             .then((response) => {
                 alert(response.data); // 서버에서 보낸 응답 메시지 출력
@@ -247,16 +241,16 @@ const Destination = () => {
             });
 
         axios.post('http://localhost:9000/planner/deletePlanner',
-            {plannerid:plannerID},
-            {'Content-Type': 'application/json'}
+            { plannerid: plannerID },
+            { 'Content-Type': 'application/json' }
         )
-        .then(resp=> {
-            window.location.href = "/planner/board";
-        })
-        .then(err=>{
-            console.error("Error Deleting to my course:", err);
+            .then(resp => {
+                window.location.href = "/planner/board";
+            })
+            .then(err => {
+                console.error("Error Deleting to my course:", err);
                 alert("플래너 삭제에 실패했습니다. 다시 시도해주세요.");
-        })
+            })
     }
 
 
@@ -300,17 +294,22 @@ const Destination = () => {
 
                     {/* 코스에대한 설명이 담긴 부분 */}
                     < div className="topcard-main" >
-                        <div>설명 : {plannerItem.description}</div>
+                        <div className="topcard-main-desc">{plannerItem.description}</div>
                     </div >
 
                     {/* 좋아요와 작성일이 담긴 부분 */}
                     < div className="topcard-footer" >
 
                         {/* 좋아요 */}
-                        < div className="like-section" >
-                            <img src={likeIcon} alt="Like Icon" className="like-icon" onClick={() => handleLike(plannerID)} />
+                        <div className="like-section">
+                            <img
+                                src={likeIcon}
+                                alt="Like Icon"
+                                className={`like-icon ${isLiked ? 'liked' : ''}`}
+                                onClick={() => handleLike(plannerID)} // plannerID 전달
+                            />
                             <span className="like-number">{likeCount}</span>
-                        </div >
+                        </div>
 
                         {/* 작성일 */}
                         < h2 className="topcard-footer-createAt" > {moment(plannerItem.createAt).format('YYYY년 MM월 DD일')} 생성</h2 >
@@ -330,7 +329,7 @@ const Destination = () => {
                         {loginStatus && loginStatus.userid && loginStatus.userid === plannerItem.userId ? (
                             <>
                                 <button className="destination-plannerControl-button">수정</button>
-                                <button className="destination-plannerControl-button" onClick={()=>{ handleDeletePlanner() }} >삭제</button>
+                                <button className="destination-plannerControl-button" onClick={() => { handleDeletePlanner() }} >삭제</button>
                             </>
 
                         ) : (
@@ -384,8 +383,8 @@ const Destination = () => {
                                             </span>
                                             <div className="destination-desc">
                                                 <p className="destination-category">{destination.category}</p>
-                                                <p className="destination-title" onClick={() => desInfoClick(destination, index)}>{destination.name}</p>
-                                                <p className="destination-address" onClick={() => addressClick(destination, index)}>{destination.address}</p>
+                                                <p className="destination-title">{destination.name}</p>
+                                                <p className="destination-address">{destination.address}</p>
                                             </div>
                                         </li>
 

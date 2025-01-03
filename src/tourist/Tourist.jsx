@@ -80,18 +80,8 @@ const Tourist = () => {
     // 여행 코스 클릭시 상세 페이지로 데이터 전달
     const handleTouristClick = (contentId) => {
         setLoading(true); // 로딩 시작
-        axios.get(`http://localhost:9000/tourist-info?id=${contentId}`)
-            .then((response) => {
-
-                const detailCommon = response.data;
-
-                navigate('/tourist-info', { state: { detailCommon } }); // 데이터와 함께 이동
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error fetching course info:', error);
-                setLoading(false);
-            });
+       
+        navigate(`/tourist-info?contentId=${contentId}`);
     };
 
     // 페이지네이션 버튼 생성 함수
@@ -258,7 +248,7 @@ const Tourist = () => {
                 </div>
             </div>
             {/* 페이지네이션 버튼들 */}
-            <div className="pagination">
+            <div className="tourist-pagination">
                 {/* 페이지네이션 */}
                 {totalPages > 0 && createPageButtons(totalPages)}
             </div>

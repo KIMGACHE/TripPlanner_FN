@@ -58,6 +58,7 @@ const LoginForm = () => {
       console.log("로그인 성공:", response.data);
       //로그인 성공 시 처리
       alert("로그인 성공 !");
+      window.location.href="/";
     } catch (err) {
       console.log("로그인 실패,", err);
       setError("로그인에 실패했습니다. 다시 시도해주세요");

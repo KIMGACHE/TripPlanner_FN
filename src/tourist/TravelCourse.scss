@@ -1,16 +1,15 @@
-
 /* 전체 래퍼 스타일 */
 .tourist-wrapper {
     background-color: #f9f9f9;
 }
 
 .tourist-content {
-    
+
     max-width: 1200px;
     /* 최대 너비를 1200px로 제한 */
     margin: 0 auto;
     padding: 20px;
-    
+
 }
 
 /* 제목 스타일 */
@@ -28,11 +27,12 @@
     .search-input {
         position: absolute;
         right: 70px;
-    }   
+    }
+
     .search-button {
-        position: absolute; 
+        position: absolute;
         right: 10px;
-    
+
     }
 
     /* 필터 섹션 스타일 */
@@ -79,12 +79,12 @@
         font-size: 1.5rem;
         color: #333;
     }
-    
+
     .sort-select {
         width: 180px;
         border-radius: 15px;
     }
-    
+
 }
 
 
@@ -169,28 +169,31 @@
 
     // 지역 p 태그 스타일
     .course-region {
-        margin-top: 10px; /* 제목과의 간격 */
+        margin-top: 10px;
+        /* 제목과의 간격 */
         font-weight: bold;
     }
 
     // 해시태그 p 태그 스타일
     .course-hashtag {
-        margin-top: 5px; /* 지역 p 태그와의 간격 */
+        margin-top: 5px;
+        /* 지역 p 태그와의 간격 */
     }
 }
 
 
 
 // 페이지네이션 버튼들 
-.pagination {
+.tourist-pagination {
     display: flex;
     justify-content: center;
-    margin: 20px 0;
+    
 }
 
-.pagination button {
+.tourist-pagination button {
     padding: 10px 15px;
     margin: 0 5px;
+    margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #f8f8f8;
@@ -198,12 +201,12 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
-.pagination button:hover {
+.tourist-pagination button:hover {
     background-color: #76c7db;
     color: white;
 }
 
-.pagination button.active {
+.tourist-pagination button.active {
     background-color: #76c7db;
     color: white;
     border-color: #76c7db;
@@ -211,11 +214,11 @@
 
 /* 로딩 중 상태 */
 .loading-message {
-    width : 100%;
+    width: 100%;
     height: calc(100vh - 80px);
-    display:flex;
+    display: flex;
     justify-content: center;
-    
+
     margin: 0 auto;
     font-size: 3rem;
     margin-top: 200px;
