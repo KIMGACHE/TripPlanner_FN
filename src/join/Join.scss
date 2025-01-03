@@ -103,7 +103,7 @@
             display: flex;
             flex-direction: column; // 수직 배치
             align-items: flex-start;
-            width: 416px;
+            width: 400;
             // border: 1px solid red;
             margin-bottom: 0; // 기본적으로 margin-bottom 없음
         
@@ -151,7 +151,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            width: 416px;
+            width: 400px;
             margin-top: 10px;
 
             &.auth-message{

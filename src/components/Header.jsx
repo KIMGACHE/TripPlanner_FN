@@ -48,6 +48,7 @@ const Header = () => {
             <Link className="header-logo" to="/">
                 <img className="logoImage" src={LogoImage} alt="logo"></img>
                 <img className="logoTitle" src={LogoTitle} alt="logo"></img>
+                <img className="logoTitle" src={LogoTitle} alt="logo"></img>
             </Link>
 
 
@@ -61,6 +62,7 @@ const Header = () => {
                     <button className="travelcourse-btn">여행코스</button>
                 </Link>
 
+
                 {/* 로그인 여부에 따라 표시될 버튼 */}
                 {!isLogin ? (
                     <>
@@ -72,11 +74,20 @@ const Header = () => {
                         </Link>
                     </>
                 ) : (
-                    <Link to="/user/logout">
-                        <button className="logout-btn">로그아웃</button>
-                    </Link>
+                    <>
+                        <Link to="/user/mypage">
+                            <button className="join-btn">마이페이지지</button>
+                        </Link>
+
+                        <Link to="/user/logout">
+                            <button className="logout-btn">로그아웃</button>
+                        </Link>
+                    </>
                 )}
-                
+
+
+
+
             </div>
 
         </header>

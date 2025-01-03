@@ -10,6 +10,7 @@ import Board from '../board/Board.jsx';
 import MakePlanner from '../planner/makePlanner/MakePlanner.jsx';
 import LoginForm from '../login/LoginForm.jsx';
 import Join from '../join/Join.jsx';
+import Mypage from '../mypage/Mypage.jsx';
 import Main from './Main.jsx';
 import BoardInfo from '../board/BoardInfo.jsx';
 import PrivateRoute from '../auth/PrivateRoute.jsx';
@@ -47,6 +48,9 @@ const Body = () => {
 
             {/* 계획 생성 */}
             <Route path="/makePlanner" element={<PrivateRoute element={<MakePlanner />} />} />
+
+            {/* 마이 페이지 */}
+            <Route path="user/mypage" element={<Mypage />}></Route>
 
             {/* 플래너 생성 */}
             <Route path="/makePlanner" element={< MakePlanner />}></Route>
