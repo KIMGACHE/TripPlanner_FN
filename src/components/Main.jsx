@@ -15,7 +15,6 @@ const Main = () => {
 
             </h2>
 
-
             <Link to="/makePlanner">
                 <button className="main-makeplanner-btn">여행 계획 만들기</button>
             </Link>
