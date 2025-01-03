@@ -35,7 +35,7 @@ const MakePlanner = () => {
 
     const handleData = async (data) => {
         await axios.post('http://localhost:9000/planner/getImages',
-            {'businessName':data.data.businessName},
+            {'businessName':data.data.name},
         )
         .then(resp=>{
             console.log(resp)
@@ -68,6 +68,14 @@ const MakePlanner = () => {
         setPlannerData([]);
     }
 
+    const handleUpdateDest = (data) => {
+        setPlannerData(data)
+    }
+
+    useEffect(()=>{
+        console.log('plannerData : ', plannerData)
+    },[plannerData])
+
     return (
         <div className='planner' >
             <div className='plannerSide' >
@@ -79,6 +87,7 @@ const MakePlanner = () => {
                     DeleteAllDestination={handleAllDelete}
                     AddDestination={handleData}
                     CookieData={cookie}
+                    UpdatePlanner={handleUpdateDest}
                 />
             </div>
             <div className='plannerBody' >

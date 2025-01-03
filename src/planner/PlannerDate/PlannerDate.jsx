@@ -99,6 +99,7 @@ const PlannerDate = (props) => {
     );
     props.AreaData(area);
     props.AreaNameData(areaName);
+    props.State();
   };
 
   return (

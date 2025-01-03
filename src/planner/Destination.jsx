@@ -216,21 +216,17 @@ const Destination = () => {
                 window.location.href = "/user/login";
             });
 
-        axios.post('http://localhost:9000/planner/bringPlanner',
-            {
-                day: plannerItem.day,
-                area: plannerItem.area,
-                plannerid: plannerItem.plannerID,
-            },
-            {'Content-Type': 'application/json'},
-        )
-            .then((response) => {
-                alert(response.data); // 서버에서 보낸 응답 메시지 출력
-            })
-            .catch((error) => {
-                console.error("Error adding to my course:", error);
-                alert("내 코스로 저장에 실패했습니다. 다시 시도해주세요.");
-            });
+        const bringData = {
+            plannerid: 0,
+            title: plannerItem.plannerTitle,
+            areaName: plannerItem.area,
+            description: plannerItem.description,
+            isPublic: plannerItem.public,
+            day: plannerItem.day,
+            userid: plannerItem.userId,
+            destinations: destinations,       
+        }
+        navigate('/makePlanner', { state: { bringData } });
     }
 
     const handleDeletePlanner = () => {
@@ -252,13 +248,50 @@ const Destination = () => {
         )
         .then(resp=> {
             window.location.href = "/planner/board";
+            alert("플래너를 성공적으로 삭제하였습니다.")
         })
-        .then(err=>{
+        .catch(err=>{
             console.error("Error Deleting to my course:", err);
-                alert("플래너 삭제에 실패했습니다. 다시 시도해주세요.");
+            alert("플래너 삭제에 실패했습니다. 다시 시도해주세요.");
         })
     }
 
+    // const handleUpdatePlanner = () => {
+    //     console.log(plannerItem);
+    //     axios.post('http://localhost:9000/planner/updatePlanner',
+    //         {
+    //             plannerid: plannerItem.plannerID,
+    //             title: plannerItem.title,
+    //             areaName: plannerItem.area,
+    //             description: plannerItem.description,
+    //             isPublic: plannerItem.public,
+    //             day: plannerItem.day,
+    //             userid: plannerItem.userId,
+    //             destinations: destinations,
+    //         },
+    //         {'Content-Type': 'application/json'},
+    //     )
+    //     .then(resp=> {
+    //         console.log(resp)
+    //     })
+    //     .catch(err=>{
+    //         console.log(resp)
+    //     })
+    // }
+
+    const handleUpdatePlanner = () => {
+        const updateData = {
+            plannerid: plannerItem.plannerID,
+            title: plannerItem.plannerTitle,
+            areaName: plannerItem.area,
+            description: plannerItem.description,
+            isPublic: plannerItem.public,
+            day: plannerItem.day,
+            userid: plannerItem.userId,
+            destinations: destinations,       
+        }
+        navigate('/makePlanner', { state: { updateData } });
+    }
 
     return (
         // 페이지 전체
@@ -329,7 +362,7 @@ const Destination = () => {
                     <div className="destination-plannerControl">
                         {loginStatus && loginStatus.userid && loginStatus.userid === plannerItem.userId ? (
                             <>
-                                <button className="destination-plannerControl-button">수정</button>
+                                <button className="destination-plannerControl-button" onClick={()=>{ handleUpdatePlanner() }} >수정</button>
                                 <button className="destination-plannerControl-button" onClick={()=>{ handleDeletePlanner() }} >삭제</button>
                             </>
 
