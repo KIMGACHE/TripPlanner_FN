@@ -40,6 +40,7 @@
     right: 2.5%;
     height: 100%;
 
+    // 관광지 버튼
     .tourist-btn {
         height: 100%;
         padding: 0 20px;
@@ -68,6 +69,7 @@
             0 0 70px #FFFFFF;
     }
 
+    // 여행코스 버튼
     .travelcourse-btn {
         height: 100%;
         border: 0px;
@@ -78,6 +80,7 @@
         border-radius: 15px;
         /* 버튼에 둥근 모서리 추가 */
         font-size: 2rem;
+        padding: 0 10px;
 
         /* 네온 효과 */
         text-shadow:
@@ -98,7 +101,7 @@
     }
 
     // 로그인 버튼
-    .login-btn {
+    .login-btn ,.logout-btn{
         height: 100%;
         padding: 0 20px;
         border: 0px;
@@ -118,7 +121,7 @@
         /* 호버 효과를 위한 트랜지션 */
     }
 
-    .login-btn:hover {
+    .login-btn:hover ,.logout-btn:hover{
 
         /* 호버 시 네온 효과 강조 */
         text-shadow:
@@ -138,7 +141,7 @@
         border-radius: 15px;
         /* 버튼에 둥근 모서리 추가 */
         font-size: 2rem;
-
+        padding: 0 10px;
         /* 네온 효과 */
         text-shadow:
             0 0 10px #2317FF,

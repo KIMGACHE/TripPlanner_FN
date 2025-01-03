@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import TravelCourse from '../tourist/TravelCourse.jsx';
@@ -12,8 +12,19 @@ import LoginForm from '../login/LoginForm.jsx';
 import Join from '../join/Join.jsx';
 import Main from './Main.jsx';
 import BoardInfo from '../board/BoardInfo.jsx';
+import PrivateRoute from '../auth/PrivateRoute.jsx';
+import Logout from '../login/Logout.jsx';
+import ForgotPage from '../login/ForgotPage.jsx';
+import FindIdPage from '../login/components/FindIdPage.jsx';
+import UseridInputPage from '../login/components/UseridInputPage.jsx';
+import EmailAuthPage from '../login/components/EmailAuthPage.jsx';
+import VerifyCodePage from '../login/components/VerifyCodePage.jsx';
+import PasswordResetPage from '../login/components/PasswordResetPage.jsx';
+
 
 const Body = () => {
+
+
     return (
 
         <Routes>
@@ -26,6 +37,16 @@ const Body = () => {
 
             {/* 로그인 */}
             <Route path="/user/login" element={<LoginForm />}></Route>
+            <Route path="/user/logout" element={<Logout />}></Route>
+            <Route path="/forgot" element={<ForgotPage />}></Route>
+            <Route path="/find-id" element={<FindIdPage />}></Route>
+            <Route path="/find-password" element={<UseridInputPage />}></Route>
+            <Route path="/email-auth" element={<EmailAuthPage />}></Route>
+            <Route path="/verify-code" element={<VerifyCodePage />}></Route>
+            <Route path="/reset-password" element={<PasswordResetPage />}></Route>
+
+            {/* 계획 생성 */}
+            <Route path="/makePlanner" element={<PrivateRoute element={<MakePlanner />} />} />
 
             {/* 플래너 생성 */}
             <Route path="/makePlanner" element={< MakePlanner />}></Route>
@@ -49,7 +70,6 @@ const Body = () => {
             <Route path="/planner/board/destination" element={<BoardInfo />}></Route>
 
         </Routes>
-
     );
 };
 
