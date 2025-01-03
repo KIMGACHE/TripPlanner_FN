@@ -11,7 +11,6 @@ const Logout = ()=>{
         axios.post('http://localhost:9000/user/logout',{},{withCredentials:true})
         .then((response)=>{
             console.log("로그아웃 성공",response.data);
-
             window.location.href="/";
         })      
         .catch((error) =>{
