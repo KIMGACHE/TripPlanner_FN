@@ -13,6 +13,9 @@ const Header = () => {
     if (location.pathname === '/planner/board/destination') {
         return null;
     }
+    if (location.pathname === '/makePlanner') {
+        return null;
+    }
 
     return (
         <header className="header-wrapper">
