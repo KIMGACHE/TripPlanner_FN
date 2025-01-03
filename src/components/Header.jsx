@@ -46,11 +46,11 @@ const Header = () => {
         <header className="header-wrapper">
 
             <Link className="header-logo" to="/">
-                <img className="logoImage" src={LogoImage} alt="logo"></img>
-                <img className="logoTitle" src={LogoTitle} alt="logo"></img>
-                <img className="logoTitle" src={LogoTitle} alt="logo"></img>
+            <div className="logo-wrapper">
+                    {/* <img className="logo-icon" src={LogoImage} alt="Plane Icon" /> */}
+                    <span className="logo-text">여행가자</span>
+                </div>
             </Link>
-
 
 
             <div className="header-btns">
@@ -76,7 +76,7 @@ const Header = () => {
                 ) : (
                     <>
                         <Link to="/user/mypage">
-                            <button className="join-btn">마이페이지지</button>
+                            <button className="join-btn">마이페이지</button>
                         </Link>
 
                         <Link to="/user/logout">
