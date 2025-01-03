@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import findwayIcon from '../images/findway.png';
-import '../css/DestinationDetails.scss';
+import './DestinationDetails.scss';
 
 const Details = ({ plannerItem, destinations, activeTab }) => {  // activeTab 받기
     const navigate = useNavigate();

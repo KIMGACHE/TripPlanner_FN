@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import '../css/Board.scss';
+import './Board.scss';
 
 const Board = () => {
     const [planners, setPlanners] = useState([]);

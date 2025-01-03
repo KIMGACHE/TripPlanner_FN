@@ -1,54 +1,52 @@
-/* CSS Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html,
-body {
-    height: 100%;
-}
-
-ul,
-ol {
-    list-style: none;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
 
 /* 전체 래퍼 스타일 */
 .tourist-wrapper {
-    width: 100%;
+    background-color: #f9f9f9;
+}
+
+.tourist-content {
+    
     max-width: 1200px;
     /* 최대 너비를 1200px로 제한 */
     margin: 0 auto;
     padding: 20px;
-    background-color: #f9f9f9;
+    
 }
 
-/* 헤더 스타일 */
-.tourist-header {
+/* 제목 스타일 */
+.tourist-title {
     text-align: center;
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-bottom: 20px;
     color: #333;
 }
 
-/* 필터 섹션 스타일 */
-.filter-select,
-.search-input,
-.search-button {
-    padding: 10px;
-    margin: 5px;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+// 검색에 대한 내용
+.tourist-header {
+    position: relative;
+
+    .search-input {
+        position: absolute;
+        right: 70px;
+    }   
+    .search-button {
+        position: absolute; 
+        right: 10px;
+    
+    }
+
+    /* 필터 섹션 스타일 */
+    .filter-select,
+    .search-input,
+    .search-button {
+        padding: 10px;
+        margin: 5px;
+        font-size: 1.5rem;
+        border-radius: 15px;
+        border: 1px solid #ccc;
+    }
 }
+
 
 .filter-select {
     width: 150px;
@@ -78,12 +76,13 @@ a {
     margin: 20px 0;
 
     .total-count {
-        font-size: 1rem;
+        font-size: 1.5rem;
         color: #333;
     }
     
     .sort-select {
         width: 180px;
+        border-radius: 15px;
     }
     
 }
@@ -139,7 +138,7 @@ a {
 
 /* 제목 스타일 */
 .course-title {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 8px;
     color: #333;
@@ -153,7 +152,7 @@ a {
 /* 지역, 해시태그 텍스트 스타일 */
 .course-region,
 .course-hashtag {
-    font-size: 0.9rem;
+    font-size: 1.4rem;
     color: #666;
     margin: 0;
     /* p 태그의 기본 margin 제거 */
@@ -212,14 +211,20 @@ a {
 
 /* 로딩 중 상태 */
 .loading-message {
-    text-align: center;
-    font-size: 1.2rem;
+    width : 100%;
+    height: calc(100vh - 80px);
+    display:flex;
+    justify-content: center;
+    
+    margin: 0 auto;
+    font-size: 3rem;
+    margin-top: 200px;
     color: #666;
 }
 
 /* 결과가 없을 때 */
 .no-results {
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.7rem;
     color: #666;
 }

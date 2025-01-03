@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useLocation, Link } from 'react-router-dom';
-import '../css/TouristInfo.scss';
+import './TouristInfo.scss';
 import homepageIcon from '../images/homepageIcon.png'
 import favIcon from '../images/favIcon.png'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';

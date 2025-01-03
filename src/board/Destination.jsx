@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../css/Destination.scss';
+import './Destination.scss';
 import findwayIcon from '../images/findway.png';
 import likeIcon from '../images/likeIcon.png';
 import moment from 'moment';

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import '../css/TravelCourseInfo.scss';
+import './TravelCourseInfo.scss';
 
 // Swiper 관련 CSS 및 컴포넌트 불러오기
 import 'swiper/css';

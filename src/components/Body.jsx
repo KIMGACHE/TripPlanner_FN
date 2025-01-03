@@ -6,14 +6,12 @@ import TravelCourse from '../tourist/TravelCourse.jsx';
 import TravelCourseInfo from '../tourist/TravelCourseInfo.jsx';
 import Tourist from '../tourist/Tourist.jsx';
 import TouristInfo from '../tourist/TouristInfo.jsx';
-import Board from '../planner/Board.jsx';
-// import DestinationInfo from '../planner/DestinationInfo.jsx';
-import Destination from '../planner/Destination.jsx';
+import Board from '../board/Board.jsx';
 import MakePlanner from '../planner/makePlanner/MakePlanner.jsx';
 import LoginForm from '../login/LoginForm.jsx';
 import Join from '../join/Join.jsx';
 import Main from './Main.jsx';
-import Destination1 from '../planner/Destination1.jsx';
+import BoardInfo from '../board/BoardInfo.jsx';
 
 const Body = () => {
     return (
@@ -47,11 +45,8 @@ const Body = () => {
             {/* 게시판 */}
             <Route path="/planner/board" element={<Board />}></Route>
 
-            {/* 게시판 중간 페이지 - 없앨거임 */}
-            {/* <Route path="/planner/board/destination" element={<Destination />}></Route> */}
-
             {/* 게시판 자세히 보기 */}
-            <Route path="/planner/board/destination" element={<Destination1 />}></Route>
+            <Route path="/planner/board/destination" element={<BoardInfo />}></Route>
 
         </Routes>
 

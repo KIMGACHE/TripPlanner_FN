@@ -25,6 +25,14 @@ const Header = () => {
 
 
             <div className="header-btns">
+                <Link to="/tourist">
+                    <button className="tourist-btn">관광지</button>
+                </Link>
+
+                <Link to="/travelcourse">
+                    <button className="travelcourse-btn">여행코스</button>
+                </Link>
+
                 <Link to="/user/login">
                     <button className="login-btn">로그인</button>
                 </Link>

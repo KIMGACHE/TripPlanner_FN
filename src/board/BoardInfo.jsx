@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 import DestinationDetails from './DestinationDetails.jsx';
 // import Comments from './Comments';
-import '../css/Destination.scss';
+import './Destination.scss';
 import Destination from './Destination.jsx';
 import LogoImage from '../images/logoImage.png';
 import LogoTitle from '../images/logotitle.png';
@@ -49,25 +49,29 @@ const Destination1 = () => {
                         <img className="logoTitle" src={LogoTitle} alt="logo"></img>
                     </Link>
                 </li>
+
+                {/* 전체정보 누를 시 Destination 페이지 표시 (Default) */}
                 <li
                     onClick={() => handleTabChange("summary")}
                     className={activeTab === "summary" ? "ACTIVE" : ""}
                 >
                     전체정보
                 </li>
+
+                {/* 세부정보 누를 시 DestinatinoDetails 페이지 표시 */}
                 <li
                     onClick={() => handleTabChange("details")}
                     className={activeTab === "details" ? "ACTIVE" : ""}
                 >
                     세부정보
                 </li>
-                
+
             </ul>
 
             {/* 탭에 따라 컴포넌트 렌더링 */}
             {activeTab === "summary" && <Destination plannerItem={plannerItem} />}
             {activeTab === "details" && <DestinationDetails plannerItem={plannerItem} destinations={destinations} />}
-        
+
         </div>
     );
 

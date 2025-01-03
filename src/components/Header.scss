@@ -40,6 +40,63 @@
     right: 2.5%;
     height: 100%;
 
+    .tourist-btn {
+        height: 100%;
+        padding: 0 20px;
+        border: 0px;
+        color: #FFFFFF;
+        background: #FFFFFF;
+        /* 버튼 배경색을 header-wrapper와 동일하게 설정 */
+        border-radius: 15px;
+        /* 버튼에 둥근 모서리 추가 */
+        font-size: 2rem;
+
+        /* 네온 효과 */
+        text-shadow:
+            0 0 10px #2317FF,
+            0 0 35px #FFFFFF;
+
+        transition: text-shadow 0.3s ease;
+        /* 호버 효과를 위한 트랜지션 */
+    }
+
+    .tourist-btn:hover {
+        /* 호버 시 네온 효과 강조 */
+        text-shadow:
+            0 0 10px #2317FF,
+            0 0 20px #2317FF,
+            0 0 70px #FFFFFF;
+    }
+
+    .travelcourse-btn {
+        height: 100%;
+        border: 0px;
+        padding: 0 5px;
+        color: #FFFFFF;
+        background: #FFFFFF;
+        /* 버튼 배경색을 header-wrapper와 동일하게 설정 */
+        border-radius: 15px;
+        /* 버튼에 둥근 모서리 추가 */
+        font-size: 2rem;
+
+        /* 네온 효과 */
+        text-shadow:
+            0 0 10px #2317FF,
+            0 0 35px #FFFFFF;
+
+        transition: text-shadow 0.3s ease;
+        /* 호버 효과를 위한 트랜지션 */
+    }
+
+    .travelcourse-btn:hover {
+
+        /* 호버 시 네온 효과 강조 */
+        text-shadow:
+            0 0 10px #2317FF,
+            0 0 20px #2317FF,
+            0 0 70px #FFFFFF;
+    }
+
     // 로그인 버튼
     .login-btn {
         height: 100%;
@@ -54,7 +111,6 @@
 
         /* 네온 효과 */
         text-shadow:
-            0 0 5px #2317FF,
             0 0 10px #2317FF,
             0 0 35px #FFFFFF;
 
@@ -85,9 +141,7 @@
 
         /* 네온 효과 */
         text-shadow:
-            0 0 5px #2317FF,
             0 0 10px #2317FF,
-            // 0 0 15px #FF8000,
             0 0 35px #FFFFFF;
 
         transition: text-shadow 0.3s ease;

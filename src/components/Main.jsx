@@ -23,13 +23,6 @@ const Main = () => {
                 <button className="main-board-btn">다른 여행 계획 보러 가기</button>
             </Link>
 
-            <Link to="/tourist">
-                <button className="main-tourist-btn">관광지 리스트</button>
-            </Link>
-
-            <Link to="/travelcourse">
-                <button className="main-travelcourse-btn">관광지 코스 정보</button>
-            </Link>
         </div>
     )
 
