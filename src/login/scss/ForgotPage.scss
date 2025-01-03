@@ -4,8 +4,8 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    // background-color: #f9f9f9;
-    // font-family: Arial, sans-serif;
+    z-index: 1;
+    position: relative;
   
     // 페이지 전체를 위로 200px 이동
     transform: translateY(-100px); // 200px 위로 이동

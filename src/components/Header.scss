@@ -6,6 +6,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 100;
+    position: relative;
 }
 
 .header-logo{
@@ -17,16 +19,12 @@
     display: flex;
     align-items: center;
     gap: 10px;
-
-    // .logo-icon {
-    //     width: 150px; // 비행기 크기
-    //     height: auto;
-    // }
+    position:relative;
 
     .logo-text {
         font-size: 3rem;
         font-weight: bold;
-        margin-left:30px;
+        margin-left:50px;
         margin-top:5px;
         color: white;
         text-shadow:
@@ -36,7 +34,16 @@
             1px 1px 0 #000; // 글자 테두리 효과
     }
 
-  
+    .logo-icon{
+        position: absolute;
+        // top:10%;
+        left:90%;
+        width:220px;
+        height:80px;
+        opacity: 1;
+        z-index: -1;
+    }
+
 }
 
 // 헤더 버튼들
