@@ -12,206 +12,116 @@ const useMyPage = () => {
     authCode: "",
   });
 
-  const [imagePreview, setImagePreview] = useState("/ProfileImg/anonymous.jpg"); // 기본 이미지
+  const [imagePreview, setImagePreview] = useState(formData.profileImage);
   const [validationMessages, setValidationMessages] = useState({});
   const [authCodeSent, setAuthCodeSent] = useState(false);
-  const [timeSee, setTimeSee] = useState(false);
   const [timer, setTimer] = useState(180);
   const [isAuthCodeVerified, setIsAuthCodeVerified] = useState(false);
-  const [isFirstSend, setIsFirstSend] = useState(true); // 초기 상태는 true
-  const [isEmailEditing, setIsEmailEditing] = useState(false); // 이메일 편집 상태
-  const [isAuthCodeLocked, setIsAuthCodeLocked] = useState(false); // 인증 코드 확인 버튼 잠금 상태
+  const [isAuthCodeLocked, setIsAuthCodeLocked] = useState(false);
+  const [isPasswordValidationVisible, setIsPasswordValidationVisible] = useState(false);
 
-  const fileInputRef = useRef(null); // 파일 입력 요소를 참조
+  
+  // 비밀번호 수정 상태 관리 (추가)
+  const [isPasswordEditing, setIsPasswordEditing] = useState(false);  // 여기에서 비밀번호 수정 상태 정의
+  const fileInputRef = useRef(null);
 
-  const [formImgeData, setFormImgeData] = useState({
-    profileImage: "/ProfileImg/anonymous.jpg", // 기본 이미지로 초기화
-  });
+  const handlePasswordEditClick = () => {
+    setIsPasswordEditing(true); // 비밀번호 입력 필드 활성화
+    setIsPasswordValidationVisible(true); // 유효성 메시지 표시 활성화
+  };
+  
+  const handleCancelPasswordEditing = () => {
+    setIsPasswordEditing(false); // 잠금 상태로 전환
+    setIsPasswordValidationVisible(false); // 유효성 메시지 숨김
+    setFormData((prev) => ({
+      ...prev,
+      password: "", // 비밀번호 초기화
+      repassword: "", // 비밀번호 확인 초기화
+    }));
+    setValidationMessages((prev) => ({
+      ...prev,
+      password: "", // 비밀번호 메시지 초기화
+      repassword: "", // 확인 메시지 초기화
+    }));
+  };
 
-  // 타이머
-  useEffect(() => {
-    let countdown;
-    if (authCodeSent && timer > 0 && !isAuthCodeVerified) {
-      countdown = setInterval(() => setTimer((prev) => prev - 1), 1000);
+  
+     // 비밀번호 유효성 검사
+     const validatePassword = (password) => {
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,15}$/;
+      if (!password) {
+        return { message: "비밀번호를 입력해주세요.", color: "validation-error" };
+      }
+  
+      if (/\s/.test(password)) {
+        return { message: "비밀번호에 공백은 사용할 수 없습니다.", color: "validation-error" };
+      }
+  
+      if (!passwordRegex.test(password)) {
+        return { message: "비밀번호는 영문+숫자 조합, 8~15자리여야 합니다.", color: "validation-error" };
+      }
+  
+      return { message: "사용가능한 비밀번호입니다.", color: "validation-success" };
+    };
+  
+
+
+
+
+  // 파일 업로드
+  // 이미지 업로드
+  const handleImageUpload = async (file) => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => setImagePreview(event.target.result); // 파일 미리보기
+      reader.readAsDataURL(file);
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:9000/user/mypage/upload",
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
+        );
+
+        if (response.data === "파일 업로드 성공") {
+          setFormData((prev) => ({
+            ...prev,
+            profileImage: `/upload/profile/${file.name}`, // 업로드된 이미지 URL을 formData에 설정
+          }));
+          console.log("이미지 업로드 성공");
+        } else {
+          console.error("이미지 업로드 실패:", response.data);
+        }
+      } catch (error) {
+        console.error("파일 업로드 중 오류 발생:", error);
+      }
     }
-    return () => clearInterval(countdown);
+  };
+
+  
+  // 이메일 부분
+
+  // 타이머 관리
+  useEffect(() => {
+    if (authCodeSent && timer > 0 && !isAuthCodeVerified) {
+      const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
+      return () => clearInterval(interval);
+    }
   }, [authCodeSent, timer, isAuthCodeVerified]);
 
-  // 이메일 변경 시 인증 상태 초기화
+  // 이메일 상태 초기화
   const resetAuthState = () => {
     setAuthCodeSent(false);
     setIsAuthCodeVerified(false);
-    setIsAuthCodeLocked(false); // 인증 코드 버튼 잠금 해제
+    setIsAuthCodeLocked(false);
   };
 
-  const validatePasswords = useCallback(() => {
-    if (formData.password && formData.repassword) {
-      const isValid = formData.password === formData.repassword;
-      const message = isValid ? "비밀번호가 일치합니다." : "비밀번호가 일치하지 않습니다.";
-      const color = isValid ? "validation-success" : "validation-error";
 
-      setValidationMessages((prevMessages) => ({
-        ...prevMessages,
-        repassword: message,
-        repasswordColor: color, // 스타일 클래스 반영
-      }));
-    } else {
-      setValidationMessages((prevMessages) => ({
-        ...prevMessages,
-        repassword: "",
-        repasswordColor: "",
-      }));
-    }
-  }, [formData.password, formData.repassword]);
-
-  // 비밀번호 일치 검사를 useEffect로 실행
-  useEffect(() => {
-    validatePasswords();
-  }, [validatePasswords]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-
-    console.log(`Field Name: ${name}, Field Value: ${value}`);
-
-    if (name === "email") {
-      const { message, color } = checkEmail(value);
-      setValidationMessages((prevMessages) => ({
-        ...prevMessages,
-        email: message,
-        emailColor: color,
-      }));
-    }
-
-    if (name === "email") {
-      resetAuthState(); // 인증 상태 초기화
-      setValidationMessages((prev) => ({
-        ...prev,
-        email: "",
-        authCode: "",
-      }));
-      setIsAuthCodeLocked(false); // 인증 버튼 잠금 해제
-    }
-
-    if (name === "password") {
-      const { message, color } = validatePassword(value);
-      setValidationMessages((prevMessages) => ({
-        ...prevMessages,
-        password: message,
-        passwordColor: color,
-      }));
-
-      // 비밀번호가 변경될 때, 비밀번호 확인 유효성도 같이 체크
-      validatePasswords();
-    }
-
-    if (name === "repassword") {
-      validatePasswords(); // 비밀번호 확인 입력 시 즉시 유효성 검사 실행
-    }
-
-    if (name === "username") {
-      const usernameRegex = /^[a-zA-Z가-힣]+$/; // 영어, 한글만 허용
-      if (!usernameRegex.test(value)) {
-        setValidationMessages((prevMessages) => ({
-          ...prevMessages,
-          username: "이름은 공백이나 숫자를 포함할 수 없습니다.",
-          usernameColor: "validation-error",
-        }));
-        setFormData((prevData) => ({
-          ...prevData,
-          username: "",
-        }));
-        return;
-      } else {
-        setValidationMessages((prevMessages) => ({
-          ...prevMessages,
-          username: "",
-          usernameColor: "",
-        }));
-      }
-    }
-  };
-
-  const handleImageUpload = (file) => {
-    if (file) {
-      setFormData((prev) => ({ ...prev, profileImage: file })); // 이미지 파일 업데이트
-      const reader = new FileReader();
-      reader.onload = (event) => setImagePreview(event.target.result); // 이미지 미리보기 설정
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleFileInputClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click(); // 숨겨진 파일 입력 클릭
-    }
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    if (e.dataTransfer.files.length > 0) {
-      handleImageUpload(e.dataTransfer.files[0]); // 드래그 앤 드롭된 파일 처리
-    }
-  };
-
-  const handleDragOver = (e) => e.preventDefault();
-
-  const handleCancelImage = () => {
-    setFormImgeData({ profileImage: null }); // 이미지 상태 초기화
-    setImagePreview("/ProfileImg/anonymous.jpg"); // 기본 이미지로 재설정
-    setFormData((prev) => ({ ...prev, profileImage: "/ProfileImg/anonymous.jpg" }));
-  };
-
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      // 이미지 미리보기 설정
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreview(previewUrl); // 이미지 미리보기 상태 업데이트
-  
-      // 파일을 서버로 업로드
-      const formData = new FormData();
-      formData.append('file', file);
-  
-      try {
-        const response = await axios.post('http://localhost:9000/user/mypage/uploadProfile', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-  
-        if (response.data.success) {
-          // 서버에서 업로드된 이미지 경로를 받아와서 상태에 저장
-          setFormData((prevData) => ({
-            ...prevData,
-            profileImage: response.data.imageUrl, // 서버에서 반환된 이미지 URL을 저장
-          }));
-        }
-      } catch (err) {
-        console.error('이미지 업로드 실패:', err);
-      }
-    }
-  };
-
-  const validatePassword = (password) => {
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,15}$/;
-    if (!password) {
-      return { message: "비밀번호를 입력해주세요.", color: "validation-error" };
-    }
-
-    if (/\s/.test(password)) {
-      return { message: "비밀번호에 공백은 사용할 수 없습니다.", color: "validation-error" };
-    }
-
-    if (!passwordRegex.test(password)) {
-      return { message: "비밀번호는 영문+숫자 조합, 8~15자리여야 합니다.", color: "validation-error" };
-    }
-
-    return { message: "사용가능한 비밀번호입니다.", color: "validation-success" };
-  };
-
-  const checkEmail = async (email) => {
+  const validateEmail = async (email) => {
+    // 이메일 형식 유효성 검사
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setValidationMessages((prev) => ({
         ...prev,
@@ -220,104 +130,105 @@ const useMyPage = () => {
       }));
       return false;
     }
-
+  
+    // 유효한 이메일 형식일 경우
+    setValidationMessages((prev) => ({
+      ...prev,
+      email: "유효한 이메일입니다.",
+      emailColor: "validation-success",
+    }));
+  
     try {
-      const response = await axios.post("http://localhost:9000/user/check-email", { email });
-      setValidationMessages((prev) => ({
-        ...prev,
-        email: response.data.available ? "사용 가능한 이메일입니다." : "이미 등록된 이메일입니다.",
-        emailColor: response.data.available ? "validation-success" : "validation-error",
-      }));
-      return response.data.available;
+      // 인증 코드 요청 함수 호출
+      await sendAuthCode();
     } catch (error) {
-      console.error("이메일 확인 오류:", error);
+      console.error("이메일 유효성 검사 중 오류:", error.response?.data || error.message);
       setValidationMessages((prev) => ({
         ...prev,
-        email: "이메일 중복 확인 중 오류가 발생했습니다.",
+        email: "서버 오류로 이메일 인증 요청에 실패했습니다.",
         emailColor: "validation-error",
       }));
-      return false;
     }
   };
-
+  
+  // 인증 코드 발송 함수
   const sendAuthCode = async () => {
-    const email = formData.email.trim();
-
-    if (!email) {
+    if (!formData.email) {
       setValidationMessages((prev) => ({
         ...prev,
-        email: "값을 입력하세요.",
+        email: "이메일을 입력해주세요.",
         emailColor: "validation-error",
       }));
-      setAuthCodeSent(false);
       return;
     }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setValidationMessages((prev) => ({
-        ...prev,
-        email: "올바른 이메일 형식으로 작성해주세요.",
-        emailColor: "validation-error",
-      }));
-      setAuthCodeSent(false);
-      return;
-    }
-
+  
     try {
-      const response = await axios.post("http://localhost:9000/user/send-auth-code", { email });
+      const response = await axios.post(
+        "http://localhost:9000/user/send-auth-code",
+        { email: formData.email }, // 이메일 전달
+        { headers: { "Content-Type": "application/json" } }
+      );
+  
       if (response.data.status === "success") {
-        setAuthCodeSent(true);
+        setAuthCodeSent(true); // 인증 코드 발송 성공
+        setValidationMessages((prev) => ({
+          ...prev,
+          email: "인증 코드가 발송되었습니다.",
+          emailColor: "validation-success",
+        }));
       } else {
         setValidationMessages((prev) => ({
           ...prev,
-          email: response.data.message || "인증 코드 발송에 실패했습니다.",
+          email: response.data.message || "인증 코드 발송 실패.",
           emailColor: "validation-error",
         }));
-        setAuthCodeSent(false);
       }
     } catch (error) {
+      console.error("인증 코드 요청 오류:", error.response?.data || error.message);
       setValidationMessages((prev) => ({
         ...prev,
         email: "서버 오류로 인증 코드를 발송할 수 없습니다.",
         emailColor: "validation-error",
       }));
-      setAuthCodeSent(false);
     }
   };
 
   const verifyAuthCode = async () => {
     try {
-      const response = await axios.post("http://localhost:9000/user/verify-auth-code", {
-        email: formData.email,
-        code: formData.authCode,
-      });
+        const response = await axios.post("http://localhost:9000/user/verify-auth-code", {
+            email: formData.email,
+            code: formData.authCode,
+        });
 
-      if (response.data.message.includes("완료")) {
-        setIsAuthCodeVerified(true);
-        setIsAuthCodeLocked(true); // 인증 성공 시 버튼 잠금
-        setValidationMessages((prevMessages) => ({
-          ...prevMessages,
-          authCode: "인증이 완료되었습니다.",
-          authCodeColor: "validation-success", // 성공 색상
-        }));
-      } else {
-        setValidationMessages((prevMessages) => ({
-          ...prevMessages,
-          authCode: "인증번호가 올바르지 않습니다.",
-          authCodeColor: "validation-error", // 오류 색상
-        }));
-      }
+        if (response.data.message.includes("완료")) {
+            setIsAuthCodeVerified(true);
+            setIsAuthCodeLocked(true); // 인증 성공 시 버튼 잠금
+            setValidationMessages((prevMessages) => ({
+                ...prevMessages,
+                authCode: "인증이 완료되었습니다.",
+                authCodeColor: "validation-success", // 성공 색상
+            }));
+        } else {
+            setValidationMessages((prevMessages) => ({
+                ...prevMessages,
+                authCode: "인증번호가 올바르지 않습니다.",
+                authCodeColor: "validation-error", // 오류 색상
+            }));
+        }
     } catch (error) {
-      setValidationMessages((prevMessages) => ({
-        ...prevMessages,
-        authCode: "서버 오류로 인증을 완료할 수 없습니다.",
-        authCodeColor: "validation-error", // 오류 색상
-      }));
+        setValidationMessages((prevMessages) => ({
+            ...prevMessages,
+            authCode: "서버 오류로 인증을 완료할 수 없습니다.",
+            authCodeColor: "validation-error", // 오류 색상
+        }));
     }
-  };
+};
 
+  
   return {
     formData,
+    handlePasswordEditClick,
+    handleCancelPasswordEditing,
     setFormData,
     imagePreview,
     setImagePreview,
@@ -326,26 +237,53 @@ const useMyPage = () => {
     authCodeSent,
     setAuthCodeSent,
     timer,
+    isPasswordEditing,
+    handlePasswordEditClick,
+    handleCancelPasswordEditing,
     setTimer,
+    isPasswordEditing,  // 이 값을 반환하여 사용할 수 있도록 전달
+    setIsPasswordEditing,  // 비밀번호 수정 상태를 변경하는 함수도 반환
+    setValidationMessages,
     isAuthCodeVerified,
     setIsAuthCodeVerified,
     isAuthCodeLocked,
-    setIsAuthCodeLocked, // 인증 코드 버튼 잠금 상태 업데이트 함수
-    isFirstSend,
-    setIsFirstSend,
+    setIsAuthCodeLocked,
+    setIsPasswordEditing,
     fileInputRef,
-    handleDrop,
-    handleDragOver,
-    handleFileInputClick,
+    handleDrop: (e) => {
+      e.preventDefault();
+      if (e.dataTransfer.files.length > 0) {
+        handleImageUpload(e.dataTransfer.files[0]); // 드래그 앤 드롭 시 이미지 업로드
+      }
+    },
+    handleDragOver: (e) => e.preventDefault(),
+    handleFileInputClick: () => fileInputRef.current?.click(),
     handleImageUpload,
-    handleCancelImage,
-    handleChange,
-    checkEmail,
+    handleCancelImage: () => {
+      setImagePreview("/ProfileImg/anonymous.jpg");
+      setFormData((prev) => ({
+        ...prev,
+        profileImage: "/ProfileImg/anonymous.jpg", // 기본 이미지로 변경
+      }));
+    },
+    handleChange: (e) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    },
     sendAuthCode,
+    validateEmail,
     verifyAuthCode,
+    setImagePreview,
     resetAuthState,
-    handleFileChange,
+    validatePassword,
+    validatePassword,
+    handlePasswordEditClick,
+    handleFileChange: (e) => handleImageUpload(e.target.files[0]),
+    setIsPasswordValidationVisible,
   };
 };
 
 export default useMyPage;
+
+
+

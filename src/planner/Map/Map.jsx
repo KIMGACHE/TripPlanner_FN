@@ -67,7 +67,6 @@ const Map = (props) => {
                                 {"Content-Type":"application/json"},
                             )
                             .then(resp=>{
-                                console.log(props.DayData)
                                 props.AddDestination({"day":props.DayData,"data":resp.data})
                             })
                             .catch(err=>{console.log(err)})
@@ -195,7 +194,6 @@ const Map = (props) => {
 
     // 지역이 변경될 때 마다 Map Rendering
     useEffect(()=>{
-
         if(map && props.AreaData) {
             var lat = Number(props.AreaData[1])
             var lng = Number(props.AreaData[0])

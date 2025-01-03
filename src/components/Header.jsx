@@ -12,6 +12,7 @@ const Header = () => {
             <Link className="header-logo" to="/">
                 <img className="logoImage" src={LogoImage} alt="logo"></img>
                 <img className="logoTitle" src={LogoTitle} alt="logo"></img>
+                <img className="logoTitle" src={LogoTitle} alt="logo"></img>
             </Link>
 
 
@@ -22,6 +23,9 @@ const Header = () => {
                 </Link>
                 <Link to="/user/join">
                     <button className="join-btn">회원가입</button>
+                </Link>
+                <Link to="/user/mypage">
+                    <button className="join-btn">마이페이지지</button>
                 </Link>
             </div>
 
