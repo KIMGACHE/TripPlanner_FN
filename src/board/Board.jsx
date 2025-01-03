@@ -119,7 +119,7 @@ const Board = () => {
                 </div>
 
                 {/* 페이징 버튼 */}
-                <div className="pagination">
+                <div className="board-pagination">
                     {createPageButtons(totalPages)}
                 </div>
             </div>
