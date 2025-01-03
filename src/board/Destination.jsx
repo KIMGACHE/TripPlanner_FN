@@ -208,23 +208,7 @@ const Destination = () => {
             withCredentials: true, // 쿠키 포함
         })
             .then(response => {
-                console.log("쿠키 보내기:", response.data);
-                // 보낼 데이터 준비
-                const requestData = {
-                    title: plannerItem.plannerTitle,
-                    area: plannerItem.area,
-                    description: plannerItem.description,
-                };
-
-                // 쿠키요청
-                axios.post('http://localhost:9000/planner/add-to-my-course', requestData)
-                    .then((response) => {
-                        alert(response.data); // 서버에서 보낸 응답 메시지 출력
-                    })
-                    .catch((error) => {
-                        console.error("Error adding to my course:", error);
-                        alert("내 코스로 저장에 실패했습니다. 다시 시도해주세요.");
-                    });
+                console.log("Planner ITEM:", plannerItem);
             })
 
             .catch(error => {
@@ -232,8 +216,49 @@ const Destination = () => {
                 window.location.href = "/user/login";
             });
 
-
+        axios.post('http://localhost:9000/planner/bringPlanner',
+            {
+                day: plannerItem.day,
+                area: plannerItem.area,
+                plannerid: plannerItem.plannerID,
+            },
+            {'Content-Type': 'application/json'},
+        )
+            .then((response) => {
+                alert(response.data); // 서버에서 보낸 응답 메시지 출력
+            })
+            .catch((error) => {
+                console.error("Error adding to my course:", error);
+                alert("내 코스로 저장에 실패했습니다. 다시 시도해주세요.");
+            });
     }
+
+    const handleDeletePlanner = () => {
+        axios.post('http://localhost:9000/api/cookie/validate', {}, {
+            withCredentials: true, // 쿠키 포함
+        })
+            .then(response => {
+                console.log("Planner ITEM:", plannerItem);
+            })
+
+            .catch(error => {
+                alert('로그인이 필요한 서비스입니다!');
+                window.location.href = "/user/login";
+            });
+
+        axios.post('http://localhost:9000/planner/deletePlanner',
+            {plannerid:plannerID},
+            {'Content-Type': 'application/json'}
+        )
+        .then(resp=> {
+            window.location.href = "/planner/board";
+        })
+        .then(err=>{
+            console.error("Error Deleting to my course:", err);
+                alert("플래너 삭제에 실패했습니다. 다시 시도해주세요.");
+        })
+    }
+
 
     return (
         // 페이지 전체
@@ -305,7 +330,7 @@ const Destination = () => {
                         {loginStatus && loginStatus.userid && loginStatus.userid === plannerItem.userId ? (
                             <>
                                 <button className="destination-plannerControl-button">수정</button>
-                                <button className="destination-plannerControl-button">삭제</button>
+                                <button className="destination-plannerControl-button" onClick={()=>{ handleDeletePlanner() }} >삭제</button>
                             </>
 
                         ) : (

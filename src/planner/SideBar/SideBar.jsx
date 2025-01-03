@@ -27,9 +27,7 @@ const SideBar = (props) => {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
   const [resultsPerPage] = useState(7); // 한 페이지에 표시할 결과 수
   const [pagesToShow] = useState(10); // 한 번에 표시할 페이지 번호 개수
-
-  const [showQuestion, setShowQuestion] = useState(false);  // 새로 추가된 상태
-
+  
   // 지역정보 저장
   const handleArea = (data) => {
     setArea(data);
