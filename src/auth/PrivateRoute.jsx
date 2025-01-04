@@ -15,6 +15,14 @@ const PrivateRoute = ({element , ...rest})=>{
             setIsAuthenticated(true);
             setCookie(response.data);  // 응답 데이터로 쿠키 정보 설정
             console.log("쿠키 정보:", response.data);  // 쿠키 정보를 콘솔에 출력
+
+            const userid = localStorage.getItem("userid");
+
+            if (userid) {
+                console.log("Userid found in 로컬스토리지:", userid);
+              } else {
+                console.log("userid 값이 로컬 스토리지에 없습니다.");
+              }
         })
         .catch(err =>{
             setIsAuthenticated(false);
@@ -30,6 +38,23 @@ const PrivateRoute = ({element , ...rest})=>{
     
 
     return isAuthenticated ? React.cloneElement(element, {cookie}) : null;
+};
+
+const validateAccessToken = (token) => {
+    return token && !isTokenExpired(token);
+}
+
+
+const refreshAccessToken = async (userid,refreshToken) => {
+    try{
+        const response = await axios.post('http://localhost:9000/api/refresh',{userid,refreshToken} ,{
+            withCredentials : true,
+        });
+        return response.data; //엑세스 토큰과 리프레시 토큰 반환
+    }catch ( error) {
+        console.log("엑세스 토큰 재발급 실패", error);
+        throw new Error("엑세스 토큰 재발급 실패");
+    }
 };
 
 

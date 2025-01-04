@@ -110,6 +110,52 @@
     }
 }
 
+// 반응형 스타일
+@media (max-width: 1024px) {
+    .main-title {
+        font-size: 2rem; // 제목 글씨 크기 축소
+    }
+
+    .main-makeplanner-btn,
+    .main-board-btn {
+        width: 25vw; // 버튼 너비 조정
+        font-size: 0.9rem; // 폰트 크기 축소
+    }
+}
+
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 1.8rem;
+    }
+
+    .main-makeplanner-btn,
+    .main-board-btn {
+        width: 30vw;
+        height: 10vh;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 1.5rem;
+        left: 5%; // 여백 축소
+        right: 5%;
+    }
+
+    .main-makeplanner-btn,
+    .main-board-btn {
+        width: 35vw;
+        height: 12vh;
+        font-size: 0.7rem;
+    }
+
+    .total-plans-display {
+        font-size: 1rem; // 여행 계획 표시 폰트 크기 축소
+        padding: 8px 10px;
+    }
+}
+
 // 여행 계획 수 표시
 .total-plans-display {
     position: fixed;
