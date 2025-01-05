@@ -455,6 +455,9 @@
         &:hover {
           background-color: transparent; /* 배경색 없앰 */
         }
+        &.active {
+          background-color: #d3d3d3;  // 회색빛 배경
+        }
       }
     }
 }

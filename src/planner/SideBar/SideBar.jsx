@@ -102,38 +102,77 @@ const SideBar = (props) => {
           const endIndex = startIndex + currentPageData.length;
 
           currentPageData.map((el,index)=>{
-            const data = {
-              name:el.title,
-              category:'관광지',
-              address:el.addr1,
-              description:'',
-              image:el.firstimage,
-              x:el.mapx,
-              y:el.mapy
+            if(el.areacode==areaCode) {
+              const data = {
+                name:el.title,
+                category:'관광지',
+                address:el.addr1,
+                description:'',
+                image:el.firstimage,
+                x:el.mapx,
+                y:el.mapy
+              }
+              updatedSearch[startIndex + index] = data;
             }
-            updatedSearch[startIndex + index] = data;
           })
           setSearch(updatedSearch || []);
-          setWord('');
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      axios.post(
-          'http://localhost:9000/planner/searchDestination',
-          { type: typeState, word: word, areaname: areaName },
-          { 'Content-Type': 'application/json' }
-        )
-        .then((resp) => {
-          setSearch(resp.data.data || []);
-          setWord('');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      axios
+  .post(
+    'http://localhost:9000/planner/searchDestination',
+    { type: typeState, word: word, areaname: areaName },
+    { 'Content-Type': 'application/json' }
+  )
+  .then((resp) => {
+    var searchData = resp.data.data;
+    const startIndex = (currentPage - 1) * resultsPerPage;
+    const currentPageData = searchData.slice(startIndex, startIndex + resultsPerPage);
+
+    // 비동기 작업 처리
+    Promise.all(
+      currentPageData.map(async (el, index) => {
+        try {
+          const imageResp = await axios.post('http://localhost:9000/planner/getImages', {
+            businessName: el.name,
+          });
+          searchData[startIndex + index].image = imageResp.data.image; 
+        } catch (error) {
+          searchData[startIndex + index].image = null; // 실패 시 기본값
+        }
+      })
+    ).then(() => {
+      setSearch(searchData || []);
+    });
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+
     }
   };
+
+    // const handleImage = async () => {
+  //   console.log("handleImage 실행됨!");
+  //   setImages([]);
+  
+  //   try {
+  //     const imagePromises = currentResults.map((el) =>
+  //       axios.post("http://localhost:9000/planner/getImages", {
+  //         businessName: el.name,
+  //       })
+  //     );
+  
+  //     const responses = await Promise.all(imagePromises);
+  //     const fetchedImages = responses.map((resp) => resp.data.image);
+  //     setImages(fetchedImages);
+  //   } catch (error) {
+  //     console.error("Error fetching images:", error);
+  //   }
+  // };
 
   // 검색한 장소 플래너에 추가
   const handleSearchAdd = (data) => {
@@ -272,19 +311,17 @@ const SideBar = (props) => {
     }
   },[areaName])
 
-  useEffect(()=>{
-    if (isMountedSearch.current) {
-      handleSearch();
-    } else {
-      isMountedSearch.current = true;
-    }  
-  },[typeState])
+  // useEffect(()=>{
+  //   if (isMountedSearch.current) {
+  //     handleSearch();
+  //   } else {
+  //     isMountedSearch.current = true;
+  //   }  
+  // },[typeState])
 
   useEffect(()=>{
     if (isMountedSearch.current) {
-      if(typeState=='관광지') {
-        handleSearch();
-      }
+      handleSearch();
     } else {
       isMountedSearch.current = true;
     }  
@@ -381,25 +418,6 @@ const SideBar = (props) => {
   }
   },[])
 
-  // const handleImage = async () => {
-  //   console.log("handleImage 실행됨!");
-  //   setImages([]);
-  
-  //   try {
-  //     const imagePromises = currentResults.map((el) =>
-  //       axios.post("http://localhost:9000/planner/getImages", {
-  //         businessName: el.name,
-  //       })
-  //     );
-  
-  //     const responses = await Promise.all(imagePromises);
-  //     const fetchedImages = responses.map((resp) => resp.data.image);
-  //     setImages(fetchedImages);
-  //   } catch (error) {
-  //     console.error("Error fetching images:", error);
-  //   }
-  // };
-
   return (
     <>
       <div className="sidebar">
@@ -481,14 +499,15 @@ const SideBar = (props) => {
                   {selectedDay && (
                     <ul>
                       {props.DestinationData.length > 0 && props.DestinationData.filter((el) => el.day === selectedDay).map((destination, index) => {
+                        console.log('destination: ',destination)
                         return (
                           <li key={index} 
                             className="content-card"
                             onClick={()=>{props.ClickPlanner(destination)}}
                           >
                             <div className="card-image">
-                              {destination && !destination.image && destination.image=='No image found' && <img src={NoImage} alt="" />}
-                              {destination && destination.image && destination.image!='No image found' && <img src={destination.image} alt="" />}
+                              {destination && destination.data.image==null && destination.data.image=='No image found' && <img src={NoImage} alt="" />}
+                              {destination && destination.data.image!=null && destination.data.image!='No image found' && <img src={destination.data.image} alt="" />}
                             </div>
                             <div className="card-content">
                               <div className="card-header">
@@ -519,14 +538,28 @@ const SideBar = (props) => {
                 <span className='total-page'>{currentPage}/{totalPages}</span>
             }
             <div className='search-btns'>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord(""); }}>식당</button>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord(""); }}>숙소</button>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord("");}}>관광지</button>
+              <button 
+                className={`search-btn ${typeState === "식당" ? "active" : ""}`} 
+                onClick={(e) => { setTypeState(e.target.innerText); }}
+              >
+                식당
+              </button>
+              <button 
+                className={`search-btn ${typeState === "숙소" ? "active" : ""}`} 
+                onClick={(e) => { setTypeState(e.target.innerText); }}
+              >
+                숙소
+              </button>
+              <button 
+                className={`search-btn ${typeState === "관광지" ? "active" : ""}`} 
+                onClick={(e) => { setTypeState(e.target.innerText); }}
+              >
+                관광지
+              </button>
             </div>
             <div className="search-body">
               <ul>
                 { search && search.length > 0 && typeState=='관광지' && currentResults.map((el, index) => {
-                  console.log(el);
                   return (
                     <li key={index}
                       className="search-card"
