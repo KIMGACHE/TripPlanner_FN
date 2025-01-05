@@ -4,30 +4,30 @@ import {useNavigate} from 'react-router-dom';
 import Map from '../Map/Map';
 import SideBar from '../SideBar/SideBar';
 import './MakePlanner.scss'
-import Option from '../Option/Options';
 import axios from 'axios';
 
 const MakePlanner = ({cookie}) => {
     const navigate = useNavigate();
 
 
-    const [optionState, setOptionState] = useState();
+    // const [optionState, setOptionState] = useState();
     const [areaState, setAreaState] = useState([]);
     const [plannerData, setPlannerData] = useState([]);
     const [selectedDay, setSelectedDay] = useState(1);
+    const [destination, setDestination] = useState();
+    const [searchDestination, setSearchDestination] = useState();
 
-    console.log("쿠키정보들 받아온거 : " ,cookie);
-
-    const handleOption = (data) => { setOptionState(data); }
+    // const handleOption = (data) => { setOptionState(data); }
 
     const handleArea = (data) => {setAreaState(data)}
 
     const handleData = async (data) => {
         await axios.post('http://localhost:9000/planner/getImages',
-            {'businessName':data.data.name},
+            {
+                'businessName':data.data.name
+            },
         )
         .then(resp=>{
-            console.log(resp)
             const updatedData = {
                 ...data,  // 기존 data 객체를 복사
                 image: resp.data.image  // image 키 추가
@@ -41,7 +41,8 @@ const MakePlanner = ({cookie}) => {
 
     const handleDay = (data) => { setSelectedDay(data); }
 
-    const handleDeleteDest = (day, index) => {
+    const handleDeleteDest = (event,day, index) => {
+        event.stopPropagation();
         setPlannerData(prevPlannerData =>
             prevPlannerData
                 .filter(el => el.day !== day) // 해당 day와 일치하지 않는 항목만 남기기
@@ -53,18 +54,14 @@ const MakePlanner = ({cookie}) => {
         );
     };
 
-    const handleAllDelete = () => {
-        setPlannerData([]);
-    }
+    const handleAllDelete = () => { setPlannerData([]); }
+    const handleUpdateDest = (data) => { setPlannerData(data) }
 
+    const handleClickPlanner = (data) => {setDestination(data);}
 
-    const handleUpdateDest = (data) => {
-        setPlannerData(data)
-    }
-
-    useEffect(()=>{
-        console.log('plannerData : ', plannerData)
-    },[plannerData])
+    // useEffect(()=>{
+    //     console.log('plannerData : ', plannerData)
+    // },[plannerData])
 
     return (
         <div className='planner' >
@@ -78,15 +75,17 @@ const MakePlanner = ({cookie}) => {
                     AddDestination={handleData}
                     CookieData={cookie}
                     UpdatePlanner={handleUpdateDest}
+                    ClickPlanner={handleClickPlanner}
                 />
             </div>
             <div className='plannerBody' >
-                <Option OptionData={handleOption}/>
+                {/* <Option OptionData={handleOption}/> */}
                 <Map 
-                    OptionData={optionState}
+                    // OptionData={optionState}
                     AreaData={areaState}
                     DayData={selectedDay}
                     AddDestination={handleData}
+                    ClickDestination={destination}
                 />
             </div>
 

@@ -1,10 +1,22 @@
 .sidebar {
-    width: 900px;
+    width: 1000px;
     height: 100vh;
 
     display: flex;
     justify-content: stretch;
     align-items: center;
+    user-select: none;
+    border: none;
+    margin: none;
+    padding: none;
+
+    & > * {
+      border: 1px solid #d9d9d9;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      margin: 1px;
+      padding: 5px;
+  }
 
     .option{
         width:100px;
@@ -26,15 +38,42 @@
             color: #d3cbed;  // 텍스트 색상 변경
             font-size: 1rem;  // 글자 크기 커짐
           }
+
+          .sidebar-logo {
+            width:80px;
+            height: 80px;
+            object-fit: contain;
+          }
         }
     }
     .content{
-        width:400px;
+        width:500px;
         height: 100%;
         
         p {
           text-align: center;
         }
+
+        .delete-destination-btn {
+          color: white;
+          background-color: #ff4d4f;
+          border: none;
+          border-radius: 4px;
+          padding: 8px 16px;
+          font-size: 0.9rem;
+          cursor: pointer;
+          float: right;
+          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 버튼에 약간의 그림자 추가 */
+      
+          &:hover {
+              background-color: #ff7875; /* 밝은 빨간색으로 변경 */
+          }
+      
+          &:active {
+              background-color: #d9363e; /* 더 어두운 빨간색 */
+          }
+      }
+
         .title {
           display: flex;                // Flexbox 사용
           flex-direction: column;       // 수직 정렬
@@ -81,156 +120,189 @@
           justify-content: center;
         }
 
-        .plannerList {
-            display: flex;
-            justify-content: stretch;
-            align-items: start;
+        .content-planner {
+          display:flex;
+          flex-direction: column;
+          
+          
+          .plannerMenu {
+            margin-bottom: 10px;
+          }
 
-            .content-side {
-                width:100px;
-                height:100%;
+          .plannerList {
+              display: flex;
+              justify-content: stretch;
+              align-items: start;
+      
+              .content-side {
+                  width: 100px;
+                  height: 100%;
+                  max-height: 750px;
+                  overflow-y: auto;
+                  padding-right: 10px;
+                  margin-right: 10px;
+                  scrollbar-width: none;
 
-                .optionButton {
-                  width: 80px;
-                  height: 80px;
-                  cursor: pointer;
-                  margin: 10px;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  font-size: .9rem;
-                  transition: font-size 0.3s ease, background-color 0.3s ease;  // 애니메이션 추가
-                  color: gray;
-                
-                  &:active {
-                    color: black;  // 텍스트 색상 변경
-                    font-size: 1.2rem;  // 글자 크기 커짐
+                  .optionButton {
+                      width: 80px;
+                      height: 80px;
+                      cursor: pointer;
+                      margin: 10px;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      font-size: 0.9rem;
+                      transition: font-size 0.3s ease, background-color 0.3s ease; 
+                      color: gray;
+      
+                      &:active {
+                          color: black;
+                          font-size: 1.2rem;
+                      }
                   }
-                }
-            }
+              }
+      
+              .content-body {
+                  width: 500px;
+                  height: 100%;
+                  max-height: 750px;
+                  overflow-y: auto;
+                  padding-right: 10px;
+                  scrollbar-width: none;
+      
+                  .content-card {
+                      height: 150px;
+                      display: flex;
+                      flex-direction: row;
+                      background-color: #fff;
+                      border-radius: 8px;
+                      border: 1px solid #ddd;
+                      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                      margin-bottom: 15px;
+                      padding: 20px;
+                      cursor: pointer;
+                  }
+      
+                  .card-image {
+                      width: 100px;
+                      height: 100px;
+                      margin-right: 15px;
+                      img {
+                          width: 100px;
+                          height: 100px;
+                          object-fit: cover;
+                          border-radius: 4px;
+                      }
+                  }
+    
+                  .card-content {
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: flex-start;
+                      flex-grow: 1;
+                  }
+      
+                  .card-header {
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: flex-start;
+                      margin-bottom: 10px;
 
-            .content-body {
-                width: 500px;
-                height: 100%;
-              
-                /* 기본적인 카드 스타일 */
-                .content-card {
-                  display: flex;
-                  flex-direction: row;  /* 이미지와 텍스트를 가로로 배치 */
-                  background-color: #fff;
-                  border-radius: 8px;
-                  border: 1px solid #ddd;
-                  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                  margin-bottom: 15px;
-                  padding: 20px;
-                  transition: transform 0.3s ease, box-shadow 0.3s ease;
-              
-                  &:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                      .card-button {
+                        display: flex;
+                        justify-content: end;
+                      }
                   }
-                }
-              
-                /* 이미지 스타일 */
-                .card-image {
-                  width: 200px;  /* 이미지의 고정 크기 */
-                  height: 100px;
-                  margin-right: 15px;
-                  img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    border-radius: 4px;
+      
+                  .card-name {
+                      font-size: 16px;
+                      font-weight: bold;
+                      color: #333;
+                      margin-bottom: 5px;
                   }
-                }
-              
-                /* 텍스트 영역 */
-                .card-content {
-                  display: flex;
-                  flex-direction: column;
-                  flex-grow: 1;
-                  justify-content: space-between;
-                }
-              
-                /* 카드 상단 (이름, 카테고리, 주소, 제거 버튼) */
-                .card-header {
-                  display: flex;
-                  flex-direction: column; /* 이름, 카테고리, 주소 세로로 정렬 */
-                  justify-content: flex-start;
-                  margin-bottom: 10px;
-                }
-              
-                /* 카드의 제목 (장소 이름) */
-                .card-name {
-                  font-size: 18px;
-                  font-weight: bold;
-                  color: #333;
-                  margin-bottom: 5px;
-                }
-              
-                /* 카드의 카테고리 (식당, 숙소, 관광지 등) */
-                .card-category {
-                  font-size: 14px;
-                  color: #888;
-                  margin-bottom: 5px;
-                }
-              
-                /* 카드의 주소 */
-                .card-addr {
-                  font-size: 14px;
-                  color: #555;
-                  margin-bottom: 10px;
-                }
-              
-                /* 제거 버튼 */
-                button {
-                  align-self: flex-start;
-                  padding: 8px 12px;
-                  font-size: 14px;
-                  color: #fff;
-                  background-color: #e53e3e;
-                  border: none;
-                  border-radius: 4px;
-                  cursor: pointer;
-                  transition: background-color 0.3s ease;
-              
-                  &:hover {
-                    background-color: #c53030;
+      
+                  .card-category {
+                      font-size: 13px;
+                      color: #888;
+                      margin-bottom: 5px;
                   }
-              
-                  &:disabled {
-                    background-color: #ddd;
-                    cursor: not-allowed;
+      
+                  .card-addr {
+                      font-size: 13px;
+                      color: #555;
+                      margin-bottom: 10px;
                   }
-                }
-              
-                /* 카드의 설명 */
-                .card-desc {
-                  font-size: 12px;
-                  color: #666;
-                  margin-bottom: 15px;
-                }
-            }
-        }
-
+      
+                  button {
+                      align-self: flex-start;
+                      padding: 8px 12px;
+                      font-size: 13px;
+                      color: #fff;
+                      background-color: #e53e3e;
+                      border: none;
+                      border-radius: 4px;
+                      cursor: pointer;
+                      transition: background-color 0.3s ease;
+      
+                      &:hover {
+                          background-color: #c53030;
+                      }
+      
+                      &:disabled {
+                          background-color: #ddd;
+                          cursor: not-allowed;
+                      }
+                  }
+      
+                  .card-desc {
+                      font-size: 12px;
+                      color: #666;
+                      margin-bottom: 15px;
+                  }
+              }
+          }
+      }
         
     }
     .question{
         width:400px;
         height: 100%;
+        position: relative;
 
         p {
           text-align: center;
           margin-bottom: 10px;
         }
+
+        .total-page {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+        }
+
+        input {
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 80%;
+            box-sizing: border-box;
+            border: 0.1px solid #d3cbed;
+            border-radius: 5px;
+            margin-bottom: 10px;
+
+            &.invalid {
+                border: 1px solid #d3cbed;
+            }
+        }
+
         button {
-          padding: 10px 20px;          // 버튼 안쪽 여백 추가
-          font-size: 1rem;             // 버튼 글꼴 크기
-          cursor: pointer;            // 마우스 커서가 손 모양으로 바뀌게 함
-          background-color: #d3cbed;  // 버튼 배경 색
-          color: white;                // 버튼 글자 색
-          border: none;                // 버튼 테두리 없애기
-          border-radius: 5px;          // 버튼 모서리 둥글게 처리
+          padding: 10px 20px;
+          font-size: 1rem;
+          cursor: pointer;
+          background-color: #d3cbed;
+          color: white;
+          border: none;
+          border-radius: 5px;
 
           &:hover {
             background-color: #e0e0e0;
@@ -243,73 +315,147 @@
         }
 
         .search-body {
+          max-height: 650px;
+          overflow-y: auto;
+          padding-right: 10px;
+          scrollbar-width: none;
 
-            .search-card {
-                width: auto;
+          .search-card {
+            height: 150px;
+            display: flex;
+            flex-direction: row;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            padding: 20px;
+            cursor: pointer;
+        
+            .card-image {
+              width: 100px;
+              height: 100px;
+              margin-right: 15px;
+        
+              img {
+                width: 100px;
                 height: 100px;
-                padding: 5px 10px 0px 5px;
-                margin-bottom: 5px;
-
-                background-color: white;
-
-                border: 1px solid black;
-                
+                object-fit: cover;
+                border-radius: 4px;
+              }
             }
+        
+              .card-header {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                margin-bottom: 10px;
+
+                .card-body {
+                  display:flex;
+                  flex-direction: column;
+                  align-items: center;
+                }
+              }
+        
+              .card-name {
+                font-size: 15px;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 5px;
+              }
+        
+              .card-category {
+                font-size: 12px;
+                color: #888;
+                margin-bottom: 5px;
+              }
+        
+              .card-addr {
+                font-size: 12px;
+                color: #555;
+                margin-bottom: 10px;
+              }
+        
+              .card-desc {
+                font-size: 10px;
+                color: #666;
+                margin-bottom: 15px;
+              }
+        
+              button {
+                width: 50px;
+                height: 100%;
+                align-self: flex-start;
+                padding: 8px 12px;
+                font-size: 14px;
+                color: #a4a4a4;
+                background-color: #f4f6f7;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 30px;
+              }
+          }
+        }
+
+        .pagination {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          position:absolute;
+          bottom: 10px;
+        
+          button {
+            padding: 6px 12px;  /* 버튼 크기를 적당히 줄여서 한 줄에 다 들어가게 함 */
+            font-size: 0.9rem;   /* 폰트 크기 조정 */
+            cursor: pointer;
+            background-color: transparent; /* 배경색을 없앰 */
+            color: black;       /* 텍스트 색상을 검정으로 변경 */
+            border: none;       /* 테두리 제거 */
+            border-radius: 4px; /* 둥근 모서리 */
+            transition: transform 0.2s ease;
+        
+            &:hover {
+              transform: scale(1.05);  /* 마우스를 올렸을 때 버튼이 커짐 */
+            }
+        
+            &.active {
+              font-weight: bold;  /* 활성화된 버튼은 글씨를 굵게 */
+              background-color: #f0f0f0;  /* 클릭된 버튼에 옅은 회색 배경 추가 */
+            }
+        
+            &:active {
+              background-color: #f0f0f0;  /* 버튼 클릭 시 옅은 회색 배경 추가 */
+            }
+        
+            &:disabled {
+              color: #ccc;        /* 비활성화된 버튼은 색상을 연하게 */
+              cursor: not-allowed; /* 비활성화 시 커서 변경 */
+            }
+          }
         }
     }
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px; /* Space between buttons */
-      
-        button {
-          padding: 8px 16px;  /* Adjust size of all pagination buttons */
-          font-size: 1rem;    /* Adjust font size if necessary */
-          cursor: pointer;
-          border: 1px solid #ccc;
-          background-color: #f1f1f1;
-          border-radius: 4px;
-      
-          transition: background-color 0.3s ease;
-      
-          &:hover {
-            background-color: #e0e0e0;
-          }
-      
-          &.active {
-            background-color: #d3cbed;
-            color: white;
-          }
-      
-          &:disabled {
-            background-color: #ddd;
-            cursor: not-allowed;
-          }
-        }
-      }
-      .search-btns {
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
+    .search-btns {
+      display: flex;
+      justify-content: flex-start;  /* 좌측 정렬 */
+      align-items: center;
+      margin: 3px 10px;
+    
+      .search-btn {
         margin: 3px 10px;
-
-        .search-btn {
-          margin: 3px 10px;
-          padding: 8px 16px; /* Consistent padding */
-          font-size: 1rem;   /* Ensure consistent font size */
-          cursor: pointer;
-          background-color: #817aff;
-          border-radius: 4px;
+        padding: 8px 16px; /* 일관된 패딩 */
+        font-size: 1rem;   /* 일관된 글꼴 크기 */
+        cursor: pointer;
+        background-color: transparent;  /* 배경색을 없앰 */
+        color: #333;  /* 글자 색상 설정 */
+        border: none; /* 테두리 없앰 */
         
-          &:hover {
-            background-color: #817aff;
-          }
+        &:hover {
+          background-color: transparent; /* 배경색 없앰 */
         }
       }
-      
-      button.pagination-btn {
-        padding: 8px 16px;  /* Same padding as pagination buttons */
-        font-size: 1rem;    /* Same font size */
-      }
+    }
 }
+

@@ -3,11 +3,14 @@ import PlannerDate from '../PlannerDate/PlannerDate';
 import axios from 'axios';
 import './SideBar.scss';
 import {useNavigate, useLocation} from 'react-router-dom';
+import Logo from '../../images/logoImage.png';
+import NoImage from '../../images/noImage.png';
 
 const SideBar = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
   const isMounted = useRef(false);
+  const isMountedSearch = useRef(false);
   const updateData = { ...location.state };
   const bringData = { ...location.state };
   const [plannerID,setPlannerID] = useState(0);
@@ -25,13 +28,16 @@ const SideBar = (props) => {
 
   const [word, setWord] = useState('');
   const [search, setSearch] = useState([]);
-  const [typeState, setTypeState] = useState('식당');
+  const [typeState, setTypeState] = useState();
   const [areaName, setAreaName] = useState(null);
   const [areaCode, setAreaCode] = useState();
 
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-  const [resultsPerPage] = useState(7); // 한 페이지에 표시할 결과 수
-  const [pagesToShow] = useState(10); // 한 번에 표시할 페이지 번호 개수
+  const [resultsPerPage] = useState(10); // 한 페이지에 표시할 결과 수
+  const [pagesToShow] = useState(5); // 한 번에 표시할 페이지 번호 개수
+
+  const [images, setImages] = useState([]);
+
   
   // 지역정보 저장
   const handleArea = (data) => {
@@ -83,40 +89,43 @@ const SideBar = (props) => {
   // 검색
   const handleSearch = () => {
     if(typeState=='관광지') {
-      axios
-        .post(
-          'http://localhost:9000/planner/searchDestination',
-          { type: typeState, word: encodeURIComponent(word.trim()), areaname: areaName, areacode: areaCode, pageNo: 1, },
+      axios.post('http://localhost:9000/planner/searchDestination',
+          { type: typeState, word: encodeURIComponent(word.trim()), areaname: areaName, areacode: areaCode, pageNo: currentPage, },
           { 'Content-Type': 'application/json' }
         )
         .then((resp) => {
-          var placeArray = [];
-          resp.data.data.items.item.map((el)=>{
+          const pTotal = resp.data.data.totalCount;
+          const currentPageData = resp.data.data.items.item;
+          const updatedSearch = new Array(pTotal).fill(null);
+
+          const startIndex = (currentPage - 1) * resultsPerPage;
+          const endIndex = startIndex + currentPageData.length;
+
+          currentPageData.map((el,index)=>{
             const data = {
               name:el.title,
               category:'관광지',
               address:el.addr1,
               description:'',
               image:el.firstimage,
+              x:el.mapx,
+              y:el.mapy
             }
-            placeArray = [...placeArray,data];
+            updatedSearch[startIndex + index] = data;
           })
-          console.log(placeArray)
-          setSearch(placeArray || []);
+          setSearch(updatedSearch || []);
           setWord('');
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      axios
-        .post(
+      axios.post(
           'http://localhost:9000/planner/searchDestination',
           { type: typeState, word: word, areaname: areaName },
           { 'Content-Type': 'application/json' }
         )
         .then((resp) => {
-          console.log(resp.data.data);
           setSearch(resp.data.data || []);
           setWord('');
         })
@@ -128,7 +137,7 @@ const SideBar = (props) => {
 
   // 검색한 장소 플래너에 추가
   const handleSearchAdd = (data) => {
-    props.AddDestination({ day: selectedDay, data: data });
+    props.AddDestination({ day: selectedDay, data: data});
   };
 
   // Day버튼을 눌렀을 때 상황에 따른 이벤트
@@ -263,12 +272,31 @@ const SideBar = (props) => {
     }
   },[areaName])
 
+  useEffect(()=>{
+    if (isMountedSearch.current) {
+      handleSearch();
+    } else {
+      isMountedSearch.current = true;
+    }  
+  },[typeState])
+
+  useEffect(()=>{
+    if (isMountedSearch.current) {
+      if(typeState=='관광지') {
+        handleSearch();
+      }
+    } else {
+      isMountedSearch.current = true;
+    }  
+  },[currentPage])
+
+  
   // 페이징 로직 ---------------------------------------------------------------------------------------
   // 검색 결과를 현재 페이지에 맞게 잘라서 표시
   const indexOfLastResult = currentPage * resultsPerPage;
   const indexOfFirstResult = indexOfLastResult - resultsPerPage;
   const currentResults = search.slice(indexOfFirstResult, indexOfLastResult)
-  
+
 
   // 총 페이지 수 계산
   const totalPages = Math.ceil(search.length / resultsPerPage);
@@ -300,8 +328,6 @@ const SideBar = (props) => {
   };
 
   useEffect(()=>{
-    console.log('up',Object.keys(updateData))
-    console.log('br',Object.keys(bringData))
       if(Object.keys(updateData).length > 0 && Object.keys(updateData)[0]=='updateData'){
         setTitle(updateData.updateData.title);
         setDescription(updateData.updateData.description)
@@ -326,10 +352,7 @@ const SideBar = (props) => {
           }));
       };
       props.UpdatePlanner(transformData(updateData.updateData.destinations));
-    } else {
-      console.log('없음')
     }
-
     if(Object.keys(bringData).length > 0 && Object.keys(bringData)[0]=='bringData'){
 
       setTitle(bringData.bringData.title);
@@ -355,15 +378,38 @@ const SideBar = (props) => {
         }));
     };
     props.UpdatePlanner(transformData(bringData.bringData.destinations));
-  } else {
-    console.log('없음')
   }
   },[])
+
+  // const handleImage = async () => {
+  //   console.log("handleImage 실행됨!");
+  //   setImages([]);
+  
+  //   try {
+  //     const imagePromises = currentResults.map((el) =>
+  //       axios.post("http://localhost:9000/planner/getImages", {
+  //         businessName: el.name,
+  //       })
+  //     );
+  
+  //     const responses = await Promise.all(imagePromises);
+  //     const fetchedImages = responses.map((resp) => resp.data.image);
+  //     setImages(fetchedImages);
+  //   } catch (error) {
+  //     console.error("Error fetching images:", error);
+  //   }
+  // };
 
   return (
     <>
       <div className="sidebar">
         <div className="option">
+          <div 
+            className="optionButton"
+            onClick={()=>navigate('/')}
+          >
+            <img className='sidebar-logo' src={Logo} alt="" />
+          </div>
           <div 
             className="optionButton"
             onClick={handleStateTitle}>
@@ -407,8 +453,16 @@ const SideBar = (props) => {
           )}
           {listState && (
             <>
-              <p> Planner </p>
-              <button onClick={()=>props.DeleteAllDestination()} >비우기</button>
+            <div className="content-planner">
+              <div className='plannerMenu' >
+                <p> Planner </p>
+                <button 
+                  onClick={() => props.DeleteAllDestination()}
+                  className="delete-destination-btn"
+                >
+                  비우기
+                </button>
+              </div>
               <div className="plannerList">
                 <div className="content-side">
                   {(() => {
@@ -428,16 +482,20 @@ const SideBar = (props) => {
                     <ul>
                       {props.DestinationData.length > 0 && props.DestinationData.filter((el) => el.day === selectedDay).map((destination, index) => {
                         return (
-                          <li key={index} className="content-card">
+                          <li key={index} 
+                            className="content-card"
+                            onClick={()=>{props.ClickPlanner(destination)}}
+                          >
                             <div className="card-image">
-                              {destination && <img src={destination.image} alt="" />}
+                              {destination && !destination.image && destination.image=='No image found' && <img src={NoImage} alt="" />}
+                              {destination && destination.image && destination.image!='No image found' && <img src={destination.image} alt="" />}
                             </div>
                             <div className="card-content">
                               <div className="card-header">
-                                <div className="card-name">{destination && destination.data.name}</div>
-                                <div className="card-category">{destination && destination.data.category}</div>
-                                <div className="card-addr">{destination && destination.data.address}</div>
-                                <button onClick={() => props.DeleteDestination(selectedDay, index)}>제거</button>
+                                  <div className="card-name">{destination && destination.data.name}</div>
+                                  <div className="card-category">{destination && destination.data.category}</div>
+                                  <div className="card-addr">{destination && destination.data.address}</div>
+                                <div className='card-button'><button onClick={(event) => props.DeleteDestination(event,selectedDay, index)}>제거</button></div>
                               </div>
                               <div className="card-desc">{destination && destination.data.description}</div>
                             </div>
@@ -448,36 +506,67 @@ const SideBar = (props) => {
                   )}
                 </div>
               </div>
-            </>
+            </div>
+          </>          
           )}
         </div>
         {listState && (
           <div className="question">
             <p>SEARCH</p>
-            <label htmlFor="">검색어 </label>
             <input type="text" value={word} onChange={(e) => { setWord(e.target.value); }} />
             <button onClick={handleSearch}>검색</button>
             { totalPages>0 && 
-                <span>{currentPage}/{totalPages}</span>
+                <span className='total-page'>{currentPage}/{totalPages}</span>
             }
             <div className='search-btns'>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord(""); handleSearch(); }}>식당</button>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord(""); handleSearch(); }}>숙소</button>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord(""); handleSearch(); }}>관광지</button>
+              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord(""); }}>식당</button>
+              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord(""); }}>숙소</button>
+              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setWord("");}}>관광지</button>
             </div>
             <div className="search-body">
               <ul>
-                {search && search.length > 0 && currentResults.map((el, index) => {
+                { search && search.length > 0 && typeState=='관광지' && currentResults.map((el, index) => {
+                  console.log(el);
                   return (
-                    <li key={index} className="search-card">
+                    <li key={index}
+                      className="search-card"
+                      onClick={()=>{props.ClickPlanner(el)}}
+                    >
                       <div className="card-image">
-                              {el && <img src={el.image} alt="" />}
+                              {el && el.image!='No image found' && <img src={el.image} alt="" />}
+                              {el && el.imgae=='No image found' && <img src={NoImage} alt="" />}
                       </div>
-                      <div className="card-name">{el && el.name}</div>
-                      <div className="card-category">{el && el.category}</div>
-                      <div className="card-addr">{el && el.address}</div>
-                      <div className="card-desc">{el && el.description}</div>
-                      <button onClick={() => { handleSearchAdd(el); }}>추가</button>
+                      <div className='card-body'>
+                        <div className="card-name">{el && el.name}</div>
+                        <div className="card-category">{el && el.category}</div>
+                        <div className="card-addr">{el && el.address}</div>
+                        <div className="card-desc">{el && el.description}</div>
+                      </div>
+                      <div>
+                        <button onClick={(event) => { handleSearchAdd(el); }}>+</button>
+                      </div>
+                    </li>
+                  );
+                })}
+                {search && search.length > 0 && typeState!='관광지' && currentResults.map((el, index) => {
+                  return (
+                    <li key={index}
+                      className="search-card"
+                      onClick={()=>{props.ClickPlanner(el)}}
+                    >
+                      <div className="card-image">
+                        {el && el.image!='No image found' && <img src={el.image} alt="" />}
+                        {el && el.imgae=='No image found' && <img src={NoImage} alt="" />}
+                      </div>
+                      <div className='card-body'>
+                        <div className="card-name">{el && el.name}</div>
+                        <div className="card-category">{el && el.category}</div>
+                        <div className="card-addr">{el && el.address}</div>
+                        <div className="card-desc">{el && el.description}</div>
+                      </div>
+                      <div>
+                        <button onClick={(event) => { handleSearchAdd(el); }}>+</button>
+                      </div>
                     </li>
                   );
                 })}
@@ -485,12 +574,12 @@ const SideBar = (props) => {
             </div>
             { search.length !=0 &&
               <div className="pagination">
-                <button onClick={handlePrevious} disabled={currentPage === 1}>Previous</button>
+                <button onClick={()=>{handlePrevious(); }} disabled={currentPage === 1}>Previous</button>
                 <span>
                   {pageNumbers.slice(startPage - 1, endPage).map((pageNumber) => (
                     <button
                       key={pageNumber}
-                      onClick={() => paginate(pageNumber)}
+                      onClick={() => {paginate(pageNumber); }}
                       className={pageNumber === currentPage ? 'active' : ''}
                     >
                       {pageNumber}
@@ -498,7 +587,7 @@ const SideBar = (props) => {
                   ))}
                 </span>
                 <button
-                  onClick={handleNext}
+                  onClick={()=>{handleNext(); }}
                   disabled={currentPage + pagesToShow > totalPages}
                 >
                   Next
