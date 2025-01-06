@@ -62,6 +62,7 @@ const MakePlanner = ({cookie}) => {
     const handleUpdateDest = (data) => { setPlannerData(data) }
 
     const handleClickPlanner = (data) => {setDestination(data);}
+    const handleClickSearch = (data) => {setSearchDestination(data);}
 
     // useEffect(()=>{
     //     console.log('plannerData : ', plannerData)
@@ -80,6 +81,7 @@ const MakePlanner = ({cookie}) => {
                     CookieData={cookie}
                     UpdatePlanner={handleUpdateDest}
                     ClickPlanner={handleClickPlanner}
+                    ClickSearch={handleClickSearch}
                 />
             </div>
             <div className='plannerBody' >
@@ -90,6 +92,7 @@ const MakePlanner = ({cookie}) => {
                     DayData={selectedDay}
                     AddDestination={handleData}
                     ClickDestination={destination}
+                    ClickSearchDestination={searchDestination}
                 />
             </div>
 
