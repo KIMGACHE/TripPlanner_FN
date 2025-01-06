@@ -155,28 +155,8 @@ const SideBar = (props) => {
     }
   };
 
-    // const handleImage = async () => {
-  //   console.log("handleImage 실행됨!");
-  //   setImages([]);
-  
-  //   try {
-  //     const imagePromises = currentResults.map((el) =>
-  //       axios.post("http://localhost:9000/planner/getImages", {
-  //         businessName: el.name,
-  //       })
-  //     );
-  
-  //     const responses = await Promise.all(imagePromises);
-  //     const fetchedImages = responses.map((resp) => resp.data.image);
-  //     setImages(fetchedImages);
-  //   } catch (error) {
-  //     console.error("Error fetching images:", error);
-  //   }
-  // };
-
   // 검색한 장소 플래너에 추가
   const handleSearchAdd = (event, data) => {
-    console.log('여기뭐임?',data)
     event.stopPropagation();
     props.AddDestination({ day: selectedDay, data: data});
   };
@@ -451,8 +431,10 @@ const SideBar = (props) => {
         {(
           <div className="question">
             <p>SEARCH</p>
-            <input type="text" value={word} onChange={(e) => { setWord(e.target.value); }} />
-            <button onClick={handleSearch}>검색</button>
+            <div className='question-search'>
+              <input type="text" value={word} onChange={(e) => { setWord(e.target.value); }} />
+              <button onClick={handleSearch}>검색</button>
+            </div>
             { totalPages>0 && 
                 <span className='total-page'>{currentPage}/{totalPages}</span>
             }
@@ -552,17 +534,22 @@ const SideBar = (props) => {
           {titleState && (
             <div className="title">
               <label htmlFor="">플래너 제목</label>
-              <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} /> <br />
+              <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} />
               <label htmlFor="">설명</label>
-              <input type="text" onChange={(e) => setDescription(e.target.value)} value={description} /> <br />
-              <label htmlFor="">다른 사람에게 Planner를 공유하시겠습니까?</label>
-              <input
-                type="checkbox"
-                onChange={(e) => setIsPublic(e.target.checked)}
-                checked={isPublic}
-              />{' '}
-              <br />
-              <button onClick={handleStateDate}>다음</button>
+              <input type="text" onChange={(e) => setDescription(e.target.value)} value={description} />
+              <div className='share-check'>
+                <label htmlFor="">다른 사람에게 Planner를 공유하시겠습니까?</label>
+                <input
+                  id="title-checkbox"
+                  type="checkbox"
+                  onChange={(e) => setIsPublic(e.target.checked)}
+                  checked={isPublic}
+                />
+                <label className='check-label' htmlFor="title-checkbox"></label>
+              </div>
+              <div className='btn-div'>
+                <button onClick={handleStateDate}>다음</button>
+              </div>
             </div>
           )}
           {dateState && (
@@ -600,7 +587,6 @@ const SideBar = (props) => {
                   {selectedDay && (
                     <ul>
                       {props.DestinationData.length > 0 && props.DestinationData.filter((el) => el.day === selectedDay).map((destination, index) => {
-                        console.log('destination: ',destination)
                         return (
                           <li key={index} 
                             className="content-card"
