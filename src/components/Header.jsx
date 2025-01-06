@@ -2,8 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.scss';
-import LogoImage from '../images/logoImage.png';
-import LogoTitle from '../images/logotitle.png';
+import LogoImage from '../images/footPrint.png';
 import axios from 'axios';
 import { useState, useEffect } from "react";
 
@@ -47,8 +46,8 @@ const Header = () => {
 
             <Link className="header-logo" to="/">
             <div className="logo-wrapper">
-                    {/* <img className="logo-icon" src={LogoImage} alt="Plane Icon" /> */}
                     <span className="logo-text">여행가자</span>
+                    <img className="logo-icon" src={LogoImage} alt="Plane Icon" />
                 </div>
             </Link>
 

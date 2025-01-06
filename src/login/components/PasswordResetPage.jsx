@@ -9,7 +9,6 @@ const PasswordResetPage = ()=>{
     const [confirmPassword,setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
     const [error,setError] = useState("");
-    const navigate = useNavigate(); // useNavigate 초기화
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
@@ -27,10 +26,12 @@ const PasswordResetPage = ()=>{
             });
             setMessage("비밀번호가 성공적으로 변경되었습니다");
             setTimeout(()=>{
-                navigate("/");
+                window.location.href = "/";
             },2000); //메시지 나오고 2초 뒤에 리다이렉트
+            localStorage.removeItem("resetToken"); //비밀번호 변경 완료하면 로컬 스토리지 삭제
         }catch(err){
             setError("비밀번호 변경에 실패했습니다. 링크가 유효하지 않거나 문제가 발생했습니다");
+            localStorage.removeItem("resetToken"); //비밀번호 변경 완료하면 로컬 스토리지 삭제
         }
     };
 
