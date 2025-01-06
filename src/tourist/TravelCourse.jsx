@@ -120,22 +120,14 @@ const TravelCourse = () => {
     };
 
     // 여행 코스 클릭시 상세 페이지로 데이터 전달
-    const handleCourseClick = (contentId) => {
+    const handleCourseClick = (contentId, hashtag) => {
         setLoading(true); // 로딩 시작
-        // axios.get(`http://localhost:9000/travelcourse-info?id=${contentId}`)
-        //     .then((response) => {
 
-        //         const courseDetail = response.data;
-
-        //         navigate('/travelcourse-info', { state: { courseDetail } }); // 데이터와 함께 이동
-        //         setLoading(false);
-
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error fetching course info:', error);
-        //         setLoading(false);
-        //     });
-        navigate(`/travelcourse-info?contentId=${contentId}`);
+        navigate(`/travelcourse-info?contentId=${contentId}`, {
+            state: {
+                hashtag,
+            },
+        });
     };
 
     // 페이지네이션 버튼 생성 함수
@@ -277,7 +269,7 @@ const TravelCourse = () => {
                                     const hashtag = getHashtag(course.cat2); // 해시태그 가져오기
 
                                     return (
-                                        <div key={course.contentid} className="travel-course-list" onClick={() => handleCourseClick(course.contentid)}>
+                                        <div key={course.contentid} className="travel-course-list" onClick={() => handleCourseClick(course.contentid, hashtag)}>
                                             {/* <Link to={`/travelcourse-info?id=${course.contentid}`}> */}
                                             {/* course.firstimage가 존재하는 경우에만 이미지 렌더링 */}
                                             {course.firstimage && (
