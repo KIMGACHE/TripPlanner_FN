@@ -23,21 +23,21 @@ const LoginForm = () => {
     window.location.href = "http://localhost:9000/oauth2/authorization/naver";
   };
 
-  const kakaoLogin = ()=>{
+  const kakaoLogin = () => {
     console.log("카카오 로그인 클릭");
     window.location.href = " http://localhost:9000/oauth2/authorization/kakao ";
   }
 
-  const googleLogin =()=>{
+  const googleLogin = () => {
     console.log("구글 로그인");
     window.location.href = " http://localhost:9000/oauth2/authorization/google "
   }
 
-  const instaLogin =()=>{
+  const instaLogin = () => {
     console.log("인스타 로그인");
     window.location.href = " http://localhost:9000/oauth2/authorization/instagram "
   }
-  
+
 
   //로그인 요청
   const handleSubmit = async (e) => {
@@ -59,7 +59,9 @@ const LoginForm = () => {
       localStorage.setItem("userid",formData.userid); //로컬 스토리지에 userid 저장
       //로그인 성공 시 처리
       alert("로그인 성공 !");
-      window.location.href ="/";
+
+      window.location.href = "/";
+
     } catch (err) {
       console.log("로그인 실패,", err);
       setError("로그인에 실패했습니다. 다시 시도해주세요");
@@ -83,11 +85,11 @@ const LoginForm = () => {
           <div className="login-form_checkbox">
             <label>ID 저장
               <input
-              type="checkbox"
-              name="rememberMe"
-              checked={formData.rememberMe}
-              onChange={handleChange}
-            /></label>
+                type="checkbox"
+                name="rememberMe"
+                checked={formData.rememberMe}
+                onChange={handleChange}
+              /></label>
           </div>
           <label htmlFor="password">PASSWORD:</label>
           <input
@@ -117,7 +119,7 @@ const LoginForm = () => {
           <ul>
             <li>
               <button className="login-form_oauth2-button" onClick={kakaoLogin}>
-              <img src="/images/kakaobutton.png" alt="카카오로그인" />
+                <img src="/images/kakaobutton.png" alt="카카오로그인" />
               </button>
             </li>
             <li>
@@ -128,12 +130,12 @@ const LoginForm = () => {
             </li>
             <li>
               <button className="login-form_oauth2-button" onClick={googleLogin}>
-              <img src="/images/googlebutton.png" alt="구글 로그인" />
+                <img src="/images/googlebutton.png" alt="구글 로그인" />
               </button>
             </li>
             <li>
               <button className="login-form_oauth2-button" onClick={instaLogin}>
-              <img src="/images/instabutton.png" alt="인스타 로그인" />
+                <img src="/images/instabutton.png" alt="인스타 로그인" />
               </button>
             </li>
           </ul>

@@ -92,7 +92,7 @@ const Board = () => {
     return (
         <div className="board">
             <div className="board-wrapper">
-                <h1 className="board-title">다른 유저의 여행 계획을 확인해 보세요!</h1>
+                {/* <h1 className="board-title">다른 유저의 여행 계획을 확인해 보세요!</h1> */}
 
                 <div className="planner-content">
                     {planners.map(planner => (

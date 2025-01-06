@@ -122,18 +122,20 @@ const TravelCourse = () => {
     // 여행 코스 클릭시 상세 페이지로 데이터 전달
     const handleCourseClick = (contentId) => {
         setLoading(true); // 로딩 시작
-        axios.get(`http://localhost:9000/travelcourse-info?id=${contentId}`)
-            .then((response) => {
+        // axios.get(`http://localhost:9000/travelcourse-info?id=${contentId}`)
+        //     .then((response) => {
 
-                const courseDetail = response.data;
+        //         const courseDetail = response.data;
 
-                navigate('/travelcourse-info', { state: { courseDetail } }); // 데이터와 함께 이동
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error fetching course info:', error);
-                setLoading(false);
-            });
+        //         navigate('/travelcourse-info', { state: { courseDetail } }); // 데이터와 함께 이동
+        //         setLoading(false);
+
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error fetching course info:', error);
+        //         setLoading(false);
+        //     });
+        navigate(`/travelcourse-info?contentId=${contentId}`);
     };
 
     // 페이지네이션 버튼 생성 함수
@@ -301,7 +303,7 @@ const TravelCourse = () => {
                         )}
 
                         {/* 페이지네이션 버튼들 */}
-                        <div className="pagination">
+                        <div className="tourist-pagination">
                             {createPageButtons(totalPages)}
                         </div>
                     </>

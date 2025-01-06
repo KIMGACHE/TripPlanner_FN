@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import findwayIcon from '../images/findway.png';
 import './DestinationDetails.scss';
+import axios from 'axios';
 
 const Details = ({ plannerItem, destinations, activeTab }) => {  // activeTab 받기
     const navigate = useNavigate();
@@ -38,6 +39,47 @@ const Details = ({ plannerItem, destinations, activeTab }) => {  // activeTab �
         }
         setSelectedDay(day); // 새로 선택된 Day
     };
+
+    // 장소 이름 클릭 시 관광지에 있는 정보이면 우리 페이지로 표시하고 없으면 카카오로 검색
+    const desInfoClick = (item) => {
+
+        axios.post(`http://localhost:9000/destination-to-tourist`, {
+            mapX: item.x,
+            mapY: item.y
+        }).then((response) => {
+
+            if (response.data.items.item[0].contentid) {
+                const contentId = response.data.items.item[0].contentid;
+                axios.get(`http://localhost:9000/tourist-info?id=${contentId}`)
+                    .then((response) => {
+
+                        const detailCommon = response.data;
+
+                        navigate('/tourist-info', { state: { detailCommon } }); // 데이터와 함께 이동
+
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching course info:', error);
+
+                    });
+
+            }
+
+            console.log(response.data.items.item[0]);
+        }).catch(() => {
+            // 데이터가 없으면 카카오지도에 장소 이름으로 검색
+            const kakaoMapUrl = `https://map.kakao.com/link/search/${encodeURIComponent(item.name)}`;
+            window.open(kakaoMapUrl, '_blank'); // 새 탭으로 카카오 지도 열기
+
+        })
+
+    }
+
+    // 주소 클릭 시 카카오 지도로 표시 (주소로 검색)
+    const addressClick = (item) => {
+        const kakaoMapUrl = `https://map.kakao.com/link/search/${encodeURIComponent(item.address)}`;
+        window.open(kakaoMapUrl, '_blank');
+    }
 
     useEffect(() => {
         if (destinations.length > 0 && window.kakao && window.kakao.maps) {
@@ -178,8 +220,9 @@ const Details = ({ plannerItem, destinations, activeTab }) => {  // activeTab �
                                         </span>
                                         <div className="destination-desc">
                                             <p className="destination-category">{destination.category}</p>
-                                            <p className="destination-title">{destination.name}</p>
-                                            <p className="destination-address">{destination.address}</p>
+                                            <p className="destination-title" onClick={() => desInfoClick(destination, index)}>{destination.name}</p>
+                                            
+                                            <p className="destination-address" onClick={() => addressClick(destination, index)}>{destination.address}</p>
                                         </div>
                                     </li>
                                 </ul>

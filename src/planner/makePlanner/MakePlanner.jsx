@@ -24,7 +24,7 @@ const MakePlanner = ({cookie}) => {
 
     const handleData = async (data) => {
         await axios.post('http://localhost:9000/planner/getImages',
-            {'businessName':data.data.businessName},
+            {'businessName':data.data.name},
         )
         .then(resp=>{
             console.log(resp)
@@ -57,31 +57,14 @@ const MakePlanner = ({cookie}) => {
         setPlannerData([]);
     }
 
-    // useEffect(() => {
-    //     axios.post('http://localhost:9000/api/cookie/validate', {}, {
-    //         withCredentials: true, // 쿠키 포함
-    //     })
-    //     .then(response => {
-    //         console.log("쿠키 보내기:", response.data);
-    //     })
-    //     .catch(error => {
-    //         console.error("쿠키 에러:", error);
-    //     });
-    // }, []);
-    
 
-    // useEffect(() => {
-    //     axios.post('http://localhost:9000/api/cookie/validate', {}, {
-    //         withCredentials: true, // 쿠키 포함
-    //     })
-    //     .then(response => {
-    //         console.log("쿠키 보내기:", response.data);
-    //     })
-    //     .catch(error => {
-    //         console.error("쿠키 에러:", error);
-    //     });
-    // }, []);
-    
+    const handleUpdateDest = (data) => {
+        setPlannerData(data)
+    }
+
+    useEffect(()=>{
+        console.log('plannerData : ', plannerData)
+    },[plannerData])
 
     return (
         <div className='planner' >
@@ -94,6 +77,7 @@ const MakePlanner = ({cookie}) => {
                     DeleteAllDestination={handleAllDelete}
                     AddDestination={handleData}
                     CookieData={cookie}
+                    UpdatePlanner={handleUpdateDest}
                 />
             </div>
             <div className='plannerBody' >

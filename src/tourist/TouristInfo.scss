@@ -36,7 +36,7 @@
 
 // 스와이퍼
 .mySwiper {
-    height: 600px; 
+    height: 600px;
 
     img {
         height: 100%;
@@ -94,8 +94,10 @@
             cursor: pointer;
         }
 
-        a {
-
+        .tohomepage-btn {
+            display: inline-block;
+            height:30px;
+            width: 30px;
             // 홈페이지 아이콘
             .homepageIcon {
                 width: 30px;
@@ -139,8 +141,8 @@
 // 지도 밑 상세정보들 컨탠트
 .detail-content {
     width: 100%;
-    display:flex;
-    
+    display: flex;
+
     .detailInfo-ul {
         width: 50%;
         margin-bottom: 100px;
