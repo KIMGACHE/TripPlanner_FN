@@ -24,6 +24,7 @@ const Join = () => {
     const [timer, setTimer] = useState(180);
     const [isAuthCodeVerified, setIsAuthCodeVerified] = useState(false);
     const [isFirstSend, setIsFirstSend] = useState(true); // 초기 상태는 true
+    const [isAuthCodeLocked, setIsAuthCodeLocked] = useState(false); // 인증 코드 확인 버튼 잠금 상태
 
     const [formImgeData, setFormImgeData] = useState({
         profileImage: null, // 이미지 파일 상태
@@ -119,8 +120,21 @@ const Join = () => {
                 ...prevMessages,
                 email: message,
                 emailColor: color,
+
             }));
         }
+
+           // 이메일 변경 시 인증 관련 상태 초기화
+    if (name === "email") {
+        resetAuthState(); // 인증 상태 초기화
+        setValidationMessages((prev) => ({
+            ...prev,
+            email: "",
+            authCode: "",
+        }));
+        setIsAuthCodeLocked(false); // 인증 코드 확인 버튼 잠금 해제
+        }
+    
     
         if (name === "password") {
             const { message, color } = validatePassword(value);
@@ -394,8 +408,6 @@ const Join = () => {
     
     
     
-    
-    
 
     const verifyAuthCode = async () => {
         try {
@@ -406,6 +418,7 @@ const Join = () => {
     
             if (response.data.message.includes("완료")) {
                 setIsAuthCodeVerified(true);
+                setIsAuthCodeLocked(true); // 인증 성공 시 버튼 잠금
                 setValidationMessages((prevMessages) => ({
                     ...prevMessages,
                     authCode: "인증이 완료되었습니다.",
@@ -606,7 +619,7 @@ const Join = () => {
 </div>
 
 {authCodeSent && validationMessages.emailColor === "validation-success" && (
-    <div className={`auth-codebox ${validationMessages.authCode ? 'auth-message' : ''}`}>
+    <div className={`auth-codebox ${validationMessages.authCode ? "auth-message" : ""}`}>
         <div className="auth-code-wrapper">
             <input
                 type="text"
@@ -614,11 +627,17 @@ const Join = () => {
                 className="auth-code"
                 placeholder="인증 코드 입력"
                 onChange={handleChange}
+                disabled={isAuthCodeLocked} // 인증 버튼 잠금 상태
             />
             <div id="timer">
                 {Math.floor(timer / 60)}:{timer % 60}
             </div>
-            <button className="verifybutton" type="button" onClick={verifyAuthCode}>
+            <button
+                className="verifybutton"
+                type="button"
+                onClick={verifyAuthCode}
+                disabled={isAuthCodeLocked} // 인증 버튼 잠금 상태
+            >
                 인증 코드 확인
             </button>
         </div>
@@ -682,5 +701,6 @@ const Join = () => {
 
     );
 };
+
 
 export default Join;

@@ -1,0 +1,158 @@
+// .calendar-popup-content {
+//     // margin: 0;
+//     padding: 0;
+//     border: 2px solid black;
+//     display: flex;
+//     flex-direction: column;
+//   }
+  
+//   .rdrCalendarWrapper.rdrDateRangeWrapper{
+//     width: 80vw;
+//     height: 80vh;
+//   }
+  
+//   // 달력 크기
+//   .rdrMonth{
+//     width: 50%;
+//     height: 200%;
+//   }
+  
+//   //날짜(일) 크기
+//   .rdrDays{
+//     height: 80%;
+//   }
+  
+//   .date{
+//     height: 125px;
+//       .modal{
+  
+  
+//         height: 100%;
+//         width: 80%;
+//         // border: 1px solid red;
+        
+//         display: flex; /* Flexbox 활성화 */
+//         flex-direction: column; /* 세로 방향 정렬 */
+//         align-items: center; /* 수평 중앙 정렬 */
+//         justify-content: center; /* 세로 중앙 정렬 */
+        
+//         .modal-content{
+//           height: 100%;
+//           display: flex; /* Flexbox 활성화 */
+//           flex-direction: column; /* 세로 방향 정렬 */
+//           align-items: center; /* 수평 중앙 정렬 */
+//           justify-content: center; /* 세로 중앙 정렬 */
+        
+//           h1{
+//           font-size: 1.5rem;
+//           height: 25%;
+//           }
+  
+         
+  
+        
+//           // 지역 선택칸
+//           .area{
+//             height: 30%;
+//             display: flex; /* Flexbox 활성화 */
+//             flex-direction: column; /* 세로 방향 정렬 */
+//             align-items: center; /* 수평 중앙 정렬 */
+//             justify-content: center; /* 세로 중앙 정렬 */
+  
+//           select{
+//             width: 100%;
+//             height: 55%;
+//             text-align: center; /* 수평 중앙 */
+//             vertical-align: middle; /* 수직 중앙 */
+//           }
+//         }
+        
+//         // 날짜 입력칸
+//         .calendar-box{
+//           height: 25%;
+//           input{
+//             height: 50%;
+//             width: 97.5%;
+//             font-size: 1.0rem;
+            
+//             text-align: center; /* 수평 중앙 */
+//             vertical-align: middle; /* 수직 중앙 */
+//             // line-height: 2rem; /* input의 높이와 동일하게 설정하거나 적절히 조정 */
+            
+//           }
+          
+//         }
+//       }
+//     }
+//   }
+  
+//   .calendar-popup {
+//     position: fixed;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     padding: 0;
+//     margin: 0;
+//     max-width: fit-content;
+//     z-index: 1001;
+//   }
+  
+//   .calendar-popup-overlay {
+//     display: none;
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100vw;
+//     height: 100vh;
+//     background-color: rgba(0, 0, 0, 0.5);
+//     z-index: 999;
+//   }
+  
+//   .confirm-button {
+//     margin: 0;
+//     align-self: flex-end;
+//     position: absolute;
+//     bottom: 10px; /* 캘린더 아래쪽에 배치 */
+//     right: 10px; /* 오른쪽에 배치 */
+//     padding: 10px 20px;
+//     background-color: #3ecf8e;
+//     color: white;
+//     border: none;
+//     border-radius: 4px;
+//     cursor: pointer;
+//     font-size: 1rem;
+    
+//   }
+  
+//   .confirm-button:hover {
+//     background-color: #32b97a; /* 버튼 hover 색상 */
+//   }
+  
+//   /* 추가된 스타일 */
+//   .rdrStaticRanges,
+//   .rdrInputRanges {
+//     display: none !important; /* 공간을 완전히 숨김 */
+//     z-index: 1001;
+    
+//   }
+  
+//   .rdrSidebarWrapper {
+//     display: none !important; /* 사이드바 전체 제거 */
+//   }
+  
+//   .rdrMonth {
+//     padding: 0 !important; /* 달력 내부 여백 제거 */
+//     // background-color: red;  
+//   }
+  
+//   .rdrCalendarWrapper {
+//     margin: 0 !important; /* 전체 여백 제거 */
+//     padding: 0 !important;
+//     position: relative; /* 버튼을 내부에서 정렬 가능하게 설정 */
+   
+//   }
+  
+//   .rdrDefinedRangesWrapper{
+//     display: none;
+//   }
+  
