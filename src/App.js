@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Header from './components/Header';
@@ -7,7 +6,7 @@ import '../src/public/public.css';
 import '../src/public/reset.css';
 
 const App = () => {
-  
+
   return (
     <Router>
 
@@ -16,6 +15,6 @@ const App = () => {
 
 
     </Router>
-    );
+  );
 }
 export default App;
