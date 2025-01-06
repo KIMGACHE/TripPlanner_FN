@@ -40,11 +40,6 @@ const PrivateRoute = ({element , ...rest})=>{
     return isAuthenticated ? React.cloneElement(element, {cookie}) : null;
 };
 
-const validateAccessToken = (token) => {
-    return token && !isTokenExpired(token);
-}
-
-
 const refreshAccessToken = async (userid,refreshToken) => {
     try{
         const response = await axios.post('http://localhost:9000/api/refresh',{userid,refreshToken} ,{
