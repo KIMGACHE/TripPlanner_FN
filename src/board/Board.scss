@@ -100,3 +100,31 @@
 //         padding: 10px;
 //     }
 // }
+// 페이지네이션 버튼들 
+.board-pagination {
+    display: flex;
+    justify-content: center;
+    
+}
+
+.board-pagination button {
+    padding: 10px 15px;
+    margin: 0 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.board-pagination button:hover {
+    background-color: #76c7db;
+    color: white;
+}
+
+.board-pagination button.active {
+    background-color: #76c7db;
+    color: white;
+    border-color: #76c7db;
+}
