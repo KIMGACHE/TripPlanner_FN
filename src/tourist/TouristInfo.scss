@@ -129,6 +129,7 @@
     // 본문 p태그
     .overview-detail {
         margin: 40px 0;
+        font-size: 18px;
     }
 
 
@@ -164,6 +165,7 @@
             line-height: 1.5;
             /* 긴 텍스트를 잘라서 보여줌 */
             word-break: break-word;
+            padding: 0 2px;
         }
     }
 

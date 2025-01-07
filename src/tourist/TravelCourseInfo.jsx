@@ -81,6 +81,8 @@ const TravelCourseInfo = () => {
         };
 
         fetchData();
+
+
     }, [contentId]);
 
     useEffect(() => {
@@ -90,6 +92,7 @@ const TravelCourseInfo = () => {
     }, [courseDetail]);
 
     useEffect(() => {
+        // Google 주소를 가져오는 함수
         const getGoogleAddress = async (latitude, longitude) => {
             const apiKey = 'AIzaSyAEae5uopEekuKilPCwWMsQS-M5JG8tTIk'; // 구글 API 키
             try {
@@ -103,7 +106,7 @@ const TravelCourseInfo = () => {
                 return null;
             }
         };
-
+    
         const fetchAddresses = async () => {
             const addresses = [];
             for (const result of googleResult) {
@@ -116,27 +119,30 @@ const TravelCourseInfo = () => {
             }
             setAddress(addresses);
         };
-
+    
+        // 구글 검색 결과가 있을 때만 주소를 가져오도록
         if (googleResult.length > 0) fetchAddresses();
-
+    
+        // 카카오 맵을 로드하기 전에 window.kakao가 준비되었는지 확인
         if (window.kakao && window.kakao.maps && googleResult.length) {
             const container = document.getElementById('main-map');
             if (!container) return;
-
+    
             const bounds = new window.kakao.maps.LatLngBounds();
             const map = new window.kakao.maps.Map(container, {
                 center: new window.kakao.maps.LatLng(googleResult[0]?.latitude, googleResult[0]?.longitude || 0),
                 level: 5,
             });
+    
             const positions = [];
             let calculatedDistance = 0;
-
+    
             googleResult.forEach((result, index) => {
                 if (result.latitude && result.longitude) {
                     const position = new window.kakao.maps.LatLng(result.latitude, result.longitude);
                     bounds.extend(position);
                     positions.push(position);
-
+    
                     const marker = new window.kakao.maps.Marker({ position, map });
                     const customOverlayContent = `
                         <div style="position: absolute; left: -15px; top: -40px;
@@ -148,26 +154,24 @@ const TravelCourseInfo = () => {
                             ${index + 1}
                         </div>
                     `;
-
-
+    
                     const infowindow = new window.kakao.maps.InfoWindow({
                         content: `<div style="padding:5px; font-size:12px;">${courseDetail.items.item[index].subname}</div>`
                     });
                     infowindow.open(map, marker);
-
+    
                     const customOverlay = new window.kakao.maps.CustomOverlay({
                         position, content: customOverlayContent, clickable: true
                     });
                     customOverlay.setMap(map);
-
                 }
             });
-
+    
             const polyline = new window.kakao.maps.Polyline({
                 path: positions, strokeWeight: 5, strokeColor: '#FF0000', strokeOpacity: 0.7, strokeStyle: 'solid',
             });
             polyline.setMap(map);
-
+    
             for (let i = 0; i < positions.length - 1; i++) {
                 const lat1 = positions[i].getLat();
                 const lon1 = positions[i].getLng();
@@ -175,11 +179,39 @@ const TravelCourseInfo = () => {
                 const lon2 = positions[i + 1].getLng();
                 calculatedDistance += getDistance(lat1, lon1, lat2, lon2);
             }
-
+    
             setTotalDistance(calculatedDistance);
             map.setBounds(bounds);
         }
-    }, [googleResult]);
+    
+        // swiper 인스턴스가 존재하면 슬라이드 변경 이벤트 핸들러 설정
+        const swiperInstance = swiperRef.current?.swiper;
+        if (!swiperInstance) return;
+    
+        const handleSlideChange = () => {
+            const activeIndex = swiperInstance.realIndex; // 현재 활성화된 슬라이드 인덱스 가져오기
+            const steps = document.querySelectorAll('.bar-num'); // 모든 단계 요소 선택
+    
+            steps.forEach((step, index) => {
+                if (index === activeIndex) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+        };
+    
+        // Swiper 슬라이드 변경 이벤트에 핸들러 등록
+        swiperInstance.on('slideChange', handleSlideChange);
+    
+        // 클린업 함수: swiperInstance가 변경되면 이벤트 핸들러 제거
+        return () => {
+            swiperInstance.off('slideChange', handleSlideChange);
+        };
+    
+    }, [googleResult]); // googleResult가 변경될 때마다 다시 실행
+    
+    
 
     if (loading) return <p>로딩 중...</p>;
     if (error) return <p>{error}</p>;
@@ -191,37 +223,9 @@ const TravelCourseInfo = () => {
             swiperRef.current.swiper.slideTo(index); // swiper 인스턴스를 이용하여 슬라이드 이동
         }
     };
-    
-    // sanitizeText 함수 정의 (HTML 태그를 텍스트만 추출하는 함수)
-    const sanitizeText = (text) => {
-        const doc = new DOMParser().parseFromString(text, 'text/html');
-        return doc.body.textContent || "";
-    };
 
-    useEffect(() => {
-        const swiperInstance = swiperRef.current?.swiper;
 
-        if (!swiperInstance) return; // swiper 인스턴스가 없으면 return
 
-        const handleSlideChange = () => {
-            const activeIndex = swiperInstance.realIndex;
-            const steps = document.querySelectorAll('.progress-bar .step');
-            steps.forEach((step, index) => {
-                if (index === activeIndex) {
-                    step.classList.add('active');
-                } else {
-                    step.classList.remove('active');
-                }
-            });
-        };
-
-        swiperInstance.on('slideChange', handleSlideChange);
-
-        // 클린업
-        return () => {
-            swiperInstance.off('slideChange', handleSlideChange);
-        };
-    }, []);
 
     return (
         <div className="TravelCourseInfo-wrapper">
@@ -260,17 +264,10 @@ const TravelCourseInfo = () => {
                 <div id="main-map" style={{ height: '400px' }}></div>
             </div>
 
-            {/* <div className="progress-bar">
-                {courseDetail.items.item.map((_, index) => (
-                    <div key={index} className={`step ${index === 0 ? 'active' : ''}`} onClick={() => goToSlide(index)}>
-                        <span>{index + 1}</span>
-                    </div>
-                ))}
-            </div> */}
             <ul className="progress-bar">
-                {courseDetail.items.item.map((_, index) => (
-                    <li key={index} onClick={() => goToSlide(index)}>
-                        <span className={index === 0 ? 'active' : ''}>
+                {courseDetail.items.item.map((subItem, index) => (
+                    <li key={index} className="step" onClick={() => goToSlide(index)}>
+                        <span className={`bar-num ${index === 0 ? 'active' : ''}`}>
                             {index + 1}
                         </span>
                         {/* 구글 첫 번째 이미지 추가 */}
@@ -280,7 +277,8 @@ const TravelCourseInfo = () => {
                                     src={googleResult[index].photoUrls[0]} // 첫 번째 이미지
                                     alt={`Google Image ${index}`}
                                     className="progress-photo"
-                                />
+                                ></img>
+                                <span className="photo-subname">{subItem.subname}</span>
                             </div>
                         )}
                     </li>
@@ -290,20 +288,43 @@ const TravelCourseInfo = () => {
                 <Swiper
                     ref={swiperRef}
                     pagination={{ type: 'progressbar' }}
-                    navigation={true}
-                    modules={[Pagination, Navigation]}>
+                    allowTouchMove={false}
+                    touchStartPreventDefault={true}
+                    touchMoveStopPropagation={true}
+                // modules={[Pagination, Navigation]}
+                >
                     {courseDetail.items.item.map((subItem, index) => (
                         <SwiperSlide key={index}>
                             <div className="slide-content">
-                                <h2>{subItem.subname}</h2>
+                                <div className="slide-title">
+                                    <span className="slide-title-num">{index + 1}</span>
+                                    <span className="silde-title-subname">{subItem.subname}</span>
+
+                                </div>
+                                <p className="silde-address">{address[index]}</p>
                                 <div className="photo-gallery">
-                                    {googleResult[index]?.photoUrls?.map((photo, i) => (
-                                        <img key={i} src={photo} alt={`Google Image ${index}-${i}`} className="photo" />
-                                    ))}
+                                    <Swiper
+                                        pagination={{ clickable: true }}
+
+                                        modules={[Pagination, Navigation]}
+                                        spaceBetween={10} /* 이미지 간 간격 */
+                                        slidesPerView={1} /* 한 번에 하나씩 표시 */
+                                    >
+                                        {googleResult[index]?.photoUrls?.map((photo, i) => (
+                                            <SwiperSlide key={i}>
+                                                <img
+                                                    src={photo}
+                                                    alt={`Google Image ${index}-${i}`}
+                                                    className="photo"
+                                                />
+                                            </SwiperSlide>
+                                        ))}
+                                    </Swiper>
                                 </div>
                                 <div className="details">
-                                    <p>{address[index]}</p>
-                                    <p>{subItem.subdetailoverview}</p>
+
+                                    <p dangerouslySetInnerHTML={{ __html: subItem.subdetailoverview }} />
+
                                 </div>
                             </div>
                         </SwiperSlide>

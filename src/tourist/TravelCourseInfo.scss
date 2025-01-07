@@ -1,3 +1,25 @@
+// 코스 전체 버튼
+.travelcourse-aBtn {
+    position: relative;
+
+    .ico {
+        display: inline-block;
+        width: 26px;
+        height: 24px;
+        background: url(https://korean.visitkorea.or.kr/resources/images/sub/ico_tit_list.png) 0 0 no-repeat;
+
+        margin-right: 5px;
+    }
+
+    a {
+        color: #888;
+        width: 30px;
+        text-decoration: none;
+    }
+
+
+}
+
 // 페이지 전체
 .TravelCourseInfo-wrapper {
     width: 100%;
@@ -6,27 +28,7 @@
     margin: 0 auto;
     padding: 20px;
 
-    // 코스 전체 버튼
-    .travelcourse-aBtn {
-        position: relative;
-
-        .ico {
-            display: inline-block;
-            width: 26px;
-            height: 24px;
-            background: url(https://korean.visitkorea.or.kr/resources/images/sub/ico_tit_list.png) 0 0 no-repeat;
-
-            margin-right: 5px;
-        }
-
-        a {
-            color: #888;
-            width: 30px;
-            text-decoration: none;
-        }
-
-
-    }
+    
 
     // 제목
     h2 {
@@ -92,38 +94,12 @@
 
         font-size: 1.3rem;
         font-weight: 100;
-        color: #888;
+        
         margin-bottom: 50px;
         padding: 10px;
     }
 }
 
-
-
-.progress-bar {
-    display: flex;
-    justify-content: space-around;
-    margin: 20px 0;
-
-    .step {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #f0f0f0;
-        border: 2px solid #ddd;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        font-weight: bold;
-        color: #888;
-    }
-
-    .active {
-        background: #ff5a5f;
-        border-color: #ff5a5f;
-        color: white;
-    }
-}
 
 .course-header {
     text-align: center;
@@ -140,10 +116,8 @@
     }
 }
 
-// .progress-bar {
-//     // display:block !important;
-//     flex-direction: row !important;
-// }
+
+// 스와이퍼 윗부분 
 .progress-bar {
     height: 200px;
     display: flex !important;
@@ -158,41 +132,67 @@
         width: 150px;
         height: 100%;
         border: 0;
-        border-radius: 0;
+        border-radius: 25px;
         background-color: white;
-        
-        font-weight: bold;
-        
-        position: relative; 
-        flex-direction: column; /* 이미지가 아래로 배치되도록 설정 */
-        span {
+        position: relative;
+        flex-direction: column;
+        /* 이미지가 아래로 배치되도록 설정 */
+
+        .bar-num {
+            position: absolute;
+            top: 5px;
             line-height: 40px;
             height: 40px;
             width: 40px;
-            border: 1px solid;
+            border: 2px solid;
             border-radius: 50%;
+            background-color: white;
+            color: black;
+
         }
 
         .photo-container {
-            margin-top: 5px; /* 번호와 이미지 사이에 간격 추가 */
-         
+            margin-top: 5px;
+
+            /* 번호와 이미지 사이에 간격 추가 */
+            .progress-photo {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 150px;
+                /* 이미지 크기 조정 */
+                height: 150px;
+                object-fit: cover;
+                border-radius: 10px;
+                border: 2px solid #ddd;
+            }
+
+            .photo-subname {
+                position: absolute;
+                top: 63%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: white; 
+                font-size: 16px;
+                font-weight: bold;
+                text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+                z-index: 1;
+                pointer-events: none;
+            }
         }
 
-        .progress-photo {
-            width: 150px; /* 이미지 크기 조정 */
-            height: 150px;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 2px solid #ddd;
-        }
     }
 
-    .active {
-        background: #ff5a5f;
-        border-color: #ff5a5f;
+    .bar-num.active {
+
+        // border: 2px solid #ed4956;
+        background-color: #ed4956;
         color: white;
+
+
     }
 }
+
 
 
 .progress-bar:hover {
@@ -208,31 +208,52 @@
         text-align: center;
         padding: 20px;
 
-        h2 {
-            font-size: 22px;
-            margin-bottom: 15px;
+        .slide-title {
+            margin: 10px;
+            .slide-title-num {
+                display: inline-block;
+                background-color: #ed4956;
+                color: white;
+                line-height: 40px;
+                transform: translate(-1px, -6px);
+                height: 40px;
+                width: 40px;
+                border: 2px solid;
+                border-radius: 50%;
+            }
+
+            .silde-title-subname {
+                margin-left:5px;
+                display: inline-block;
+                font-size: 2rem;
+                height: 40px;
+                line-height: 40px;
+            }
+        }
+
+        .silde-address {
+            margin: 10px 0;
         }
 
         .photo-gallery {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 15px;
-
-            .photo {
-                width: 120px;
-                height: 120px;
-                object-fit: cover;
-                border-radius: 8px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
+            width: 100%; /* 부모 컨테이너 크기에 맞춤 */
+            margin-bottom: 15px; /* 슬라이더 아래 여백 */
+            height: 700px;
+        }
+        
+        .photo {
+            width: 90%; /* 슬라이드 너비에 맞춤 */
+            height: 700px; /* 이미지 비율 유지 */
+            border-radius: 8px; /* 둥근 모서리 효과 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 이미지 그림자 */
         }
 
         .details {
             text-align: left;
-            font-size: 14px;
+            font-size: 20px;
             line-height: 1.6;
             color: #555;
+            padding: 20px 56px;
 
             p {
                 margin: 5px 0;
