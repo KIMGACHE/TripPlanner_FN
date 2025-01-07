@@ -28,7 +28,7 @@ const SideBar = (props) => {
 
   const [word, setWord] = useState('');
   const [search, setSearch] = useState([]);
-  const [typeState, setTypeState] = useState();
+  const [typeState, setTypeState] = useState('관광지');
   const [areaName, setAreaName] = useState(null);
   const [areaCode, setAreaCode] = useState();
 
@@ -293,13 +293,13 @@ const SideBar = (props) => {
     }
   },[areaName])
 
-  // useEffect(()=>{
-  //   if (isMountedSearch.current) {
-  //     handleSearch();
-  //   } else {
-  //     isMountedSearch.current = true;
-  //   }  
-  // },[typeState])
+  useEffect(()=>{
+    if (isMountedSearch.current) {
+      handleSearch();
+    } else {
+      isMountedSearch.current = true;
+    }  
+  },[areaCode])
 
   useEffect(()=>{
     if (isMountedSearch.current) {
