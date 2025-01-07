@@ -203,7 +203,17 @@ const Destination = () => {
             withCredentials: true, // 쿠키 포함
         })
             .then(response => {
-                console.log("Planner ITEM:", plannerItem);
+                const bringData = {
+                    plannerid: 0,
+                    title: plannerItem.plannerTitle,
+                    areaName: plannerItem.area,
+                    description: plannerItem.description,
+                    isPublic: plannerItem.public,
+                    day: plannerItem.day,
+                    userid: plannerItem.userId,
+                    destinations: destinations,
+                }
+                navigate('/makePlanner', { state: { bringData } });
             })
 
             .catch(error => {
@@ -211,34 +221,22 @@ const Destination = () => {
                 window.location.href = "/user/login";
             });
 
-        axios.post('http://localhost:9000/planner/bringPlanner',
-            {
-                day: plannerItem.day,
-                area: plannerItem.area,
-                plannerid: plannerItem.plannerID,
-            },
-            { 'Content-Type': 'application/json' },
-        )
-            .then((response) => {
-                alert(response.data); // 서버에서 보낸 응답 메시지 출력
-            })
-            .catch((error) => {
-                console.error("Error adding to my course:", error);
-                alert("내 코스로 저장에 실패했습니다. 다시 시도해주세요.");
-            });
-
-        const bringData = {
-            plannerid: 0,
-            title: plannerItem.plannerTitle,
-            areaName: plannerItem.area,
-            description: plannerItem.description,
-            isPublic: plannerItem.public,
-            day: plannerItem.day,
-            userid: plannerItem.userId,
-            destinations: destinations,
-        }
-        navigate('/makePlanner', { state: { bringData } });
-
+        // axios.post('http://localhost:9000/planner/bringPlanner',
+        //     {
+        //         day: plannerItem.day,
+        //         area: plannerItem.area,
+        //         plannerid: plannerItem.plannerID,
+        //     },
+        //     { 'Content-Type': 'application/json' },
+        // )
+        //     .then((response) => {
+        //         alert(response.data); // 서버에서 보낸 응답 메시지 출력
+                
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error adding to my course:", error);
+        //         alert("내 코스로 저장에 실패했습니다. 다시 시도해주세요.");
+        //     });
     }
 
     const handleDeletePlanner = () => {
@@ -261,7 +259,7 @@ const Destination = () => {
             .then(resp => {
                 window.location.href = "/planner/board";
             })
-            .then(err => {
+            .catch(err => {
                 console.error("Error Deleting to my course:", err);
                 alert("플래너 삭제에 실패했습니다. 다시 시도해주세요.");
             })

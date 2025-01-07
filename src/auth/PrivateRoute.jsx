@@ -3,9 +3,9 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import React from "react";
 
-const PrivateRoute = ({element , ...rest})=>{
-    const [isAuthenticated , setIsAuthenticated] = useState(null);
-    const [cookie,setCookie] = useState(null);
+const PrivateRoute = ({ element, ...rest }) => {
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
+    const [cookie, setCookie] = useState(null);
     const navigate = useNavigate();  // navigate 훅 사용
 
     useEffect(()=> {
@@ -61,9 +61,11 @@ const PrivateRoute = ({element , ...rest})=>{
 
     if(isAuthenticated === null) {
         return <div>Loading...</div>; //인증 상태 결정 대기
+
     }
 
-    return isAuthenticated ? React.cloneElement(element, {cookie}) : null;
+
+    return isAuthenticated ? React.cloneElement(element, { cookie }) : null;
 };
 
 const refreshAccessToken = async (userid) => {
@@ -76,6 +78,8 @@ const refreshAccessToken = async (userid) => {
         });
         return response.data; 
     }catch (error) {
+
+
         console.log("엑세스 토큰 재발급 실패", error);
         localStorage.removeItem("userid");
         throw new Error("엑세스 토큰 재발급 실패");
