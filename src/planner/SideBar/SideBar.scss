@@ -1,5 +1,5 @@
 .sidebar {
-    width: 1000px;
+    width: 52.08vw;
     height: 100vh;
 
     display: flex;
@@ -19,12 +19,12 @@
   }
 
     .option{
-        width:100px;
+        width:5.2vw;
         height: 100%;
 
         .optionButton {
-          width: 80px;
-          height: 80px;
+          width: 4.16vw;
+          height: 4.16vw;
           cursor: pointer;
           margin: 10px;
           display: flex;
@@ -35,19 +35,20 @@
           color: gray;
         
           &:active {
-            color: #d3cbed;  // 텍스트 색상 변경
+            color: black;  // 텍스트 색상 변경
             font-size: 1rem;  // 글자 크기 커짐
+            font-weight: bold;
           }
 
           .sidebar-logo {
-            width:80px;
-            height: 80px;
+            width: 4.16vw;
+            height: 4.16vw;
             object-fit: contain;
           }
         }
     }
     .content{
-        width:500px;
+        width:26.04vw;
         height: 100%;
         
         p {
@@ -63,57 +64,129 @@
           font-size: 0.9rem;
           cursor: pointer;
           float: right;
-          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 버튼에 약간의 그림자 추가 */
+          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
       
           &:hover {
-              background-color: #ff7875; /* 밝은 빨간색으로 변경 */
+              background-color: #ff7875;
           }
       
           &:active {
-              background-color: #d9363e; /* 더 어두운 빨간색 */
+              background-color: #d9363e;
           }
       }
 
-        .title {
-          display: flex;                // Flexbox 사용
-          flex-direction: column;       // 수직 정렬
-          justify-content: baseline;      // 수직 중앙 정렬
-          align-items: center;          // 수평 중앙 정렬
-          height: 100vh;                // 화면 전체 높이 사용
-          text-align: center;           // 텍스트 중앙 정렬
-          padding: 20px;                // 여백 추가 (필요에 따라 조정)
+      .title {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: baseline;
+        height: auto;
+        text-align: center;
+        padding: 30px 40px;
+        background-color: #f4f6f7;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px;
         
-          label, input {
-            margin-bottom: 10px;        // 각 입력 요소 사이에 여백 추가
+        label {
+          font-size: 1.1rem;
+          margin-bottom: 10px;
+          color: #333;
+        }
+      
+        input {
+          padding: 10px 15px;
+          font-size: 1rem;
+          border: 1px solid #d3cbed;
+          border-radius: 5px;
+          margin-bottom: 15px;
+          width: 100%;
+          box-sizing: border-box;
+          transition: border-color 0.3s ease-in-out;
+      
+          &:focus {
+            border-color: #d3cbed;
+            outline: none;
           }
+        }
+      
+        .share-check {
+          display: flex;
+          align-items: center;
+          margin-bottom: 20px;
         
           label {
-            display: flex;              // label 내부의 텍스트와 체크박스를 가로로 배치
-            align-items: center;        // 텍스트와 체크박스를 세로로 정렬
-        
-            input {
-              margin-right: 10px;        // 체크박스와 텍스트 사이에 여백 추가
-            }
+            font-size: 0.8rem;
+            margin-right: 10px;
+            color: #DB4455;
           }
         
-          button {
-            margin-top: 20px;            // 버튼과 그 위 요소들 사이에 여백 추가
-            padding: 10px 20px;          // 버튼 안쪽 여백 추가
-            font-size: 1rem;             // 버튼 글꼴 크기
-            cursor: pointer;            // 마우스 커서가 손 모양으로 바뀌게 함
-            background-color: #d3cbed;  // 버튼 배경 색
-            color: white;                // 버튼 글자 색
-            border: none;                // 버튼 테두리 없애기
-            border-radius: 5px;          // 버튼 모서리 둥글게 처리
-            transition: background-color 0.3s ease;
+          input {
+            display: none;
+          }
         
-            &:hover {
-              background-color: #d3cbed;  // 버튼에 마우스를 올렸을 때 색 변경
-            }
+          .check-label {
+            display: flex;
+            width: 20px;
+            height: 20px;
+            border: 1.5px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+          }
+        
+          input:checked + .check-label {
+            background-color: black;
+            border-color: black;
+          }
+        
+          input:checked + .check-label::after {
+            content: '✔';
+            color: white;
+            font-size: 14px;
+          }
+        
+          .check-label:hover {
+            border-color: black;
+          }
+
+          .check-label:active {
+            transform: scale(0.98);
           }
         }
         
-
+      
+        .btn-div {
+          display: flex;
+          justify-content: flex-end;
+          width: 100%;
+        
+          button {
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            color: white;
+            background-color: #a2d2ff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        
+            &:hover {
+              background-color: #bde0fe;
+              transform: scale(1.05);
+            }
+        
+            &:active {
+              background-color: #bde0fe;
+              transform: scale(0.98);
+            }
+          }
+        } 
+      }
         .date {
           width: 100%;
           display: flex;
@@ -135,19 +208,19 @@
               align-items: start;
       
               .content-side {
-                  width: 100px;
+                  width: 5.20vw;
                   height: 100%;
-                  max-height: 750px;
+                  max-height: 39.06vw;
                   overflow-y: auto;
                   padding-right: 10px;
                   margin-right: 10px;
                   scrollbar-width: none;
 
                   .optionButton {
-                      width: 80px;
-                      height: 80px;
+                      width: 4.16vw;
+                      height: 4.16vw;
                       cursor: pointer;
-                      margin: 10px;
+                      margin: 10px 0px;
                       display: flex;
                       justify-content: center;
                       align-items: center;
@@ -163,15 +236,15 @@
               }
       
               .content-body {
-                  width: 500px;
+                  width: 26.04vw;
                   height: 100%;
-                  max-height: 750px;
+                  max-height: 39.06vw;
                   overflow-y: auto;
                   padding-right: 10px;
                   scrollbar-width: none;
       
                   .content-card {
-                      height: 150px;
+                      height: 13.88vh;
                       display: flex;
                       flex-direction: row;
                       background-color: #fff;
@@ -184,8 +257,8 @@
                   }
       
                   .card-image {
-                      width: 100px;
-                      height: 100px;
+                      width: 5.2vw;
+                      height: 9.25vh;
                       margin-right: 15px;
                       img {
                           width: 100px;
@@ -265,7 +338,7 @@
         
     }
     .question{
-        width:400px;
+        width:20.83vw;
         height: 100%;
         position: relative;
 
@@ -280,48 +353,50 @@
           right: 10px;
         }
 
-        input {
+        .question-search {
+          input {
+              padding: 10px 20px;
+              font-size: 1rem;
+              cursor: pointer;
+              width: 80%;
+              box-sizing: border-box;
+              border: 0.1px solid #d3cbed;
+              border-radius: 5px;
+              margin-bottom: 10px;
+
+              &.invalid {
+                  border: 1px solid #d3cbed;
+              }
+          }
+
+          button {
             padding: 10px 20px;
             font-size: 1rem;
             cursor: pointer;
-            width: 80%;
-            box-sizing: border-box;
-            border: 0.1px solid #d3cbed;
-            border-radius: 5px;
-            margin-bottom: 10px;
-
-            &.invalid {
-                border: 1px solid #d3cbed;
-            }
-        }
-
-        button {
-          padding: 10px 20px;
-          font-size: 1rem;
-          cursor: pointer;
-          background-color: #d3cbed;
-          color: white;
-          border: none;
-          border-radius: 5px;
-
-          &:hover {
-            background-color: #e0e0e0;
-          }
-      
-          &.active {
-            background-color: #d3cbed;
+            background-color: #a2d2ff;
             color: white;
+            border: none;
+            border-radius: 5px;
+
+            &:hover {
+              background-color: #bde0fe;
+            }
+        
+            &.active {
+              background-color: #bde0fe;
+              color: white;
+            }
           }
         }
 
         .search-body {
-          max-height: 650px;
+          max-height: 33.85vw;
           overflow-y: auto;
           padding-right: 10px;
           scrollbar-width: none;
 
           .search-card {
-            height: 150px;
+            height: 13.88vh;
             display: flex;
             flex-direction: row;
             background-color: #fff;
@@ -333,8 +408,8 @@
             cursor: pointer;
         
             .card-image {
-              width: 100px;
-              height: 100px;
+              width: 5.20vw;
+              height: 9.25vh;
               margin-right: 15px;
         
               img {
@@ -384,7 +459,7 @@
               }
         
               button {
-                width: 50px;
+                width: 2.6vw;
                 height: 100%;
                 align-self: flex-start;
                 padding: 8px 12px;
@@ -408,55 +483,55 @@
           bottom: 10px;
         
           button {
-            padding: 6px 12px;  /* 버튼 크기를 적당히 줄여서 한 줄에 다 들어가게 함 */
-            font-size: 0.9rem;   /* 폰트 크기 조정 */
+            padding: 6px 12px;
+            font-size: 0.9rem;
             cursor: pointer;
-            background-color: transparent; /* 배경색을 없앰 */
-            color: black;       /* 텍스트 색상을 검정으로 변경 */
-            border: none;       /* 테두리 제거 */
-            border-radius: 4px; /* 둥근 모서리 */
+            background-color: transparent;
+            color: black;
+            border: none;
+            border-radius: 4px;
             transition: transform 0.2s ease;
         
             &:hover {
-              transform: scale(1.05);  /* 마우스를 올렸을 때 버튼이 커짐 */
+              transform: scale(1.05);
             }
         
             &.active {
-              font-weight: bold;  /* 활성화된 버튼은 글씨를 굵게 */
-              background-color: #f0f0f0;  /* 클릭된 버튼에 옅은 회색 배경 추가 */
+              font-weight: bold;
+              background-color: #f0f0f0;
             }
         
             &:active {
-              background-color: #f0f0f0;  /* 버튼 클릭 시 옅은 회색 배경 추가 */
+              background-color: #f0f0f0;
             }
         
             &:disabled {
-              color: #ccc;        /* 비활성화된 버튼은 색상을 연하게 */
-              cursor: not-allowed; /* 비활성화 시 커서 변경 */
+              color: #ccc;
+              cursor: not-allowed;
             }
           }
         }
     }
     .search-btns {
       display: flex;
-      justify-content: flex-start;  /* 좌측 정렬 */
+      justify-content: flex-start;
       align-items: center;
       margin: 3px 10px;
     
       .search-btn {
         margin: 3px 10px;
-        padding: 8px 16px; /* 일관된 패딩 */
-        font-size: 1rem;   /* 일관된 글꼴 크기 */
+        padding: 8px 16px;
+        font-size: 1rem;
         cursor: pointer;
-        background-color: transparent;  /* 배경색을 없앰 */
-        color: #333;  /* 글자 색상 설정 */
-        border: none; /* 테두리 없앰 */
+        background-color: transparent;
+        color: #333;
+        border: none;
         
         &:hover {
-          background-color: transparent; /* 배경색 없앰 */
+          background-color: transparent;
         }
         &.active {
-          background-color: #d3d3d3;  // 회색빛 배경
+          background-color: #d3d3d3;
         }
       }
     }

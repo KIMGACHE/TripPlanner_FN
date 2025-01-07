@@ -116,6 +116,7 @@ const Map = (props) => {
 
     const handleClickMarker = async (data) => {
         const lat = data.y; const lng = data.x;
+        console.log('여기임!!',data);
         map.setView([lat,lng], 13);
         var image;
         layerGroup.clearLayers();
@@ -190,14 +191,24 @@ const Map = (props) => {
     useEffect(()=>{
         if(isClicked) {
             if(props.ClickDestination) {
-                const data = props.ClickDestination;
-                console.log(props.ClickDestination);
+                const data = props.ClickDestination.data;
                 handleClickMarker(data)
             }
         } else {
             isClicked(true);
         }
     },[props.ClickDestination])
+
+    useEffect(()=>{
+        if(isClicked) {
+            if(props.ClickSearchDestination) {
+                const data = props.ClickDestination;
+                handleClickMarker(data)
+            }
+        } else {
+            isClicked(true);
+        }
+    },[props.ClickSearchDestination])
 
 
     // map 최초 로딩시
