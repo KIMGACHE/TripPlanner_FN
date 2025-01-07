@@ -30,12 +30,12 @@ const details = [
 
 const TouristInfo = () => {
     const location = useLocation();
-    const contentId = new URLSearchParams(location.search).get('contentId'); 
-    const [detail, setDetail] = useState({}); 
+    const contentId = new URLSearchParams(location.search).get('contentId');
+    const [detail, setDetail] = useState({});
     const [detailInfo, setDetailInfo] = useState('');
     const [detailIntro, setDetailIntro] = useState('');
-    const [photoUrls, setPhotoUrls] = useState([]); 
-    const mapContainer = useRef(null); 
+    const [photoUrls, setPhotoUrls] = useState([]);
+    const mapContainer = useRef(null);
 
     const openMapDetail = (lat, lng) => {
         const kakaoMapUrl = `https://map.kakao.com/link/map/${lat},${lng}`;
@@ -96,9 +96,12 @@ const TouristInfo = () => {
             {/* content 부분 */}
             {detail.title && (
                 <div className="desc-content">
-                    <div className="desc__link-container">
-                        <Link to="/tourist"><p>관광지</p></Link>
-                    </div>
+                    <span className="travelcourse-aBtn">
+                        <a href="/tourist">
+                            <span className="ico"></span>
+                            관광지
+                        </a>
+                    </span>
                     <h2 className="desc__title">{detail.title}</h2>
                     <div className="desc__address-container">
                         <span>{detail.addr1}</span>
