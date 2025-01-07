@@ -486,7 +486,7 @@ const SideBar = (props) => {
                   return (
                     <li key={index}
                       className="search-card"
-                      onClick={()=>{props.ClickPlanner(el)}}
+                      onClick={()=>{props.ClickSearch(el)}}
                     >
                       <div className="card-image">
                         {el && el.image!='No image found' && <img src={el.image} alt="" />}

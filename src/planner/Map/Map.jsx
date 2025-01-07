@@ -202,7 +202,8 @@ const Map = (props) => {
     useEffect(()=>{
         if(isClicked) {
             if(props.ClickSearchDestination) {
-                const data = props.ClickDestination;
+                const data = props.ClickSearchDestination;
+                console.log(data);
                 handleClickMarker(data)
             }
         } else {
