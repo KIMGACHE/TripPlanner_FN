@@ -4,7 +4,7 @@ import "react-date-range/dist/styles.css"; // 기본 스타일
 import "react-date-range/dist/theme/default.css"; // 테마 스타일
 import "./PlannerDate.scss";
 
-const Test = (props) => {
+const PlannerDate = (props) => {
   const [state, setState] = useState([
     {
       startDate: new Date(),
@@ -14,7 +14,7 @@ const Test = (props) => {
   ]);
   const [showCalendar, setShowCalendar] = useState(false); // 팝업 열림 여부
   const [inputValue, setInputValue] = useState(""); // 날짜 입력 필드 값
-  const [area, setArea] = useState(null); // 선택된 지역 좌표
+  const [area, setArea] = useState([126.9779692, 37.566535]); // 선택된 지역 좌표
   const [areaName, setAreaName] = useState("서울");
 
   const today = new Date(); // 오늘 날짜 계산
@@ -29,7 +29,7 @@ const Test = (props) => {
     { value: [127.3845475, 36.3504119], name: "대전" },
     { value: [126.8526012, 35.1595454], name: "광주" },
     { value: [129.3113596, 35.5383773], name: "울산" },
-    { value: [127.5183, 37.4138], name: "경기" },
+    { value: [127.5183, 37.4138], name: "경기도" },
     { value: [128.18161, 37.142803], name: "충청북도" },
     { value: [127.1516, 36.8075], name: "충청남도" },
     { value: [126.991, 34.8679], name: "전라남도" },
@@ -66,16 +66,15 @@ const Test = (props) => {
 
   const handleSelect = (e) => {
     const data = e.target.value;
-    
-    if(data!=null) {
+    if (data != null) {
       const selectedArea = areaCoordinate.find(
         (item) => item.value.toString() === data.toString()
       ).name;
 
-      setArea(data.split(','));
+      setArea(data.split(","));
       setAreaName(selectedArea);
     }
-};
+  };
 
   const handleConfirm = () => {
     const startDate = state[0].startDate;
@@ -100,62 +99,68 @@ const Test = (props) => {
     );
     props.AreaData(area);
     props.AreaNameData(areaName);
+    props.State();
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <h1>날짜 및 지역 선택</h1>
-        <div className="calendar-box">
-          <input
-            type="text"
-            value={inputValue}
-            placeholder="날짜를 선택하세요"
-            readOnly
-            onClick={() => setShowCalendar(true)} // 팝업 열기
-            style={{ cursor: "pointer" }}
-          />
-        </div>
-        {showCalendar && (
-          <div className="calendar-popup">
-            <div
-              className="calendar-popup-overlay"
-              onClick={() => setShowCalendar(false)}
-            ></div>
-            <div className="calendar-popup-content">
-              <DateRangePicker
-                ranges={state}
-                onChange={handleDateChange}
-                editableDateInputs={true}
-                moveRangeOnFirstSelection={false}
-                minDate={today} // 오늘 이전 날짜 비활성화
-                months={2}
-                direction="horizontal"
-                rangeColors={["#3ecf8e"]}
-                staticRanges={[]} // 모든 프리셋 버튼 제거
-                inputRanges={[]} // 모든 입력 버튼 제거
-              />
-              <button className="confirm-button" onClick={handleConfirm}>
-                확인
-              </button>
-            </div>
+    <div className="planner-date-container">
+      <h1>날짜 및 지역 선택</h1>
+      <h2>날짜 선택</h2>
+      <div className="calendar-box">
+        <input
+          type="text"
+          value={inputValue}
+          placeholder="날짜를 선택하세요"
+          readOnly
+          onClick={() => setShowCalendar(true)} // 팝업 열기
+          style={{ cursor: "pointer" }}
+        />
+      </div>
+      {showCalendar && (
+        <div className="calendar-popup">
+          <div
+            className="calendar-popup-overlay"
+            onClick={() => setShowCalendar(false)}
+          ></div>
+          <div className="calendar-popup-content">
+            <DateRangePicker
+              ranges={state}
+              onChange={handleDateChange}
+              editableDateInputs={true}
+              moveRangeOnFirstSelection={false}
+              minDate={today} // 오늘 이전 날짜 비활성화
+              months={2}
+              direction="horizontal"
+              rangeColors={["#3ecf8e"]}
+              staticRanges={[]} // 모든 프리셋 버튼 제거
+              inputRanges={[]} // 모든 입력 버튼 제거
+            />
+            <button className="confirm-button" onClick={handleConfirm}>
+              확인
+            </button>
           </div>
-        )}
-        <div className='area' >
-            <select onChange={handleSelect} value={area!=null&&area} >
-                {areaCoordinate.map((item,index)=>{
-                    return (
-                        <option value={item.value} key={index}>
-                            {item.name}
-                        </option>
-                    );
-                })}
-            </select>
         </div>
+      )}
+
+      {/* 지역 선택 */}
+      <div className="area">
+        <h2>지역 선택</h2>
+        <select onChange={handleSelect} value={area != null && area}>
+          {areaCoordinate.map((item, index) => {
+            return (
+              <option value={item.value} key={index}>
+                {item.name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+      <div className="areaBtn">
         <button onClick={handleNext}>다음</button>
       </div>
+      
     </div>
   );
 };
 
-export default Test;
+export default PlannerDate;

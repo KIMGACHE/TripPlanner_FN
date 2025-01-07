@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../css/TravelCourse.scss';
+import './TravelCourse.scss';
 
 // 지역 및 해시태그 필터 옵션
 const regionOptions = [
@@ -120,20 +120,14 @@ const TravelCourse = () => {
     };
 
     // 여행 코스 클릭시 상세 페이지로 데이터 전달
-    const handleCourseClick = (contentId) => {
+    const handleCourseClick = (contentId, hashtag) => {
         setLoading(true); // 로딩 시작
-        axios.get(`http://localhost:9000/travelcourse-info?id=${contentId}`)
-            .then((response) => {
 
-                const courseDetail = response.data;
-
-                navigate('/travelcourse-info', { state: { courseDetail } }); // 데이터와 함께 이동
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error fetching course info:', error);
-                setLoading(false);
-            });
+        navigate(`/travelcourse-info?contentId=${contentId}`, {
+            state: {
+                hashtag,
+            },
+        });
     };
 
     // 페이지네이션 버튼 생성 함수
@@ -202,108 +196,111 @@ const TravelCourse = () => {
     const totalPages = Math.ceil(totalCount / pageSize);
 
     return (
+
         <div className="tourist-wrapper">
-            <h1 className="tourist-header">여행 코스 검색</h1>
+            <div className="tourist-content">
+                <h1 className="tourist-title">여행 코스 정보</h1>
+                <div className="tourist-header">
+                    {/* 지역 필터 */}
+                    <select
+                        value={regionFilter}
+                        onChange={(e) => setRegionFilter(e.target.value)}
+                        className="filter-select"
+                    >
+                        {regionOptions.map((region) => (
+                            <option key={region.value} value={region.value}>
+                                {region.label}
+                            </option>
+                        ))}
+                    </select>
 
-            {/* 지역 필터 */}
-            <select
-                value={regionFilter}
-                onChange={(e) => setRegionFilter(e.target.value)}
-                className="filter-select"
-            >
-                {regionOptions.map((region) => (
-                    <option key={region.value} value={region.value}>
-                        {region.label}
-                    </option>
-                ))}
-            </select>
+                    {/* 카테고리 필터 */}
+                    <select
+                        value={hashtagFilter}
+                        onChange={(e) => setHashtagFilter(e.target.value)}
+                        className="filter-select"
+                    >
+                        {hashtagOptions.map((hashtag) => (
+                            <option key={hashtag.value} value={hashtag.value}>
+                                {hashtag.label}
+                            </option>
+                        ))}
+                    </select>
 
-            {/* 카테고리 필터 */}
-            <select
-                value={hashtagFilter}
-                onChange={(e) => setHashtagFilter(e.target.value)}
-                className="filter-select"
-            >
-                {hashtagOptions.map((hashtag) => (
-                    <option key={hashtag.value} value={hashtag.value}>
-                        {hashtag.label}
-                    </option>
-                ))}
-            </select>
+                    {/* 검색어 입력 */}
+                    <input
+                        type="text"
+                        placeholder="검색어를 입력하세요"
+                        value={searchKeyword}
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                        className="search-input"
+                    />
+                    <button onClick={handleSearch} className="search-button">검색</button>
+                </div>
+                <div className="total-check">
+                    <p className="total-count">총 {totalCount}개 코스</p>
 
-            {/* 검색어 입력 */}
-            <input
-                type="text"
-                placeholder="검색어를 입력하세요"
-                value={searchKeyword}
-                onChange={(e) => setSearchKeyword(e.target.value)}
-                className="search-input"
-            />
-            <button onClick={handleSearch} className="search-button">검색</button>
+                    {/* 정렬 방식 */}
+                    <select
+                        className="sort-select"
+                        value={arrange}
+                        onChange={(e) => setArrange(e.target.value)} // 상태만 업데이트
+                    >
+                        <option value="">정렬선택</option>
+                        <option value="O">제목순</option>
+                        <option value="Q">수정일순</option>
+                        <option value="R">생성일순</option>
+                    </select>
 
-            <div className="total-check">
-                <p className="total-count">총 {totalCount}개 코스</p>
+                </div>
 
-                {/* 정렬 방식 */}
-                <select
-                    className="sort-select"
-                    value={arrange}
-                    onChange={(e) => setArrange(e.target.value)} // 상태만 업데이트
-                >
-                    <option value="">정렬선택</option>
-                    <option value="O">제목순</option>
-                    <option value="Q">수정일순</option>
-                    <option value="R">생성일순</option>
-                </select>
+                {/* 로딩 상태 처리 */}
+                {loading ? (
+                    <div className="loading-message">로딩 중...</div>
+                ) : (
+                    <>
+                        {/* 데이터가 비어있을 때 "결과가 없습니다" 메시지 */}
+                        {courseData.length === 0 ? (
+                            <div className="no-results">결과가 없습니다.</div>
+                        ) : (
+                            <div className="travel-course-list-content">
+                                {courseData.map((course) => {
+                                    const regionName = regionMap[course.areacode] || '알 수 없음';
+                                    const hashtag = getHashtag(course.cat2); // 해시태그 가져오기
 
-            </div>
-
-            {/* 로딩 상태 처리 */}
-            {loading ? (
-                <div className="loading-message">로딩 중...</div>
-            ) : (
-                <>
-                    {/* 데이터가 비어있을 때 "결과가 없습니다" 메시지 */}
-                    {courseData.length === 0 ? (
-                        <div className="no-results">결과가 없습니다.</div>
-                    ) : (
-                        <div className="travel-course-list-content">
-                            {courseData.map((course) => {
-                                const regionName = regionMap[course.areacode] || '알 수 없음';
-                                const hashtag = getHashtag(course.cat2); // 해시태그 가져오기
-
-                                return (
-                                    <div key={course.contentid} className="travel-course-list" onClick={() => handleCourseClick(course.contentid)}>
-                                        {/* <Link to={`/travelcourse-info?id=${course.contentid}`}> */}
-                                        {/* course.firstimage가 존재하는 경우에만 이미지 렌더링 */}
-                                        {course.firstimage && (
-                                            <img
-                                                src={course.firstimage}
-                                                alt={course.title}
-                                                className="travel-course-list__img"
-                                            />
-                                        )}
-                                        <h4 className="course-title">{course.title}</h4>
-                                        <div className="course-box">
-                                            {/* 지역 */}
-                                            <p className="course-region">{regionName}</p>
-                                            {/* 코스 태그 */}
-                                            <p className="course-hashtag">{hashtag}</p>
+                                    return (
+                                        <div key={course.contentid} className="travel-course-list" onClick={() => handleCourseClick(course.contentid, hashtag)}>
+                                            {/* <Link to={`/travelcourse-info?id=${course.contentid}`}> */}
+                                            {/* course.firstimage가 존재하는 경우에만 이미지 렌더링 */}
+                                            {course.firstimage && (
+                                                <img
+                                                    src={course.firstimage}
+                                                    alt={course.title}
+                                                    className="travel-course-list__img"
+                                                />
+                                            )}
+                                            <h4 className="course-title">{course.title}</h4>
+                                            <div className="course-box">
+                                                {/* 지역 */}
+                                                <p className="course-region">{regionName}</p>
+                                                {/* 코스 태그 */}
+                                                <p className="course-hashtag">{hashtag}</p>
+                                            </div>
+                                            {/* </Link> */}
                                         </div>
-                                        {/* </Link> */}
-                                    </div>
 
-                                );
-                            })}
+                                    );
+                                })}
+                            </div>
+                        )}
+
+                        {/* 페이지네이션 버튼들 */}
+                        <div className="tourist-pagination">
+                            {createPageButtons(totalPages)}
                         </div>
-                    )}
-
-                    {/* 페이지네이션 버튼들 */}
-                    <div className="pagination">
-                        {createPageButtons(totalPages)}
-                    </div>
-                </>
-            )}
+                    </>
+                )}
+            </div>
         </div>
 
     );
