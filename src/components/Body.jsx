@@ -1,23 +1,32 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import TravelCourse from '../tourist/TravelCourse.jsx';
 import TravelCourseInfo from '../tourist/TravelCourseInfo.jsx';
 import Tourist from '../tourist/Tourist.jsx';
 import TouristInfo from '../tourist/TouristInfo.jsx';
-import Board from '../planner/Board.jsx';
-// import DestinationInfo from '../planner/DestinationInfo.jsx';
-import Destination from '../planner/Destination.jsx';
+import Board from '../board/Board.jsx';
 import MakePlanner from '../planner/makePlanner/MakePlanner.jsx';
 import LoginForm from '../login/LoginForm.jsx';
-import Join from '../join/Join.jsx';
+import Join from '../Join/Join.jsx';
 import Mypage from '../mypage/Mypage.jsx';
 import Main from './Main.jsx';
-import Destination1 from '../planner/Destination1.jsx';
-import MyPlanner from "../mypage/MyPlanner.jsx"
+import BoardInfo from '../board/BoardInfo.jsx';
+import PrivateRoute from '../auth/PrivateRoute.jsx';
+import Logout from '../login/Logout.jsx';
+import ForgotPage from '../login/ForgotPage.jsx';
+import FindIdPage from '../login/components/FindIdPage.jsx';
+import UseridInputPage from '../login/components/UseridInputPage.jsx';
+import EmailAuthPage from '../login/components/EmailAuthPage.jsx';
+import VerifyCodePage from '../login/components/VerifyCodePage.jsx';
+import PasswordResetPage from '../login/components/PasswordResetPage.jsx';
+
+
 
 const Body = () => {
+
+
     return (
 
         <Routes>
@@ -30,12 +39,19 @@ const Body = () => {
 
             {/* 로그인 */}
             <Route path="/user/login" element={<LoginForm />}></Route>
+            <Route path="/user/logout" element={<Logout />}></Route>
+            <Route path="/forgot" element={<ForgotPage />}></Route>
+            <Route path="/find-id" element={<FindIdPage />}></Route>
+            <Route path="/find-password" element={<UseridInputPage />}></Route>
+            <Route path="/email-auth" element={<EmailAuthPage />}></Route>
+            <Route path="/verify-code" element={<VerifyCodePage />}></Route>
+            <Route path="/reset-password" element={<PasswordResetPage />}></Route>
+
+            {/* 계획 생성 */}
+            <Route path="/makePlanner" element={<PrivateRoute element={<MakePlanner />} />} />
 
             {/* 마이 페이지 */}
             <Route path="user/mypage" element={<Mypage />}></Route>
-
-            {/* 마이 플래너 */}
-            <Route path="/user/mypage/my-planners" element={<MyPlanner />}></Route>
 
             {/* 플래너 생성 */}
             <Route path="/makePlanner" element={< MakePlanner />}></Route>
@@ -55,14 +71,10 @@ const Body = () => {
             {/* 게시판 */}
             <Route path="/planner/board" element={<Board />}></Route>
 
-            {/* 게시판 중간 페이지 - 없앨거임 */}
-            {/* <Route path="/planner/board/destination" element={<Destination />}></Route> */}
-
             {/* 게시판 자세히 보기 */}
-            <Route path="/planner/board/destination" element={<Destination1 />}></Route>
+            <Route path="/planner/board/destination" element={<BoardInfo />}></Route>
 
         </Routes>
-
     );
 };
 

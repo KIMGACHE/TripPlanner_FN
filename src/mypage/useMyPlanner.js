@@ -38,7 +38,6 @@ const useMyPlanner = () => {
       setError("플래너 데이터를 가져오는 중 오류가 발생했습니다.");
     } finally {
       console.log("플래너 요청 종료");
-      setLoading(false);
     }
   };
   

@@ -2,11 +2,19 @@ import { useState, useEffect, useRef } from 'react';
 import PlannerDate from '../PlannerDate/PlannerDate';
 import axios from 'axios';
 import './SideBar.scss';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
+import Logo from '../../images/logoImage.png';
+import NoImage from '../../images/noImage.png';
 
 const SideBar = (props) => {
+  const location = useLocation();
   const navigate = useNavigate();
   const isMounted = useRef(false);
+  const isMountedSearch = useRef(false);
+  const updateData = { ...location.state };
+  const bringData = { ...location.state };
+  const [plannerID,setPlannerID] = useState(0);
+
   const [titleState, setTitleState] = useState(true);
   const [dateState, setDateState] = useState(false);
   const [listState, setListState] = useState(false);
@@ -20,13 +28,17 @@ const SideBar = (props) => {
 
   const [word, setWord] = useState('');
   const [search, setSearch] = useState([]);
-  const [typeState, setTypeState] = useState('식당');
+  const [typeState, setTypeState] = useState();
   const [areaName, setAreaName] = useState(null);
+  const [areaCode, setAreaCode] = useState();
 
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-  const [resultsPerPage] = useState(7); // 한 페이지에 표시할 결과 수
-  const [pagesToShow] = useState(10); // 한 번에 표시할 페이지 번호 개수
+  const [resultsPerPage] = useState(10); // 한 페이지에 표시할 결과 수
+  const [pagesToShow] = useState(5); // 한 번에 표시할 페이지 번호 개수
 
+  const [images, setImages] = useState([]);
+
+  
   // 지역정보 저장
   const handleArea = (data) => {
     setArea(data);
@@ -35,21 +47,6 @@ const SideBar = (props) => {
   // 몇박인지 저장
   const handleDate = (data) => {
     setDay(data);
-  };
-
-  // 제목 저장
-  const handleTitle = (data) => {
-    setTitle(data);
-  };
-
-  // 설명 저장
-  const handleDescription = (data) => {
-    setDescription(data);
-  };
-
-  // 공유 여부 저장
-  const handlePublic = (data) => {
-    setIsPublic(data);
   };
 
   const handleStateTitle = () => {
@@ -91,25 +88,95 @@ const SideBar = (props) => {
 
   // 검색
   const handleSearch = () => {
-    axios
-      .post(
-        'http://localhost:9000/planner/searchDestination',
-        { type: typeState, word: word, areaname: areaName },
-        { 'Content-Type': 'application/json' }
-      )
-      .then((resp) => {
-        console.log(resp);
-        setSearch(resp.data.data || []);
-        setWord('');
+    if(typeState=='관광지') {
+      axios.post('http://localhost:9000/planner/searchDestination',
+          { type: typeState, word: encodeURIComponent(word.trim()), areaname: areaName, areacode: areaCode, pageNo: currentPage, },
+          { 'Content-Type': 'application/json' }
+        )
+        .then((resp) => {
+          const pTotal = resp.data.data.totalCount;
+          const currentPageData = resp.data.data.items.item;
+          const updatedSearch = new Array(pTotal).fill(null);
+
+          const startIndex = (currentPage - 1) * resultsPerPage;
+          const endIndex = startIndex + currentPageData.length;
+
+          currentPageData.map((el,index)=>{
+            if(el.areacode==areaCode) {
+              const data = {
+                name:el.title,
+                category:'관광지',
+                address:el.addr1,
+                description:'',
+                image:el.firstimage,
+                x:el.mapx,
+                y:el.mapy
+              }
+              updatedSearch[startIndex + index] = data;
+            }
+          })
+          setSearch(updatedSearch || []);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+  .post(
+    'http://localhost:9000/planner/searchDestination',
+    { type: typeState, word: word, areaname: areaName },
+    { 'Content-Type': 'application/json' }
+  )
+  .then((resp) => {
+    var searchData = resp.data.data;
+    const startIndex = (currentPage - 1) * resultsPerPage;
+    const currentPageData = searchData.slice(startIndex, startIndex + resultsPerPage);
+
+    // 비동기 작업 처리
+    Promise.all(
+      currentPageData.map(async (el, index) => {
+        try {
+          const imageResp = await axios.post('http://localhost:9000/planner/getImages', {
+            businessName: el.name,
+          });
+          searchData[startIndex + index].image = imageResp.data.image; 
+        } catch (error) {
+          searchData[startIndex + index].image = null; // 실패 시 기본값
+        }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+    ).then(() => {
+      setSearch(searchData || []);
+    });
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+
+    }
   };
+
+    // const handleImage = async () => {
+  //   console.log("handleImage 실행됨!");
+  //   setImages([]);
+  
+  //   try {
+  //     const imagePromises = currentResults.map((el) =>
+  //       axios.post("http://localhost:9000/planner/getImages", {
+  //         businessName: el.name,
+  //       })
+  //     );
+  
+  //     const responses = await Promise.all(imagePromises);
+  //     const fetchedImages = responses.map((resp) => resp.data.image);
+  //     setImages(fetchedImages);
+  //   } catch (error) {
+  //     console.error("Error fetching images:", error);
+  //   }
+  // };
 
   // 검색한 장소 플래너에 추가
   const handleSearchAdd = (data) => {
-    props.AddDestination({ day: selectedDay, data: data });
+    props.AddDestination({ day: selectedDay, data: data});
   };
 
   // Day버튼을 눌렀을 때 상황에 따른 이벤트
@@ -136,7 +203,29 @@ const SideBar = (props) => {
       if (props.DestinationData.length === 0) {
         alert('경로를 지정해주세요.');
       } else {
-        await axios.post('http://localhost:9000/planner/addPlanner',
+        if(plannerID==0) {
+          await axios.post('http://localhost:9000/planner/addPlanner',
+              {
+                title: title,
+                areaName: areaName,
+                description: description,
+                isPublic: isPublic,
+                destination: props.DestinationData,
+                day: day,
+                userid: props.CookieData.userid,
+              },
+              { 'Content-Type': 'application/json' }
+            )
+            .then((resp) => {
+              alert('플래너를 성공적으로 작성하였습니다!');
+              navigate('/');
+            })
+            .catch((err) => {
+              console.log(err);
+              alert('플래너를 작성하지 못했습니다.');
+            });
+        } else {
+          await axios.post('http://localhost:9000/planner/updatePlanner',
             {
               title: title,
               areaName: areaName,
@@ -145,17 +234,19 @@ const SideBar = (props) => {
               destination: props.DestinationData,
               day: day,
               userid: props.CookieData.userid,
+              plannerid: plannerID,
             },
             { 'Content-Type': 'application/json' }
           )
           .then((resp) => {
-            alert('플래너를 성공적으로 작성하였습니다!');
-            navigate('/');
+            alert('플래너를 성공적으로 수정하였습니다!');
+            navigate('/planner/board');
           })
           .catch((err) => {
             console.log(err);
-            alert('플래너를 작성하지 못했습니다.');
+            alert('플래너를 수정하지 못했습니다.');
           });
+        }
       }
     }
   };
@@ -178,18 +269,70 @@ const SideBar = (props) => {
     }
   }, [area]);
 
-  useEffect(() => {
-    if (!listState) {
-      props.DeleteAllDestination();
+  useEffect(()=>{
+    if(areaName) {
+      if(areaName=='서울') {
+        setAreaCode('1')
+      } else if(areaName=='인천') {
+        setAreaCode('2')
+      } else if(areaName=='대전') {
+        setAreaCode('3')
+      } else if(areaName=='대구') {
+        setAreaCode('4')
+      } else if(areaName=='광주') {
+        setAreaCode('5')
+      } else if(areaName=='부산') {
+        setAreaCode('6')
+      } else if(areaName=='울산') {
+        setAreaCode('7')
+      } else if(areaName=='세종') {
+        setAreaCode(areaName=='8')
+      } else if(areaName=='경기') {
+        setAreaCode('31')
+      } else if(areaName=='강원도') {
+        setAreaCode('32')
+      } else if(areaName=='충청북도') {
+        setAreaCode('33')
+      } else if(areaName=='충청남도') {
+        setAreaCode('34')
+      } else if(areaName=='경상북도') {
+        setAreaCode('35')
+      } else if(areaName=='경상남도') {
+        setAreaCode('36')
+      } else if(areaName=='전라북도') {
+        setAreaCode('37')
+      } else if(areaName=='전라남도') {
+        setAreaCode('38')
+      } else if(areaName=='제주') {
+        setAreaCode('39')
+      } else {
+        setAreaCode(null);
+      }
     }
-  }, [listState]);
+  },[areaName])
 
+  // useEffect(()=>{
+  //   if (isMountedSearch.current) {
+  //     handleSearch();
+  //   } else {
+  //     isMountedSearch.current = true;
+  //   }  
+  // },[typeState])
+
+  useEffect(()=>{
+    if (isMountedSearch.current) {
+      handleSearch();
+    } else {
+      isMountedSearch.current = true;
+    }  
+  },[currentPage])
+
+  
   // 페이징 로직 ---------------------------------------------------------------------------------------
   // 검색 결과를 현재 페이지에 맞게 잘라서 표시
   const indexOfLastResult = currentPage * resultsPerPage;
   const indexOfFirstResult = indexOfLastResult - resultsPerPage;
   const currentResults = search.slice(indexOfFirstResult, indexOfLastResult)
-  
 
   // 총 페이지 수 계산
   const totalPages = Math.ceil(search.length / resultsPerPage);
@@ -220,17 +363,73 @@ const SideBar = (props) => {
     }
   };
 
-  // ----------------------------------------------------------------------------------------
-
   useEffect(()=>{
-    console.log(typeState);
-  },[typeState])
+      if(Object.keys(updateData).length > 0 && Object.keys(updateData)[0]=='updateData'){
+        setTitle(updateData.updateData.title);
+        setDescription(updateData.updateData.description)
+        setIsPublic(updateData.updateData.isPublic)
+        setDay(updateData.updateData.day)
+        setAreaName(updateData.updateData.areaName)
+        setPlannerID(updateData.updateData.plannerid);
+
+        const transformData = (data) => {
+          return data.map(item => ({
+              day: item.day,
+              data: {
+                  name: item.name,
+                  x: item.x,
+                  y: item.y,
+                  locationFullAddress: item.address,
+                  address: item.address,
+                  category: item.category,
+                  image: item.image,
+              },
+              image: item.image
+          }));
+      };
+      props.UpdatePlanner(transformData(updateData.updateData.destinations));
+    }
+    if(Object.keys(bringData).length > 0 && Object.keys(bringData)[0]=='bringData'){
+
+      setTitle(bringData.bringData.title);
+      setDescription(bringData.bringData.description)
+      setIsPublic(bringData.bringData.isPublic)
+      setDay(bringData.bringData.day)
+      setAreaName(bringData.bringData.areaName)
+      setPlannerID(0);
+
+      const transformData = (data) => {
+        return data.map(item => ({
+            day: item.day,
+            data: {
+                name: item.name,
+                x: item.x,
+                y: item.y,
+                locationFullAddress: item.address,
+                address: item.address,
+                category: item.category,
+                image: item.image,
+            },
+            image: item.image
+        }));
+    };
+    props.UpdatePlanner(transformData(bringData.bringData.destinations));
+  }
+  },[])
 
   return (
     <>
       <div className="sidebar">
         <div className="option">
-          <div className="optionButton" onClick={handleStateTitle}>
+          <div 
+            className="optionButton"
+            onClick={()=>navigate('/')}
+          >
+            <img className='sidebar-logo' src={Logo} alt="" />
+          </div>
+          <div 
+            className="optionButton"
+            onClick={handleStateTitle}>
             <span>Title</span>
           </div>
 
@@ -250,14 +449,14 @@ const SideBar = (props) => {
         <div className="content">
           {titleState && (
             <div className="title">
-              <label htmlFor="">Title</label>
-              <input type="text" onChange={(e) => handleTitle(e.target.value)} /> <br />
-              <label htmlFor="">Description</label>
-              <input type="text" onChange={(e) => handleDescription(e.target.value)} /> <br />
+              <label htmlFor="">플래너 제목</label>
+              <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} /> <br />
+              <label htmlFor="">설명</label>
+              <input type="text" onChange={(e) => setDescription(e.target.value)} value={description} /> <br />
               <label htmlFor="">다른 사람에게 Planner를 공유하시겠습니까?</label>
               <input
                 type="checkbox"
-                onChange={(e) => handlePublic(e.target.checked)}
+                onChange={(e) => setIsPublic(e.target.checked)}
                 checked={isPublic}
               />{' '}
               <br />
@@ -266,12 +465,21 @@ const SideBar = (props) => {
           )}
           {dateState && (
             <div className="date">
-              <PlannerDate AreaData={handleArea} DayData={handleDate} AreaNameData={handleAreaName} />
+              <PlannerDate AreaData={handleArea} DayData={handleDate} AreaNameData={handleAreaName} State={()=>{handleStatePlanner()}}/>
             </div>
           )}
           {listState && (
             <>
-              <p> Planner </p>
+            <div className="content-planner">
+              <div className='plannerMenu' >
+                <p> Planner </p>
+                <button 
+                  onClick={() => props.DeleteAllDestination()}
+                  className="delete-destination-btn"
+                >
+                  비우기
+                </button>
+              </div>
               <div className="plannerList">
                 <div className="content-side">
                   {(() => {
@@ -289,18 +497,23 @@ const SideBar = (props) => {
                 <div className="content-body">
                   {selectedDay && (
                     <ul>
-                      {props.DestinationData.filter((el) => el.day === selectedDay).map((destination, index) => {
+                      {props.DestinationData.length > 0 && props.DestinationData.filter((el) => el.day === selectedDay).map((destination, index) => {
+                        console.log('destination: ',destination)
                         return (
-                          <li key={index} className="content-card">
+                          <li key={index} 
+                            className="content-card"
+                            onClick={()=>{props.ClickPlanner(destination)}}
+                          >
                             <div className="card-image">
-                              {destination && <img src={destination.image} alt="" />}
+                              {destination && destination.data.image==null && destination.data.image=='No image found' && <img src={NoImage} alt="" />}
+                              {destination && destination.data.image!=null && destination.data.image!='No image found' && <img src={destination.data.image} alt="" />}
                             </div>
                             <div className="card-content">
                               <div className="card-header">
-                                <div className="card-name">{destination && destination.data.businessName}</div>
-                                <div className="card-category">{destination && destination.data.businessCategory}</div>
-                                <div className="card-addr">{destination && destination.data.streetFullAddress}</div>
-                                <button onClick={() => props.DeleteDestination(selectedDay, index)}>제거</button>
+                                  <div className="card-name">{destination && destination.data.name}</div>
+                                  <div className="card-category">{destination && destination.data.category}</div>
+                                  <div className="card-addr">{destination && destination.data.address}</div>
+                                <div className='card-button'><button onClick={(event) => props.DeleteDestination(event,selectedDay, index)}>제거</button></div>
                               </div>
                               <div className="card-desc">{destination && destination.data.description}</div>
                             </div>
@@ -311,33 +524,81 @@ const SideBar = (props) => {
                   )}
                 </div>
               </div>
-            </>
+            </div>
+          </>          
           )}
         </div>
         {listState && (
           <div className="question">
-            <p>검색기능</p>
-            <label htmlFor="">검색어 : </label>
-            <input type="text" onChange={(e) => { setWord(e.target.value); }} />
+            <p>SEARCH</p>
+            <input type="text" value={word} onChange={(e) => { setWord(e.target.value); }} />
             <button onClick={handleSearch}>검색</button>
             { totalPages>0 && 
-                <span>{currentPage}/{totalPages}</span>
+                <span className='total-page'>{currentPage}/{totalPages}</span>
             }
-            <div>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setSearch([]); }}>식당</button>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setSearch([]); }}>숙소</button>
-              <button className="search-btn" onClick={(e) => { setTypeState(e.target.innerText); setSearch([]); }}>관광지</button>
+            <div className='search-btns'>
+              <button 
+                className={`search-btn ${typeState === "식당" ? "active" : ""}`} 
+                onClick={(e) => { setTypeState(e.target.innerText); }}
+              >
+                식당
+              </button>
+              <button 
+                className={`search-btn ${typeState === "숙소" ? "active" : ""}`} 
+                onClick={(e) => { setTypeState(e.target.innerText); }}
+              >
+                숙소
+              </button>
+              <button 
+                className={`search-btn ${typeState === "관광지" ? "active" : ""}`} 
+                onClick={(e) => { setTypeState(e.target.innerText); }}
+              >
+                관광지
+              </button>
             </div>
             <div className="search-body">
               <ul>
-                {search && search.length > 0 && currentResults.map((el, index) => {
+                { search && search.length > 0 && typeState=='관광지' && currentResults.map((el, index) => {
                   return (
-                    <li key={index} className="search-card">
-                      <div className="card-name">{el && el.businessName}</div>
-                      <div className="card-category">{el && el.businessCategory}</div>
-                      <div className="card-addr">{el && el.streetFullAddress}</div>
-                      <div className="card-desc">{el && el.description}</div>
-                      <button onClick={() => { handleSearchAdd(el); }}>추가</button>
+                    <li key={index}
+                      className="search-card"
+                      onClick={()=>{props.ClickPlanner(el)}}
+                    >
+                      <div className="card-image">
+                              {el && el.image!='No image found' && <img src={el.image} alt="" />}
+                              {el && el.imgae=='No image found' && <img src={NoImage} alt="" />}
+                      </div>
+                      <div className='card-body'>
+                        <div className="card-name">{el && el.name}</div>
+                        <div className="card-category">{el && el.category}</div>
+                        <div className="card-addr">{el && el.address}</div>
+                        <div className="card-desc">{el && el.description}</div>
+                      </div>
+                      <div>
+                        <button onClick={(event) => { handleSearchAdd(el); }}>+</button>
+                      </div>
+                    </li>
+                  );
+                })}
+                {search && search.length > 0 && typeState!='관광지' && currentResults.map((el, index) => {
+                  return (
+                    <li key={index}
+                      className="search-card"
+                      onClick={()=>{props.ClickPlanner(el)}}
+                    >
+                      <div className="card-image">
+                        {el && el.image!='No image found' && <img src={el.image} alt="" />}
+                        {el && el.imgae=='No image found' && <img src={NoImage} alt="" />}
+                      </div>
+                      <div className='card-body'>
+                        <div className="card-name">{el && el.name}</div>
+                        <div className="card-category">{el && el.category}</div>
+                        <div className="card-addr">{el && el.address}</div>
+                        <div className="card-desc">{el && el.description}</div>
+                      </div>
+                      <div>
+                        <button onClick={(event) => { handleSearchAdd(el); }}>+</button>
+                      </div>
                     </li>
                   );
                 })}
@@ -345,12 +606,12 @@ const SideBar = (props) => {
             </div>
             { search.length !=0 &&
               <div className="pagination">
-                <button onClick={handlePrevious} disabled={currentPage === 1}>Previous</button>
+                <button onClick={()=>{handlePrevious(); }} disabled={currentPage === 1}>Previous</button>
                 <span>
                   {pageNumbers.slice(startPage - 1, endPage).map((pageNumber) => (
                     <button
                       key={pageNumber}
-                      onClick={() => paginate(pageNumber)}
+                      onClick={() => {paginate(pageNumber); }}
                       className={pageNumber === currentPage ? 'active' : ''}
                     >
                       {pageNumber}
@@ -358,7 +619,7 @@ const SideBar = (props) => {
                   ))}
                 </span>
                 <button
-                  onClick={handleNext}
+                  onClick={()=>{handleNext(); }}
                   disabled={currentPage + pagesToShow > totalPages}
                 >
                   Next

@@ -1,63 +1,63 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import useFileAndImageHandler from "./useFileAndImageHandler";
-import useFormDataHandler from "./useFormDataHandler";
 import useValidationHandler from "./useValidationHandler";
 import useAuthHandler from "./useAuthHandler";
+import useSaveChanges from "./useSaveChanges";
+import useFormDataHandler from "./useFormDataHandler";
 import "./Mypage.scss";
-import MyPlanner from "./MyPlanner";
+import useMyPlanner from "./useMyPlanner";
+import useLikePlanner from "./useLikePlanner";
+
+  
 
 const Mypage = () => {
-  const {
-    imagePreview,
-    fileInputRef,
-    handleFileInputClick,
-    handleDrop,
-    handleDragOver,
-    handleCancelImage,
-    handleResetToDefaultImage,
-    handleImageUpload,
-    handleCancelChanges,
-    handleFileChange,
-  } = useFileAndImageHandler();
-
-  const { setFormData, 
-    updateFormData,
-    handleCancelEmailEditing,
-    handleEmailChange,
-    handleUsernameChange,
-    handleChange,
-  } = useFormDataHandler();
-
-
-  const {
-    validationMessages,
-    setValidationMessages,
-    validatePassword,
-    validateEmail,
-    validateUsername,
-    handlePasswordChange,
-    handlePasswordEditClick,
-    handleCancelPasswordEditing,
-  } = useValidationHandler();
-
-  const {
-    authCodeSent,
-    isAuthCodeLocked,
-    timer,
-    sendAuthCode,
-    verifyAuthCode,
-    handleSaveChanges,
-  } = useAuthHandler();
-
-  const { formData } = useFormDataHandler(); // 추가
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const [isEmailEditing, setIsEmailEditing] = useState(false);
   const [isPasswordEditing, setIsPasswordEditing] = useState(false);
+  const [isAuthCodeVerified, setIsAuthCodeVerified] = useState(false);
+  // MyPlanner와 LikePlanner 데이터 가져오기
+  // const { planners } = useMyPlanner();
+  const { likePlanner } = useLikePlanner(userData?.userid); // userData?.userid로 수정
 
+  
+
+  
+  // 초기 데이터 준비
+  const initialUserData = userData
+  ? {
+      userid: userData.userid || "",
+      username: userData.username || "",
+      email: userData.email || "",
+      profileImage: userData.img || "/ProfileImg/anonymous.jpg",
+    }
+  : {
+      userid: "",
+      username: "",
+      email: "",
+      profileImage: "/ProfileImg/anonymous.jpg",
+    };
+  
+ 
+  
+  const {
+    formData,
+    setFormData,
+    resetFormData, // 초기화 메서드 추가
+    updateFormData,
+    handleEmailChange,
+    handleUsernameChange,
+    handleChange,
+    handlePasswordChange,
+    handleAuthCodeVerification,
+    handleSendAuthCode,
+  } = useFormDataHandler(initialUserData);
+
+  
+  
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -65,8 +65,10 @@ const Mypage = () => {
         setLoading(true);
         await axios.post("http://localhost:9000/api/cookie/validate", {}, { withCredentials: true });
 
+
         const userResponse = await axios.get("http://localhost:9000/user/mypage", { withCredentials: true });
-        setUserData(userResponse.data);
+        setUserData(userResponse.data); // userData 설정
+        console.log("1.Mypage", userResponse.data); // 디버깅 추가
         setFormData({
           profileImage: userResponse.data.img || "/ProfileImg/anonymous.jpg",
           userid: userResponse.data.userid || "",
@@ -76,83 +78,154 @@ const Mypage = () => {
         });
         setLoading(false);
       } catch (err) {
-        console.error("오류:", err);
-        setError("사용자 데이터를 가져오는 중 오류가 발생했습니다.");
-        setLoading(false);
-      }
-    };
+         setError("사용자 데이터를 가져오는 중 오류가 발생했습니다.");
+        } finally {
+          setLoading(false);
+        }
+  };
 
+  
     fetchUserData();
-  }, [setFormData]);
+  }, []);
+  const { planners,} = useMyPlanner();
+
+  console.log("플래너 렌더링 상태:", { planners}); // 디버깅 추가
+  // 핸들러 가져오기
+  const {
+    imagePreview,
+    fileInputRef,
+    handleFileInputClick,
+    handleFileChange,
+    handleCancelImage,
+    handleResetToDefaultImage,
+    handleDrop,
+    setImagePreview,
+    handleDragOver,
+  } = useFileAndImageHandler(setFormData,userData); // 함수 자체로 전달
+
+  const {
+    validationMessages,
+    setValidationMessages,
+    validatePassword,
+    validateEmail,
+    validateUsername,
+  } = useValidationHandler();
+
+  const {
+    authCodeSent,
+    isAuthCodeLocked,
+    timer,
+    sendAuthCode,
+    verifyAuthCode,
+    resetAuthState,
+    handleVerifyAuthCode,
+  } = useAuthHandler({ setValidationMessages });
 
 
+  
+  // Save Changes Hook
+  const { handleSaveChanges } = useSaveChanges({
+    formData,
+    setUserData,
+    setIsEditing,
+    isEmailEditing,
+    isAuthCodeVerified,
+    setValidationMessages,
+  });
+
+   
+
+  const handleCancelChanges = () => {
+    if (userData) {
+      setFormData({
+        profileImage: userData.img || "/ProfileImg/anonymous.jpg",
+        userid: userData.userid || "",
+        username: userData.username || "",
+        email: userData.email || "",
+      });
+    }
+    setIsEditing(false); // 수정 모드 종료
+  };
+
+    // 수정 버튼 클릭 시 현재 프로필 이미지를 미리보기로 설정
+    const handleEditClick = () => {
+      if (userData) {
+        setImagePreview(userData.img ? `http://localhost:9000${userData.img}` : "/ProfileImg/anonymous.jpg");
+        setFormData({
+          profileImage: userData.img || "/ProfileImg/anonymous.jpg",
+          userid: userData.userid || "",
+          username: userData.username || "",
+          email: userData.email || "",
+        });
+      }
+      setIsEditing(true); // 수정 모드 활성화
+    };
+  
+  
+
+  // 비밀번호 편집 모드
+  const handlePasswordEditClick = () => {
+    setIsPasswordEditing(true);
+    setIsEmailEditing(false); // 이메일 수정 모드 비활성화
+    setFormData((prev) => ({
+      ...prev,
+      password: "",
+      repassword: "",
+    }));
+  };
+
+  const handleCancelPasswordEditing = () => {
+    setIsPasswordEditing(false);
+    setFormData((prev) => ({
+      ...prev,
+      password: "",
+      repassword: "",
+    }));
+    setValidationMessages((prev) => ({
+      ...prev,
+      password: "",
+      repassword: "",
+    }));
+  };
+
+  // 이메일 편집 취소
+  const cancelEmailEditing = () => {
+    setIsEmailEditing(false);
+    setFormData((prev) => ({
+      ...prev,
+      email: userData.email,
+    }));
+    resetAuthState();
+  };
+
+  const handleDelet = async () => {
+    if (!window.confirm("정말로 회원탈퇴를 하시겠습니까?")) {
+      return;
+    }
+  
+    try {
+      const response = await axios.delete("http://localhost:9000/user/mypage/delete", {
+        withCredentials: true, // 쿠키 인증 정보를 함께 보냄
+      });
+  
+      if (response.status === 200) {
+        alert("회원탈퇴가 완료되었습니다.");
+        // 로그아웃 처리 및 리다이렉트
+        setUserData(null); // 유저 데이터를 초기화
+        window.location.href = "/"; // 홈 페이지로 리다이렉트
+      }
+    } catch (error) {
+      console.error("회원탈퇴 중 오류 발생:", error);
+      alert("회원탈퇴 중 문제가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+ 
+  const { likedPlanners, loading: likeLoading } = useLikePlanner(userData?.userid || "");
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
   if (!userData) return <div>데이터를 불러오지 못했습니다.</div>;
-  
 
-
-  // const handleSaveChanges = async () => {
-  //   const noChanges =
-  //     formData.profileImage === (userData.img || "/ProfileImg/anonymous.jpg") &&
-  //     formData.username === userData.username &&
-  //     formData.email === userData.email &&
-  //     formData.password === "" &&
-  //     formData.repassword === "" &&
-  //     !isPasswordEditing;
-  
-  //   if (noChanges) {
-  //     alert("변경된 사항이 없습니다.");
-  //     return;
-  //   }
-  
-  //   if (isPasswordEditing && !isPasswordValid) {
-  //     alert("비밀번호 확인을 다시 확인해주세요.");
-  //     return;
-  //   }
-  
-  //   if (isEmailEditing && !isAuthCodeLocked) {
-  //     alert("이메일 인증을 완료해주세요.");
-  //     return;
-  //   }
-  
-  //   try {
-  //     const response = await axios.put(
-  //       "http://localhost:9000/user/mypage/userupdate",
-  //       {
-  //         username: formData.username,
-  //         email: formData.email,
-  //         password: formData.password,
-  //         profileImg: formData.profileImage,
-  //       },
-  //       { withCredentials: true }
-  //     );
-  
-  //     const userResponse = await axios.get("http://localhost:9000/user/mypage", {
-  //       withCredentials: true,
-  //     });
-  
-  //     setUserData(userResponse.data);
-  //     setFormData({
-  //       profileImage: userResponse.data.img || "/ProfileImg/anonymous.jpg",
-  //       userid: userResponse.data.userid,
-  //       username: userResponse.data.username,
-  //       email: userResponse.data.email,
-  //       gender: userResponse.data.gender,
-  //     });
-  //     setImagePreview(userResponse.data.img || "/ProfileImg/anonymous.jpg");
-  
-  //     alert("유저 정보가 성공적으로 변경되었습니다.");
-  //     setIsEditing(false);
-  //   } catch (err) {
-  //     console.error("유저 정보 변경 중 오류:", err);
-  //     setValidationMessages((prev) => ({
-  //       ...prev,
-  //       username: "서버 오류로 유저 정보를 변경할 수 없습니다.",
-  //       usernameColor: "validation-error",
-  //     }));
-  //   }
-  // };
   
 
   return (
@@ -221,11 +294,11 @@ const Mypage = () => {
                   <>
                     <button
                       type="button"
-                      onClick={sendAuthCode}
+                      onClick={handleSendAuthCode}
                     >
                       인증 코드 받기
                     </button>
-                    <button type="button" onClick={handleCancelEmailEditing}>
+                    <button type="button" onClick={cancelEmailEditing}>
                       취소
                     </button>
                   </>
@@ -261,7 +334,7 @@ const Mypage = () => {
                   </div>
                   <button
                     type="button"
-                    onClick={verifyAuthCode}
+                    onClick={handleAuthCodeVerification}
                     disabled={isAuthCodeLocked}
                   >
                     인증 코드 확인
@@ -276,8 +349,6 @@ const Mypage = () => {
                 )}
               </div>
             )}
-
-              
             
           {/* Password */}
           <input
@@ -343,15 +414,53 @@ const Mypage = () => {
             <p>아이디: {userData.userid}</p>
             <p>이메일: {userData.email}</p>
             <p>성별 : {userData.gender}</p>
-            {/* <p>생년월일{userData.birth}</p> */}
-            <button onClick={() => setIsEditing(true)}>수정</button>
+            <p>생년월일 : {userData.birth}</p>
+            <button type="button" onClick={handleEditClick}>수정</button>
+            <button type="button" onClick={handleDelet}>회원탈퇴</button>
           </>
           
         )}
       </div>
-         {/* MyPlanner 컴포넌트 추가 */}
-        <MyPlanner />
+      <div className="my-planner-container">
+        <h3>내가 만든 Planner 목록</h3>
+        {planners?.length === 0 ? (
+          <p>작성된 플래너가 없습니다.</p>
+        ) : (
+          <ul>
+            {planners?.map((planner, index) => (
+              <li key={planner.plannerID || index} className="planner-item">
+                <h4>{planner.plannerTitle}</h4>
+                <p>지역: {planner.area}</p>
+                <p>여행 일수: {planner.day}일</p>
+                <p>설명: {planner.description}</p>
+                <p>생성 날짜: {planner.createAt}</p>
+                <p>수정 날짜: {planner.updateAt}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
+      <div>
+        <h2>좋아요한 플래너 목록</h2>
+        {likeLoading ? (
+          <p>좋아요한 플래너를 불러오는 중...</p>
+        ) : likedPlanners.length === 0 ? (
+          <p>좋아요한 플래너가 없습니다.</p>
+        ) : (
+          <ul>
+            {likedPlanners.map((planner, index) => (
+              <li key={planner.plannerID || index} className="planner-item">
+                <h4>{planner.plannerTitle}</h4>
+                <p>지역: {planner.area}</p>
+                <p>여행 일수: {planner.day}일</p>
+                <p>설명: {planner.description}</p>
+                <p>생성 날짜: {planner.createAt}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };

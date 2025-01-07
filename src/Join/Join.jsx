@@ -465,6 +465,12 @@ const Join = () => {
             alert("이름을 올바르게 입력하세요.");
             return;
         }
+
+            // 이메일 인증 여부 확인
+        if (!isAuthCodeVerified) {
+            alert("이메일 인증을 완료해주세요.");
+            return;
+        }
     
         if (!email || validationMessages.emailColor === "error") {
             alert("이메일을 올바르게 입력하세요.");

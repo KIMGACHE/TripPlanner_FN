@@ -1,8 +1,21 @@
 
 import { Link } from 'react-router-dom';
 import './Main.scss';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Main = () => {
+    const [totalPlans,setTotalPlans] = useState(0); //여행 계획 수 상태
+
+    useEffect(()=>{
+        axios.get('http://localhost:9000/planner/plans/total')
+        .then((response)=>{
+            setTotalPlans(response.data); //서버에서 받은 총 개수 설정
+        })
+        .catch((error)=>{
+            console.error("여행 계획 조회 실패",error);
+        });
+    },[]);
 
     return (
         <div className="main-wrapper">
@@ -15,21 +28,18 @@ const Main = () => {
 
             </h2>
 
-
             <Link to="/makePlanner">
                 <button className="main-makeplanner-btn">여행 계획 만들기</button>
             </Link>
             <Link to="/planner/board">
-                <button className="main-board-btn">다른 여행 계획 보러 가기</button>
+                <button className="main-board-btn">다른 여행계획 보러 가기</button>
             </Link>
 
-            <Link to="/tourist">
-                <button className="main-tourist-btn">관광지 리스트</button>
-            </Link>
+            {/* 여행 계획 수 표시 */}
+            <div className='total-plans-display'>
+                총 생성된 여행 계획 수: <strong>{totalPlans}</strong>
+            </div>
 
-            <Link to="/travelcourse">
-                <button className="main-travelcourse-btn">관광지 코스 정보</button>
-            </Link>
         </div>
     )
 
