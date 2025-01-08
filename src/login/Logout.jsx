@@ -8,18 +8,17 @@ const Logout = () => {
 
     useEffect(() => {
 
+        axios.post('http://localhost:9000/user/logout', {}, { withCredentials: true })
+            .then((response) => {
+                console.log("로그아웃 성공", response.data);
 
-        axios.post('http://localhost:9000/user/logout',{},{withCredentials:true})
-        .then((response)=>{
-            console.log("로그아웃 성공",response.data);
-            localStorage.removeItem("userid");
-            window.location.href="/";
-        })      
-        .catch((error) =>{
-            console.log("로그아웃 실패.",error);
-        });
-    },[navigate]);
+                window.location.href = "/";
 
+            })
+            .catch((error) => {
+                console.log("로그아웃 실패.", error);
+            });
+    }, [navigate]);
 
     return (
         <div>
