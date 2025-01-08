@@ -67,6 +67,21 @@ const Planners = () => {
     navigate(`/destination?plannerID=${plannerID}`, { state: { plannerItem } });
   };
 
+  const handlelikePlannerClick = (plannerID) => {
+    if (!likedPlanners || likedPlanners.length === 0) {
+      console.warn("플래너 데이터가 초기화되지 않았습니다.");
+      return;
+    }
+
+    const plannerItem = likedPlanners.find((item) => item.plannerID === plannerID);
+    if (!plannerItem) {
+      console.warn("PlannerID에 해당하는 플래너가 없습니다.");
+      return;
+    }
+
+    navigate(`/destination?plannerID=${plannerID}`, { state: { plannerItem } });
+  };
+
   // 로딩 상태
   if (loading || plannersLoading || likeLoading) return <div>로딩 중...</div>;
 
@@ -111,7 +126,7 @@ const Planners = () => {
               <li
                 key={likedPlanners.plannerID || index}
                 className="planner-item"
-                onClick={() => handlePlannerClick(likedPlanners.plannerID)}
+                onClick={() => handlelikePlannerClick(likedPlanners.plannerID)}
               >
                 <h4>{likedPlanners.plannerTitle}</h4>
                 <p>PlannerID: {likedPlanners.plannerID}</p>
