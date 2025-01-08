@@ -1,21 +1,15 @@
 .all{
 
-    // margin-top: 100px;
+    margin-top: 100px;
 
     width: 100%;
     height: 100%;
 
     place-items: center; // 가로와 세로 중앙정렬
-   position: relative;
+    position: relative;
 
     // border: 1px solid blue;
-<<<<<<< HEAD
     
-=======
-    h1 {
-        font-size: 3rem;
-    }
->>>>>>> 23f97af76c94a4933f005c3c441054794b9a0b46
 
     form{
 
@@ -26,7 +20,7 @@
          // 유효성 메세지 색깔 체크
          .validation-message {
             font-size: 0.9rem;
-            // margin-top: 10px;
+            margin-top: 5px;
             // border: 1px solid black;
             z-index: 0;
             
@@ -44,7 +38,7 @@
         //오류 메세지
         div{
             width: 400px;
-            // height: 25px;
+            height: 25px;
             // border: 1px solid rgb(255, 192, 237);
         }
 
@@ -88,7 +82,7 @@
         #imgbutton{
             justify-content: center;
             align-items: center;
-            width: auto;
+            width: 900px;
             height: 50px;
             // border: 1px solid red;
             display: flex;
@@ -96,7 +90,7 @@
             align-items: center;
            
             #imgupload{
-                width: auto;
+                width: 100px;
             }
 
             #imgcancel{
@@ -109,38 +103,28 @@
             display: flex;
             flex-direction: column; // 수직 배치
             align-items: flex-start;
-            width: 400px;
+            width: 400;
             // border: 1px solid red;
             margin-bottom: 0; // 기본적으로 margin-bottom 없음
         
             &.has-message {
-                // margin-bottom: 35px; // 유효성 메시지가 있을 경우 추가 간격
+                margin-bottom: 35px; // 유효성 메시지가 있을 경우 추가 간격
             }
 
-            // 이메일 유효성 체크
-            .validation-message {
-                // margin-top: 15px;
-                // border: 1px solid black;
-                z-index: 0;
+            &.name-message{
+                margin-top: 10px;
             }
-
-            // &.name-message{
-            //     margin-top: 10px;
-            // }
         
             .email-wrapper {
                 position: relative;
                 display: flex;
                 align-items: center;
                 width: 100%;
-                // border:1px solid  red;
         
                 input {
                     flex: 1;
                     padding-right: 150px; // 인증 코드 버튼 공간
                 }
-
-                
         
                 .emailbutton {
                     position: absolute;
@@ -168,18 +152,18 @@
             display: flex;
             flex-direction: column;
             width: 400px;
-            // margin-top: 10px;
+            margin-top: 10px;
 
-            // &.auth-message{
-            //     margin-bottom: 30px;
-            // }
+            &.auth-message{
+                margin-bottom: 30px;
+            }
         
             .auth-code-wrapper {
                 // position: relative; // 인증 버튼과 타이머 위치를 조정하기 위해 relative 추가
                 display: flex;
                 align-items: center;
                 width: 100%;
-                // border: 1px solid blue;
+                border: 1px solid blue;
                 // margin-bottom: 50px ;
         
                 .auth-code {
@@ -189,18 +173,17 @@
                     border-radius: 4px;
                     font-size: 0.9rem;
                     width: 100%;
-                    // border: 1px solid red;
+                    border: 1px solid red;
                     position: relative;
                     // margin-bottom:  0px;
                 }
-
-                
         
                 #timer {
                     position: absolute;
-                    right: -270px; // 버튼과 간격 조정
-                    transform: translateY(0%);
-                    font-size: 1.2rem;
+                    right: -250px; // 버튼과 간격 조정
+                    top: 50%;
+                    transform: translateY(-50%);
+                    font-size: 0.9rem;
                     color: #333;
                 }
         
