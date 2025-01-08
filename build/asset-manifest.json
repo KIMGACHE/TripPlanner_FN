@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/KIMGACHE/TripPlanner_FN/static/css/main.291495ea.css",
+    "main.js": "/KIMGACHE/TripPlanner_FN/static/js/main.4e521115.js",
+    "static/media/trip2.png": "/KIMGACHE/TripPlanner_FN/static/media/trip2.7d8e514109512446c2b0.png",
+    "static/media/Jalnan2TTF.ttf": "/KIMGACHE/TripPlanner_FN/static/media/Jalnan2TTF.512497399460b79dd80f.ttf",
+    "static/media/footPrint.png": "/KIMGACHE/TripPlanner_FN/static/media/footPrint.6bcb74259d7fa1c4cc48.png",
+    "static/media/likeIcon.png": "/KIMGACHE/TripPlanner_FN/static/media/likeIcon.afc97638893d6476fd19.png",
+    "index.html": "/KIMGACHE/TripPlanner_FN/index.html",
+    "main.291495ea.css.map": "/KIMGACHE/TripPlanner_FN/static/css/main.291495ea.css.map",
+    "main.4e521115.js.map": "/KIMGACHE/TripPlanner_FN/static/js/main.4e521115.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.291495ea.css",
+    "static/js/main.4e521115.js"
+  ]
+}
