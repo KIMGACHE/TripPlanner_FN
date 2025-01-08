@@ -28,7 +28,7 @@ const SideBar = (props) => {
 
   const [word, setWord] = useState('');
   const [search, setSearch] = useState([]);
-  const [typeState, setTypeState] = useState();
+  const [typeState, setTypeState] = useState('관광지');
   const [areaName, setAreaName] = useState(null);
   const [areaCode, setAreaCode] = useState();
 
@@ -155,27 +155,9 @@ const SideBar = (props) => {
     }
   };
 
-    // const handleImage = async () => {
-  //   console.log("handleImage 실행됨!");
-  //   setImages([]);
-  
-  //   try {
-  //     const imagePromises = currentResults.map((el) =>
-  //       axios.post("http://localhost:9000/planner/getImages", {
-  //         businessName: el.name,
-  //       })
-  //     );
-  
-  //     const responses = await Promise.all(imagePromises);
-  //     const fetchedImages = responses.map((resp) => resp.data.image);
-  //     setImages(fetchedImages);
-  //   } catch (error) {
-  //     console.error("Error fetching images:", error);
-  //   }
-  // };
-
   // 검색한 장소 플래너에 추가
-  const handleSearchAdd = (data) => {
+  const handleSearchAdd = (event, data) => {
+    event.stopPropagation();
     props.AddDestination({ day: selectedDay, data: data});
   };
 
@@ -311,13 +293,13 @@ const SideBar = (props) => {
     }
   },[areaName])
 
-  // useEffect(()=>{
-  //   if (isMountedSearch.current) {
-  //     handleSearch();
-  //   } else {
-  //     isMountedSearch.current = true;
-  //   }  
-  // },[typeState])
+  useEffect(()=>{
+    if (isMountedSearch.current) {
+      handleSearch();
+    } else {
+      isMountedSearch.current = true;
+    }  
+  },[areaCode])
 
   useEffect(()=>{
     if (isMountedSearch.current) {
@@ -445,22 +427,129 @@ const SideBar = (props) => {
             <span>Complete!</span>
           </div>
         </div>
-
+        {(
+          <div className="question">
+            <p>SEARCH</p>
+            <div className='question-search'>
+              <input type="text" value={word} onChange={(e) => { setWord(e.target.value); }} />
+              <button onClick={handleSearch}>검색</button>
+            </div>
+            { totalPages>0 && 
+                <span className='total-page'>{currentPage}/{totalPages}</span>
+            }
+            <div className='search-btns'>
+              <button 
+                className={`search-btn ${typeState === "식당" ? "active" : ""}`} 
+                onClick={(e) => { setTypeState(e.target.innerText); }}
+              >
+                식당
+              </button>
+              <button 
+                className={`search-btn ${typeState === "숙소" ? "active" : ""}`} 
+                onClick={(e) => { setTypeState(e.target.innerText); }}
+              >
+                숙소
+              </button>
+              <button 
+                className={`search-btn ${typeState === "관광지" ? "active" : ""}`} 
+                onClick={(e) => { setTypeState(e.target.innerText); }}
+              >
+                관광지
+              </button>
+            </div>
+            <div className="search-body">
+              <ul>
+                { search && search.length > 0 && typeState=='관광지' && currentResults.map((el, index) => {
+                  console.log('image안나오는거보기',el);
+                  return (
+                    <li key={index}
+                      className="search-card"
+                      onClick={()=>{props.ClickSearch(el)}}
+                    >
+                      <div className="card-image">
+                              {el && el.image!='No image found' && <img src={el.image} alt="" />}
+                              {el && el.imgae=='No image found' && <img src={NoImage} alt="" />}
+                      </div>
+                      <div className='card-body'>
+                        <div className="card-name">{el && el.name}</div>
+                        <div className="card-category">{el && el.category}</div>
+                        <div className="card-addr">{el && el.address}</div>
+                        <div className="card-desc">{el && el.description}</div>
+                      </div>
+                      <div>
+                        <button onClick={(event) => { handleSearchAdd(event, el); }}>+</button>
+                      </div>
+                    </li>
+                  );
+                })}
+                {search && search.length > 0 && typeState!='관광지' && currentResults.map((el, index) => {
+                  return (
+                    <li key={index}
+                      className="search-card"
+                      onClick={()=>{props.ClickSearch(el)}}
+                    >
+                      <div className="card-image">
+                        {el && el.image!='No image found' && <img src={el.image} alt="" />}
+                        {el && el.imgae=="" && <img src={NoImage} alt="" />}
+                      </div>
+                      <div className='card-body'>
+                        <div className="card-name">{el && el.name}</div>
+                        <div className="card-category">{el && el.category}</div>
+                        <div className="card-addr">{el && el.address}</div>
+                        <div className="card-desc">{el && el.description}</div>
+                      </div>
+                      <div>
+                        <button onClick={(event) => { handleSearchAdd(event,el); }}>+</button>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+            { search.length !=0 &&
+              <div className="pagination">
+                <button onClick={()=>{handlePrevious(); }} disabled={currentPage === 1}>Previous</button>
+                <span>
+                  {pageNumbers.slice(startPage - 1, endPage).map((pageNumber) => (
+                    <button
+                      key={pageNumber}
+                      onClick={() => {paginate(pageNumber); }}
+                      className={pageNumber === currentPage ? 'active' : ''}
+                    >
+                      {pageNumber}
+                    </button>
+                  ))}
+                </span>
+                <button
+                  onClick={()=>{handleNext(); }}
+                  disabled={currentPage + pagesToShow > totalPages}
+                >
+                  Next
+                </button>
+              </div>
+            }
+          </div>
+        )}
         <div className="content">
           {titleState && (
             <div className="title">
               <label htmlFor="">플래너 제목</label>
-              <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} /> <br />
+              <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} />
               <label htmlFor="">설명</label>
-              <input type="text" onChange={(e) => setDescription(e.target.value)} value={description} /> <br />
-              <label htmlFor="">다른 사람에게 Planner를 공유하시겠습니까?</label>
-              <input
-                type="checkbox"
-                onChange={(e) => setIsPublic(e.target.checked)}
-                checked={isPublic}
-              />{' '}
-              <br />
-              <button onClick={handleStateDate}>다음</button>
+              <input type="text" onChange={(e) => setDescription(e.target.value)} value={description} />
+              <div className='share-check'>
+                <label htmlFor="">다른 사람에게 Planner를 공유하시겠습니까?</label>
+                <input
+                  id="title-checkbox"
+                  type="checkbox"
+                  onChange={(e) => setIsPublic(e.target.checked)}
+                  checked={isPublic}
+                />
+                <label className='check-label' htmlFor="title-checkbox"></label>
+              </div>
+              <div className='btn-div'>
+                <button onClick={handleStateDate}>다음</button>
+              </div>
             </div>
           )}
           {dateState && (
@@ -498,7 +587,6 @@ const SideBar = (props) => {
                   {selectedDay && (
                     <ul>
                       {props.DestinationData.length > 0 && props.DestinationData.filter((el) => el.day === selectedDay).map((destination, index) => {
-                        console.log('destination: ',destination)
                         return (
                           <li key={index} 
                             className="content-card"
@@ -528,106 +616,6 @@ const SideBar = (props) => {
           </>          
           )}
         </div>
-        {listState && (
-          <div className="question">
-            <p>SEARCH</p>
-            <input type="text" value={word} onChange={(e) => { setWord(e.target.value); }} />
-            <button onClick={handleSearch}>검색</button>
-            { totalPages>0 && 
-                <span className='total-page'>{currentPage}/{totalPages}</span>
-            }
-            <div className='search-btns'>
-              <button 
-                className={`search-btn ${typeState === "식당" ? "active" : ""}`} 
-                onClick={(e) => { setTypeState(e.target.innerText); }}
-              >
-                식당
-              </button>
-              <button 
-                className={`search-btn ${typeState === "숙소" ? "active" : ""}`} 
-                onClick={(e) => { setTypeState(e.target.innerText); }}
-              >
-                숙소
-              </button>
-              <button 
-                className={`search-btn ${typeState === "관광지" ? "active" : ""}`} 
-                onClick={(e) => { setTypeState(e.target.innerText); }}
-              >
-                관광지
-              </button>
-            </div>
-            <div className="search-body">
-              <ul>
-                { search && search.length > 0 && typeState=='관광지' && currentResults.map((el, index) => {
-                  return (
-                    <li key={index}
-                      className="search-card"
-                      onClick={()=>{props.ClickPlanner(el)}}
-                    >
-                      <div className="card-image">
-                              {el && el.image!='No image found' && <img src={el.image} alt="" />}
-                              {el && el.imgae=='No image found' && <img src={NoImage} alt="" />}
-                      </div>
-                      <div className='card-body'>
-                        <div className="card-name">{el && el.name}</div>
-                        <div className="card-category">{el && el.category}</div>
-                        <div className="card-addr">{el && el.address}</div>
-                        <div className="card-desc">{el && el.description}</div>
-                      </div>
-                      <div>
-                        <button onClick={(event) => { handleSearchAdd(el); }}>+</button>
-                      </div>
-                    </li>
-                  );
-                })}
-                {search && search.length > 0 && typeState!='관광지' && currentResults.map((el, index) => {
-                  return (
-                    <li key={index}
-                      className="search-card"
-                      onClick={()=>{props.ClickPlanner(el)}}
-                    >
-                      <div className="card-image">
-                        {el && el.image!='No image found' && <img src={el.image} alt="" />}
-                        {el && el.imgae=='No image found' && <img src={NoImage} alt="" />}
-                      </div>
-                      <div className='card-body'>
-                        <div className="card-name">{el && el.name}</div>
-                        <div className="card-category">{el && el.category}</div>
-                        <div className="card-addr">{el && el.address}</div>
-                        <div className="card-desc">{el && el.description}</div>
-                      </div>
-                      <div>
-                        <button onClick={(event) => { handleSearchAdd(el); }}>+</button>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            { search.length !=0 &&
-              <div className="pagination">
-                <button onClick={()=>{handlePrevious(); }} disabled={currentPage === 1}>Previous</button>
-                <span>
-                  {pageNumbers.slice(startPage - 1, endPage).map((pageNumber) => (
-                    <button
-                      key={pageNumber}
-                      onClick={() => {paginate(pageNumber); }}
-                      className={pageNumber === currentPage ? 'active' : ''}
-                    >
-                      {pageNumber}
-                    </button>
-                  ))}
-                </span>
-                <button
-                  onClick={()=>{handleNext(); }}
-                  disabled={currentPage + pagesToShow > totalPages}
-                >
-                  Next
-                </button>
-              </div>
-            }
-          </div>
-        )}
       </div>
     </>
   );

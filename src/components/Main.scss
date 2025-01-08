@@ -45,7 +45,7 @@
     background: #caf0f8; // 버튼 배경색 검은색
     font-size: 1.2rem; // 글자 크기
     font-weight: normal; // 글자 두께
-    border-radius: 0; // 네모 모양으로 변경
+    border-radius: 30px; // 네모 모양으로 변경
     transition: background-color 0.3s ease, color 0.3s ease; // 부드러운 전환 효과
         /* 초기 상태 */
         opacity: 0;
@@ -73,7 +73,7 @@
     background: #caf0f8; // 버튼 배경색 검은색
     font-size: 1.2rem; // 글자 크기
     font-weight: normal; // 글자 두께
-    border-radius: 0; // 네모 모양으로 변경
+    border-radius: 30px; // 네모 모양으로 변경
     transition: background-color 0.3s ease, color 0.3s ease; // 부드러운 전환 효과
         /* 초기 상태 */
         opacity: 0;

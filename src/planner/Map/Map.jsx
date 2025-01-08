@@ -120,14 +120,40 @@ const Map = (props) => {
     }
 
     useEffect(()=>{
-        if(isMounted) {
-            if(map!=null) {
-                MapRender(map.getZoom());
+
+        if(map && props.AreaData) {
+            var lat = Number(props.AreaData[1])
+            var lng = Number(props.AreaData[0])
+
+            map.setView([lat,lng], 7);
+        }
+    },[props.AreaData])
+
+    useEffect(()=>{
+        if(isClicked) {
+            if(props.ClickDestination) {
+                const data = props.ClickDestination.data;
+                handleClickMarker(data)
+
             }
         } else {
             isMounted(true);
         }
-    },[props.DayData])
+
+    },[props.ClickDestination])
+
+    useEffect(()=>{
+        if(isClicked) {
+            if(props.ClickSearchDestination) {
+                const data = props.ClickSearchDestination;
+                handleClickMarker(data)
+            }
+        } else {
+            isClicked(true);
+        }
+    },[props.ClickSearchDestination])
+
+
 
     // map 최초 로딩시
     useEffect(() => {

@@ -64,9 +64,10 @@ const MakePlanner = () => {
         );
     };
 
+
     const handleAllDelete = () => {
         setPlannerData([]);
-    }
+
 
     return (
         <div className='planner' >
@@ -79,6 +80,8 @@ const MakePlanner = () => {
                     DeleteAllDestination={handleAllDelete}
                     AddDestination={handleData}
                     CookieData={cookie}
+
+
                 />
             </div>
             <div className='plannerBody' >
@@ -88,7 +91,9 @@ const MakePlanner = () => {
                     AreaData={areaState}
                     DayData={selectedDay}
                     AddDestination={handleData}
+
                 /> */}
+
             </div>
 
         </div>
