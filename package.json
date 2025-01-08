@@ -1,7 +1,7 @@
 {
   "name": "trip_planner_fn",
   "version": "0.1.0",
-  "homepage": "https://github.com/KIMGACHE/TripPlanner_FN/",
+  "homepage": "https://KIMGACHE.github.io/TripPlanner_FN/",
   "private": true,
   "dependencies": {
     "axios": "^1.7.9",
