@@ -9,7 +9,7 @@ import TouristInfo from '../tourist/TouristInfo.jsx';
 import Board from '../board/Board.jsx';
 import MakePlanner from '../planner/makePlanner/MakePlanner.jsx';
 import LoginForm from '../login/LoginForm.jsx';
-import Join from '../join/Join.jsx';
+import Join from '../Join/Join.jsx';
 import Mypage from '../mypage/Mypage.jsx';
 import Main from './Main.jsx';
 import BoardInfo from '../board/BoardInfo.jsx';
