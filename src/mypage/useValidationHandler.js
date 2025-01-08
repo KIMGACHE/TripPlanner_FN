@@ -26,6 +26,7 @@ const useValidationHandler = () => {
     return { message: "유효한 이메일입니다.", color: "validation-success" };
   }, []);
 
+
   // 이름 검증
   const validateUsername = useCallback((username) => {
     const usernameRegex = /^[a-zA-Z가-힣]+$/;
@@ -35,46 +36,7 @@ const useValidationHandler = () => {
     return { message: "", color: "validation-success" };
   }, []);
 
- 
 
-  // // 비밀번호 변경 핸들러
-  // const handlePasswordChange = useCallback(
-  //   (e, formData, setFormData, setIsPasswordValid) => {
-  //     const { name, value } = e.target;
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       [name]: value,
-  //     }));
-
-  //     if (name === "password") {
-  //       const validationResult = validatePassword(value);
-  //       setValidationMessages((prev) => ({
-  //         ...prev,
-  //         password: validationResult.message,
-  //         passwordColor: validationResult.color,
-  //       }));
-  //     }
-
-  //     if (name === "repassword") {
-  //       if (formData.password !== value) {
-  //         setValidationMessages((prev) => ({
-  //           ...prev,
-  //           repassword: "비밀번호 확인이 일치하지 않습니다.",
-  //           repasswordColor: "validation-error",
-  //         }));
-  //         setIsPasswordValid(false);
-  //       } else {
-  //         setValidationMessages((prev) => ({
-  //           ...prev,
-  //           repassword: "비밀번호가 일치합니다.",
-  //           repasswordColor: "validation-success",
-  //         }));
-  //         setIsPasswordValid(true);
-  //       }
-  //     }
-  //   },
-  //   [validatePassword]
-  // );
 
   return {
     validationMessages,
