@@ -35,7 +35,7 @@ const Body = () => {
             <Route path="/" element={<Main />}></Route>
 
             {/* 회원가입 페이지 */}
-            <Route path="/user/join" element={<Join />}> </Route>
+            {/* <Route path="/user/join" element={<Join />}> </Route> */}
 
             {/* 로그인 */}
             <Route path="/user/login" element={<LoginForm />}></Route>
