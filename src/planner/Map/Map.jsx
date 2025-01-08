@@ -116,7 +116,6 @@ const Map = (props) => {
 
     const handleClickMarker = async (data) => {
         const lat = data.y; const lng = data.x;
-        console.log('여기임!!',data);
         map.setView([lat,lng], 13);
         var image;
         layerGroup.clearLayers();
@@ -202,7 +201,7 @@ const Map = (props) => {
     useEffect(()=>{
         if(isClicked) {
             if(props.ClickSearchDestination) {
-                const data = props.ClickDestination;
+                const data = props.ClickSearchDestination;
                 handleClickMarker(data)
             }
         } else {

@@ -461,6 +461,7 @@ const SideBar = (props) => {
             <div className="search-body">
               <ul>
                 { search && search.length > 0 && typeState=='관광지' && currentResults.map((el, index) => {
+                  console.log('image안나오는거보기',el);
                   return (
                     <li key={index}
                       className="search-card"
@@ -486,11 +487,11 @@ const SideBar = (props) => {
                   return (
                     <li key={index}
                       className="search-card"
-                      onClick={()=>{props.ClickPlanner(el)}}
+                      onClick={()=>{props.ClickSearch(el)}}
                     >
                       <div className="card-image">
                         {el && el.image!='No image found' && <img src={el.image} alt="" />}
-                        {el && el.imgae=='No image found' && <img src={NoImage} alt="" />}
+                        {el && el.imgae=="" && <img src={NoImage} alt="" />}
                       </div>
                       <div className='card-body'>
                         <div className="card-name">{el && el.name}</div>
