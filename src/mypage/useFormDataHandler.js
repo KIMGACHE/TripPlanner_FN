@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 
-const useFormDataHandler = () => {
+const useFormDataHandler = (validateUsername, setValidationMessages) => {
   // 기본 폼 데이터
   const defaultFormData = {
     userid: "",
@@ -41,16 +41,23 @@ const useFormDataHandler = () => {
   }, []);
 
   // 이름 변경 핸들러
-  const handleUsernameChange = useCallback((e, validateUsername, setValidationMessages) => {
+ const handleUsernameChange = useCallback(
+  (e) => {
     const { value } = e.target;
+
+    // formData 업데이트
     setFormData((prev) => ({ ...prev, username: value }));
+
+    // 이름 유효성 검사
     const validationResult = validateUsername(value);
     setValidationMessages((prev) => ({
       ...prev,
       username: validationResult.message,
       usernameColor: validationResult.color,
     }));
-  }, []);
+  },
+  [setFormData, validateUsername, setValidationMessages] // 의존성 배열
+);
 
   // 일반 입력값 변경 핸들러
   const handleChange = useCallback((e) => {

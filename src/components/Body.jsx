@@ -10,7 +10,6 @@ import Board from '../board/Board.jsx';
 import MakePlanner from '../planner/makePlanner/MakePlanner.jsx';
 import LoginForm from '../login/LoginForm.jsx';
 import Join from '../Join/Join.jsx';
-import Mypage from '../mypage/Mypage.jsx';
 import Main from './Main.jsx';
 import BoardInfo from '../board/BoardInfo.jsx';
 import PrivateRoute from '../auth/PrivateRoute.jsx';
@@ -21,7 +20,7 @@ import UseridInputPage from '../login/components/UseridInputPage.jsx';
 import EmailAuthPage from '../login/components/EmailAuthPage.jsx';
 import VerifyCodePage from '../login/components/VerifyCodePage.jsx';
 import PasswordResetPage from '../login/components/PasswordResetPage.jsx';
-
+import Mypage from '../mypage/MypageRouter.jsx';
 
 
 const Body = () => {
