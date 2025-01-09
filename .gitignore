@@ -12,7 +12,8 @@ node_modules
 bower_components
 
 *.sublime*
-
+# 빌드 파일 제외
+/build/
 psd
 thumb
 sketch
