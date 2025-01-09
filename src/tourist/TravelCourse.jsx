@@ -104,6 +104,7 @@ const TravelCourse = () => {
         axios.post('https://www.tripplannerbn.shop/api/getSearch', data, {
             headers: {
                 'Content-Type': 'application/json',  // Content-Type을 JSON으로 설정
+                withCredentials: true
                 // 'Accept': 'application/json'
             }
         })
