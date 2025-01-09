@@ -20,22 +20,22 @@ const LoginForm = () => {
 
   const naverLogin = () => {
     console.log("네이버 로그인 클릭");
-    window.location.href = "http://localhost:9000/oauth2/authorization/naver";
+    window.location.href = "https://www.tripplannerbn.shop/oauth2/authorization/naver";
   };
 
   const kakaoLogin = () => {
     console.log("카카오 로그인 클릭");
-    window.location.href = " http://localhost:9000/oauth2/authorization/kakao ";
+    window.location.href = " https://www.tripplannerbn.shop/oauth2/authorization/kakao ";
   }
 
   const googleLogin = () => {
     console.log("구글 로그인");
-    window.location.href = " http://localhost:9000/oauth2/authorization/google "
+    window.location.href = " https://www.tripplannerbn.shop/oauth2/authorization/google "
   }
 
   const instaLogin = () => {
     console.log("인스타 로그인");
-    window.location.href = " http://localhost:9000/oauth2/authorization/instagram "
+    window.location.href = " https://www.tripplannerbn.shop/oauth2/authorization/instagram "
   }
 
 
@@ -46,7 +46,7 @@ const LoginForm = () => {
     setError(null); //이전 에러 초기화
     try {
       const response = await axios.post(
-        "http://localhost:9000/user/login",
+        "https://www.tripplannerbn.shop/user/login",
         formData,
         {
           headers: {

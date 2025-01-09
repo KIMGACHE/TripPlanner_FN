@@ -20,7 +20,7 @@ const PasswordResetPage = ()=>{
         setError("");
         try{
             const token = localStorage.getItem("resetToken");
-            await axios.post("http://localhost:9000/user/reset-password",
+            await axios.post("https://www.tripplannerbn.shop/user/reset-password",
             { newPassword }, {
                 headers : {Authorization : `Bearer ${token}`},
             });

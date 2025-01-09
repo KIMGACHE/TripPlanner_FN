@@ -8,7 +8,7 @@ const Main = () => {
     const [totalPlans,setTotalPlans] = useState(0); //여행 계획 수 상태
 
     useEffect(()=>{
-        axios.get('http://localhost:9000/planner/plans/total')
+        axios.get('https://www.tripplannerbn.shop/planner/plans/total')
         .then((response)=>{
             setTotalPlans(response.data); //서버에서 받은 총 개수 설정
         })

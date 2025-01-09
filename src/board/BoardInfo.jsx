@@ -19,7 +19,7 @@ const Destination1 = () => {
 
     useEffect(() => {
         // 데이터를 가져오는 로직
-        axios.get(`http://localhost:9000/planner/board/destination?plannerID=${plannerID}`)
+        axios.get(`https://www.tripplannerbn.shop/planner/board/destination?plannerID=${plannerID}`)
             .then((response) => {
 
                 setDestinations(response.data);
@@ -29,7 +29,7 @@ const Destination1 = () => {
             });
 
         // 로그인 상태 확인
-        axios.post('http://localhost:9000/api/cookie/validate', {}, { withCredentials: true })
+        axios.post('https://www.tripplannerbn.shop/api/cookie/validate', {}, { withCredentials: true })
             .then(response => setLoginStatus(response.data))
             .catch(error => setLoginStatus(error));
     }, []);

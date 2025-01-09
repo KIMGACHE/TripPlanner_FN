@@ -57,7 +57,7 @@ const Tourist = () => {
             contentTypeId: '12',  // 필요에 맞게 설정
         };
 
-        axios.post('http://localhost:9000/api/getSearch', data, {
+        axios.post('https://www.tripplannerbn.shop/api/getSearch', data, {
 
             headers: {
                 'Content-Type': 'application/json', // Content-Type을 JSON으로 설정

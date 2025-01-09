@@ -17,7 +17,7 @@ const Header = () => {
         // 쿠키를 포함한 요청을 통해 로그인 상태 확인
         axios
             .post(
-                "http://localhost:9000/api/cookie/validate",
+                "https://www.tripplannerbn.shop/api/cookie/validate",
                 {},
                 { withCredentials: true }
             )

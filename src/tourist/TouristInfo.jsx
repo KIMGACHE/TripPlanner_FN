@@ -47,7 +47,7 @@ const TouristInfo = () => {
             try {
                 if (contentId) {
                     // 관광지 기본 정보 가져오기
-                    const response = await axios.get(`http://localhost:9000/tourist-info?contentId=${contentId}`);
+                    const response = await axios.get(`https://www.tripplannerbn.shop/tourist-info?contentId=${contentId}`);
                     console.log('response : ', response);
                     setDetail(response.data.items.item[0]);
 
@@ -55,9 +55,9 @@ const TouristInfo = () => {
                     if (detailData) {
                         // 순차적으로 API 호출하여 데이터를 가져오기
                         const [detailInfoResponse, detailIntroResponse, googleResponse] = await Promise.all([
-                            axios.post(`http://localhost:9000/tourist-detailInfo`, { contentId: detailData.contentid }),
-                            axios.post('http://localhost:9000/tourist-detailIntro', { contentId: detailData.contentid }),
-                            axios.post('http://localhost:9000/google-search-places', { keyword: encodeURIComponent(detailData.title) })
+                            axios.post(`https://www.tripplannerbn.shop/tourist-detailInfo`, { contentId: detailData.contentid }),
+                            axios.post('https://www.tripplannerbn.shop/tourist-detailIntro', { contentId: detailData.contentid }),
+                            axios.post('https://www.tripplannerbn.shop/google-search-places', { keyword: encodeURIComponent(detailData.title) })
                         ]);
 
                         setDetailInfo(detailInfoResponse.data.items);

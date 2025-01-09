@@ -17,7 +17,7 @@ const Board = () => {
     };
 
     const fetchPlanners = (page) => {
-        axios.get(`http://localhost:9000/planner/board?page=${page - 1}&size=${pageSize}`)
+        axios.get(`https://www.tripplannerbn.shop/planner/board?page=${page - 1}&size=${pageSize}`)
             .then((response) => {
                 setPlanners(response.data.content); // 데이터 리스트
                 setTotalPages(response.data.totalPages); // 전체 페이지 수

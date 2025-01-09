@@ -43,14 +43,14 @@ const Details = ({ plannerItem, destinations, activeTab }) => {  // activeTab �
     // 장소 이름 클릭 시 관광지에 있는 정보이면 우리 페이지로 표시하고 없으면 카카오로 검색
     const desInfoClick = (item) => {
 
-        axios.post(`http://localhost:9000/destination-to-tourist`, {
+        axios.post(`https://www.tripplannerbn.shop/destination-to-tourist`, {
             mapX: item.x,
             mapY: item.y
         }).then((response) => {
 
             if (response.data.items.item[0].contentid) {
                 const contentId = response.data.items.item[0].contentid;
-                axios.get(`http://localhost:9000/tourist-info?id=${contentId}`)
+                axios.get(`https://www.tripplannerbn.shop/tourist-info?id=${contentId}`)
                     .then((response) => {
 
                         const detailCommon = response.data;

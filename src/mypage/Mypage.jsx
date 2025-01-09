@@ -48,13 +48,13 @@ const Mypage = () => {
       try {
         setLoading(true);
         const validateResponse = await axios.post(
-          "http://localhost:9000/api/cookie/validate",
+          "https://www.tripplannerbn.shop/api/cookie/validate",
           {},
           { withCredentials: true }
         );
         console.log("쿠키 유효성 검증 완료:", validateResponse.data);
 
-        const userResponse = await axios.get("http://localhost:9000/user/mypage", {
+        const userResponse = await axios.get("https://www.tripplannerbn.shop/user/mypage", {
           withCredentials: true,
         });
         console.log("사용자 데이터:", userResponse.data);
@@ -197,7 +197,7 @@ const Mypage = () => {
     try {
       // 사용자 정보 업데이트
       await axios.put(
-        "http://localhost:9000/user/mypage/userupdate",
+        "https://www.tripplannerbn.shop/user/mypage/userupdate",
         {
           profileImg: formData.profileImage,
           username: formData.username,

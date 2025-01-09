@@ -22,7 +22,7 @@ const Mypage = () => {
                     return;
                 }
 
-                const response = await axios.get("http://localhost:9000/api/mypage/info", {
+                const response = await axios.get("https://www.tripplannerbn.shop/api/mypage/info", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -58,7 +58,7 @@ const Mypage = () => {
                 return;
             }
 
-            const response = await axios.put("http://localhost:9090/api/mypage/profile-img", formData, {
+            const response = await axios.put("https://www.tripplannerbn.shop/api/mypage/profile-img", formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",

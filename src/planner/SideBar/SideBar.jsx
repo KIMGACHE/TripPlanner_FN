@@ -89,7 +89,7 @@ const SideBar = (props) => {
   // 검색
   const handleSearch = () => {
     if(typeState=='관광지') {
-      axios.post('http://localhost:9000/planner/searchDestination',
+      axios.post('https://www.tripplannerbn.shop/planner/searchDestination',
           { type: typeState, word: encodeURIComponent(word.trim()), areaname: areaName, areacode: areaCode, pageNo: currentPage, },
           { 'Content-Type': 'application/json' }
         )

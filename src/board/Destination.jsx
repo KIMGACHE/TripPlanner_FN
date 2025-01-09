@@ -52,7 +52,7 @@ const Destination = () => {
     // destination 데이터를 서버에서 가져오는 API 호출
     useEffect(() => {
         if (plannerID) {
-            axios.get(`http://localhost:9000/planner/board/destination?plannerID=${plannerID}`)
+            axios.get(`https://www.tripplannerbn.shop/planner/board/destination?plannerID=${plannerID}`)
                 .then((response) => {
                     setUsername(response.data[0].username);
                     setDestinations(response.data);
@@ -62,7 +62,7 @@ const Destination = () => {
                 });
 
             // 쿠키요청
-            axios.post('http://localhost:9000/api/cookie/validate', {}, {
+            axios.post('https://www.tripplannerbn.shop/api/cookie/validate', {}, {
                 withCredentials: true, // 쿠키 포함
             })
                 .then(response => {
@@ -78,7 +78,7 @@ const Destination = () => {
         // 좋아요
 
         if (plannerID) {
-            axios.get(`http://localhost:9000/planner/board/likeStatus?plannerID=${plannerID}`, {
+            axios.get(`https://www.tripplannerbn.shop/planner/board/likeStatus?plannerID=${plannerID}`, {
                 withCredentials: true, // 쿠키 포함
             })
                 .then((response) => {
@@ -181,7 +181,7 @@ const Destination = () => {
         if (!loginStatus) {
             alert('로그인이 필요한 서비스입니다');
         }
-        axios.post('http://localhost:9000/planner/board/toggleLike',
+        axios.post('http://www.tripplannerbn.shop/planner/board/toggleLike',
             { plannerID },
             { withCredentials: true }) // 쿠키 포함
             .then((response) => {
@@ -199,7 +199,7 @@ const Destination = () => {
     // 내 코스로 담기 버튼
     const handleAddToMyCourse = () => {
 
-        axios.post('http://localhost:9000/api/cookie/validate', {}, {
+        axios.post('https://www.tripplannerbn.shop/api/cookie/validate', {}, {
             withCredentials: true, // 쿠키 포함
         })
             .then(response => {
@@ -240,7 +240,7 @@ const Destination = () => {
     }
 
     const handleDeletePlanner = () => {
-        axios.post('http://localhost:9000/api/cookie/validate', {}, {
+        axios.post('https://localhost:9000/api/cookie/validate', {}, {
             withCredentials: true, // 쿠키 포함
         })
             .then(response => {
@@ -252,7 +252,7 @@ const Destination = () => {
                 window.location.href = "/user/login";
             });
 
-        axios.post('http://localhost:9000/planner/deletePlanner',
+        axios.post('https://localhost:9000/planner/deletePlanner',
             { plannerid: plannerID },
             { 'Content-Type': 'application/json' }
         )

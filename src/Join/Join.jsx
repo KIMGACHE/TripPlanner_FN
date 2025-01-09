@@ -244,7 +244,7 @@ const Join = () => {
             }
 
             // 백엔드 중복 검사
-            const response = await axios.post("http://localhost:9000/user/check-id", { userid });
+            const response = await axios.post("https://www.tripplannerbn.shop/user/check-id", { userid });
             setValidationMessages((prev) => ({
                 ...prev,
                 userid: response.data.available ? "사용 가능한 ID입니다." : "이미 사용 중인 ID입니다.",
@@ -275,7 +275,7 @@ const Join = () => {
     
         try {
             // 서버 중복 확인 요청
-            const response = await axios.post("http://localhost:9000/user/check-email", { email });
+            const response = await axios.post("https://www.tripplannerbn.shop/user/check-email", { email });
     
             setValidationMessages((prev) => ({
                 ...prev,
@@ -357,7 +357,7 @@ const Join = () => {
         }
     
         try {
-            const response = await axios.post("http://localhost:9000/user/send-auth-code", {
+            const response = await axios.post("https://www.tripplannerbn.shop/user/send-auth-code", {
                 email: email,
             });
     
@@ -399,7 +399,7 @@ const Join = () => {
 
     const verifyAuthCode = async () => {
         try {
-            const response = await axios.post("http://localhost:9000/user/verify-auth-code", {
+            const response = await axios.post("https://www.tripplannerbn.shop/user/verify-auth-code", {
                 email: formData.email,
                 code: formData.authCode,
             });
@@ -489,7 +489,7 @@ const Join = () => {
         
     
         try {
-            const response = await axios.post("http://localhost:9000/user/join", data);
+            const response = await axios.post("https://www.tripplannerbn.shop/user/join", data);
             if (response.status === 200) {
                 alert("회원가입이 완료되었습니다.");
             }

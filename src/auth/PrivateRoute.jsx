@@ -12,7 +12,7 @@ const PrivateRoute = ({ element, ...rest }) => {
         const validateCookie = async () =>{
             try{
                 const response = await axios.post(
-                    "http://localhost:9000/api/cookie/validate",
+                    "https://www.tripplannerbn.shop/api/cookie/validate",
                     {},
                     {withCredentials:true}
                 );
@@ -40,7 +40,7 @@ const PrivateRoute = ({ element, ...rest }) => {
 
                 //갱신 후 쿠키 유효성 재검사
                 const retryResponse = await axios.post(
-                    "http://localhost:9000/api/cookie/validate",
+                    "https://www.tripplannerbn.shop/api/cookie/validate",
                     {},
                     {withCredentials : true}
                 );
@@ -70,7 +70,7 @@ const PrivateRoute = ({ element, ...rest }) => {
 
 const refreshAccessToken = async (userid) => {
     try{
-        const response = await axios.post('http://localhost:9000/api/cookie/refresh',{userid} ,{
+        const response = await axios.post('https://www.tripplannerbn.shop/api/cookie/refresh',{userid} ,{
             withCredentials : true,
             headers : {
                 userid : userid,

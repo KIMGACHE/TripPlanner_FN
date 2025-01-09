@@ -120,7 +120,7 @@ const Map = (props) => {
         var image;
         layerGroup.clearLayers();
 
-        await axios.post('http://localhost:9000/planner/getImages',
+        await axios.post('https://www.tripplannerbn.shop/planner/getImages',
             { 'businessName':data.name },
         )
         .then(resp=>{ image=resp.data.image })
@@ -164,7 +164,7 @@ const Map = (props) => {
         marker.on('popupopen',function(e){
         const nodeList = e.target._popup._contentNode.childNodes[1].childNodes[1].childNodes[1].childNodes[3].childNodes;
         nodeList[1].addEventListener('click', async () => {
-            await  axios.post('http://localhost:9000/planner/findDestination',
+            await  axios.post('https://www.tripplannerbn.shop/planner/findDestination',
                     {"businessName":data.name, "businessCategory":data.category,"streetFullAddress":data.address,"coordinate_x":data.x,"coordinate_y":data.y},
                     {"Content-Type":"application/json"},
             )
