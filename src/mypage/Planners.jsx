@@ -8,8 +8,8 @@ const Planners = () => {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("summary");  // 현재 활성화된 탭을 관리
-  const [destinations, setDestinations] = useState([]);
+  // const [activeTab, setActiveTab] = useState("summary");  // 현재 활성화된 탭을 관리
+  // const [destinations, setDestinations] = useState([]);
 
   const navigate = useNavigate();
 
@@ -64,7 +64,7 @@ const Planners = () => {
       return;
     }
 
-    navigate(`/destination?plannerID=${plannerID}`, { state: { plannerItem } });
+    navigate(`/planner/board/destination?destination?plannerID=${plannerID}`, { state: { plannerItem } });
   };
 
   const handlelikePlannerClick = (plannerID) => {
@@ -79,7 +79,7 @@ const Planners = () => {
       return;
     }
 
-    navigate(`/destination?plannerID=${plannerID}`, { state: { plannerItem } });
+    navigate(`/planner/board/destination?plannerID=${plannerID}`, { state: { plannerItem } });
   };
 
   // 로딩 상태

@@ -21,8 +21,7 @@ import EmailAuthPage from '../login/components/EmailAuthPage.jsx';
 import VerifyCodePage from '../login/components/VerifyCodePage.jsx';
 import PasswordResetPage from '../login/components/PasswordResetPage.jsx';
 import SocialLoginHandler from '../login/SocialLoginHandler.jsx';
-import Mypage from '../mypage/MypageRouter.jsx';
-
+import Mypage from '../mypage/Mypage.jsx';
 const Body = () => {
 
 

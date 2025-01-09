@@ -64,44 +64,6 @@ const useMyPage = () => {
       return { message: "사용가능한 비밀번호입니다.", color: "validation-success" };
     };
   
-
-
-
-
-  // 파일 업로드
-  // 이미지 업로드
-  const handleImageUpload = async (file) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => setImagePreview(event.target.result); // 파일 미리보기
-      reader.readAsDataURL(file);
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      try {
-        const response = await axios.post(
-          "http://localhost:9000/user/mypage/upload",
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
-        );
-
-        if (response.data === "파일 업로드 성공") {
-          setFormData((prev) => ({
-            ...prev,
-            profileImage: `/upload/profile/${file.name}`, // 업로드된 이미지 URL을 formData에 설정
-          }));
-          console.log("이미지 업로드 성공");
-        } else {
-          console.error("이미지 업로드 실패:", response.data);
-        }
-      } catch (error) {
-        console.error("파일 업로드 중 오류 발생:", error);
-      }
-    }
-  };
-
-  
   // 이메일 부분
 
   // 타이머 관리
@@ -250,22 +212,22 @@ const useMyPage = () => {
     setIsAuthCodeLocked,
     setIsPasswordEditing,
     fileInputRef,
-    handleDrop: (e) => {
-      e.preventDefault();
-      if (e.dataTransfer.files.length > 0) {
-        handleImageUpload(e.dataTransfer.files[0]); // 드래그 앤 드롭 시 이미지 업로드
-      }
-    },
+    // handleDrop: (e) => {
+    //   e.preventDefault();
+    //   if (e.dataTransfer.files.length > 0) {
+    //     handleImageUpload(e.dataTransfer.files[0]); // 드래그 앤 드롭 시 이미지 업로드
+    //   }
+    // },
     handleDragOver: (e) => e.preventDefault(),
     handleFileInputClick: () => fileInputRef.current?.click(),
-    handleImageUpload,
-    handleCancelImage: () => {
-      setImagePreview("/ProfileImg/anonymous.jpg");
-      setFormData((prev) => ({
-        ...prev,
-        profileImage: "/ProfileImg/anonymous.jpg", // 기본 이미지로 변경
-      }));
-    },
+    // handleImageUpload,
+    // handleCancelImage: () => {
+    //   setImagePreview("/ProfileImg/anonymous.jpg");
+    //   setFormData((prev) => ({
+    //     ...prev,
+    //     profileImage: "/ProfileImg/anonymous.jpg", // 기본 이미지로 변경
+    //   }));
+    // },
     handleChange: (e) => {
       const { name, value } = e.target;
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -278,7 +240,7 @@ const useMyPage = () => {
     validatePassword,
     validatePassword,
     handlePasswordEditClick,
-    handleFileChange: (e) => handleImageUpload(e.target.files[0]),
+    // handleFileChange: (e) => handleImageUpload(e.target.files[0]),
     setIsPasswordValidationVisible,
   };
 };

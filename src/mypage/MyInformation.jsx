@@ -1,65 +1,78 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import useMyPage from "./useMyPage"; // Custom hook import
-// import "./Mypage.scss";
+import useProfileImage from "./useProfileImage";
+import "./MyInformation.scss"
 
 const MyInformation = () => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState(null);
+
+  // 비밀번호 필드 활성화 상태 추가
+
+  const [isEmailEditing, setIsEmailEditing] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false); // 비밀번호 유효성 여부
+
+  const [formData, setFormData] = useState({
+    profileImage: "/ProfileImg/anonymous.jpg",
+    userid: "",
+    username: "",
+    email: "",
+    gender: "",
+  });
   const {
     setValidationMessages,
-    formData,
-    setFormData,
-    imagePreview,
     validationMessages,
     authCodeSent,
     timer,
     isAuthCodeLocked,
     validatePassword,
-    fileInputRef,
-    setImagePreview,
-    setIsPasswordValidationVisible,
-    handleDrop,
     handlePasswordEditClick,
     handleCancelPasswordEditing,
     validateEmail,
-    handleDragOver,
-    handleFileInputClick,
-    handleCancelImage,
     isPasswordEditing,
     handleChange,
     sendAuthCode,
     verifyAuthCode,
     resetAuthState,
+  } = useMyPage(formData, setFormData);
+
+  const {
+    imagePreview,
+    fileInputRef,
+    handleFileInputClick,
     handleFileChange,
-  } = useMyPage();
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState(null);
-  const [error, setError] = useState(null);
-  // 비밀번호 필드 활성화 상태 추가
-
-  const [isEmailEditing, setIsEmailEditing] = useState(false);
-  const [isPasswordValid, setIsPasswordValid] = useState(false); // 비밀번호 유효성 여부
+    handleDrop,
+    handleDragOver,
+    handleCancelImage,
+    handleResetToDefaultImage,
+    setImagePreview,
+  } = useProfileImage(formData, setFormData); // 함수 자체로 전달
 
   // Fetch user data on load
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const validateResponse = await axios.post(
+
+        // 쿠키 유효성 확인
+        await axios.post(
           "http://localhost:9000/api/cookie/validate",
           {},
-          { withCredentials: true }
+          {
+            withCredentials: true,
+          }
         );
-        console.log("쿠키 유효성 검증 완료:", validateResponse.data);
 
+        // 사용자 데이터 가져오기
         const userResponse = await axios.get(
           "http://localhost:9000/user/mypage",
           {
             withCredentials: true,
           }
         );
-        console.log("사용자 데이터:", userResponse.data);
 
         setUserData(userResponse.data);
         setFormData({
@@ -78,18 +91,27 @@ const MyInformation = () => {
     };
 
     fetchUserData();
-  }, [setFormData]);
+  }, []); // userData 제거 // 의존성 배열에서 `userData`를 제외하여 무한 루프 방지
 
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
 
-  const handleResetToDefaultImage = () => {
-    const defaultImage = "/ProfileImg/anonymous.jpg"; // 기본 이미지 경로
-    setImagePreview(defaultImage); // 미리보기 이미지 업데이트
-    setFormData((prev) => ({
-      ...prev,
-      profileImage: defaultImage, // formData의 프로필 이미지 업데이트
-    }));
+  // 수정 버튼 클릭 시 현재 프로필 이미지를 미리보기로 설정
+  const handleEditClick = () => {
+    if (userData) {
+      setImagePreview(
+        userData.img
+          ? `http://localhost:9000${userData.img}`
+          : "/ProfileImg/anonymous.jpg"
+      );
+      setFormData({
+        profileImage: userData.img || "/ProfileImg/anonymous.jpg",
+        userid: userData.userid,
+        username: userData.username,
+        email: userData.email,
+      });
+    }
+    setIsEditing(true); // 수정 모드 활성화
   };
 
   const handleCancelChanges = () => {
@@ -180,13 +202,23 @@ const MyInformation = () => {
       return;
     }
 
-    if (!formData.username || formData.username === userData.username) {
-      alert("변경된 사항이 없습니다.");
+    if (!formData.username) {
+      alert("이름을 입력해 주세요.");
       return;
     }
 
-    if (!formData.email || !isAuthCodeLocked) {
-      alert("이메일 인증을 완료해주세요.");
+    // if (!formData.email || !isAuthCodeLocked) {
+    //   alert("이메일 인증을 완료해주세요.");
+    //   return;
+    // }
+
+    if (
+      formData.username === userData.username &&
+      formData.email === userData.email &&
+      formData.profileImage === userData.img &&
+      (!formData.password || formData.password === "")
+    ) {
+      alert("변경된 사항이 없습니다.");
       return;
     }
 
@@ -204,7 +236,9 @@ const MyInformation = () => {
       );
       console.log("유저 정보가 성공적으로 변경되었습니다.");
       alert("유저 정보가 성공적으로 변경되었습니다.");
-      setIsEditing(false);
+
+      // 새로고침
+      window.location.reload();
     } catch (err) {
       console.error("유저 정보 변경 중 오류:", err);
       setValidationMessages((prev) => ({
@@ -279,7 +313,7 @@ const MyInformation = () => {
   return (
     <div className="mypage-container">
       <h2>{userData.username}님의 마이페이지</h2>
-      <div className="user-info">
+      <div className="image-preview-container">
         {isEditing ? (
           <>
             {/* Profile Image */}
@@ -289,9 +323,10 @@ const MyInformation = () => {
               onDragOver={handleDragOver}
             >
               <img
-                src={`http://localhost:9000${userData.img}`}
+                src={imagePreview}
                 alt="미리보기"
                 className="circle-preview"
+                style={{ width: "150px", height: "150px", borderRadius: "50%" }}
               />
             </div>
             <div id="imgbutton">
@@ -410,10 +445,9 @@ const MyInformation = () => {
               placeholder="비밀번호"
               value={formData.password}
               onChange={handlePasswordChange}
-              disabled={!isPasswordEditing} // 잠금 상태 제어
+              disabled={!isPasswordEditing}
             />
-
-            {isPasswordEditing && validationMessages.password && (
+            {validationMessages.password && (
               <div
                 className={`validation-message ${validationMessages.passwordColor}`}
               >
@@ -475,7 +509,8 @@ const MyInformation = () => {
             <p>아이디: {userData.userid}</p>
             <p>이메일: {userData.email}</p>
             <p>성별 : {userData.gender}</p>
-            <button onClick={() => setIsEditing(true)}>수정</button>
+            <p>생년월일 : {userData.birth}</p>
+            <button onClick={handleEditClick}>수정</button>
             <button type="button" onClick={handleDelet}>
               회원탈퇴
             </button>
