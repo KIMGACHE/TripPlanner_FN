@@ -8,7 +8,7 @@ import '../src/public/reset.css';
 const App = () => {
 
   return (
-    <Router basename='/'>
+    <Router>
 
       <Header />
       <Body />
