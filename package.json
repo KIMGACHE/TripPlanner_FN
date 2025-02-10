@@ -55,5 +55,6 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "gh_pages": "^6.2.0",
     "sass": "^1.83.1"
+
   }
 }
