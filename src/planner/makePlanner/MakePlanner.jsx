@@ -99,5 +99,5 @@ const MakePlanner = () => {
         </div>
     )
 }
-
+}
 export default MakePlanner;
